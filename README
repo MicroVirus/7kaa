@@ -1,5 +1,5 @@
-Seven Kingdoms: Ancient Adversaries
------------------------------------
+Seven Kingdoms: Ancient Adversaries - Visual Studio Projects version
+--------------------------------------------------------------------
 
 Release version 2.14.4
 Project website: www.7kfans.com
@@ -10,68 +10,77 @@ free and open source license in 2009. See the file "COPYING" for the
 details of the license. We are indebted to Enlight for making the 7kfans
 project possible and giving a new chance to build a community for fans
 of the game.
+This specific fork of the project includes Visual Studio C++ 2010 project
+and solution files.
 
 Who should use this version of 7KAA?
- * Any linux user.
- * Anyone who wants to try the latest bugfixes.
- * Anyone who likes the slightly improved game play.
+Programmers who would like to get started programming for 7kaa in Visual C++
+on the latest development branch.
 
-Who shouldn't use this version of 7KAA?
- * Any multiplayer user under Windows. The new netcode, while it promises
-   actual cross-platform capatability, does not work well in lobby, nor
-   does not work on anything other than LAN (VPN okay) and 2 players. Please
-   use 2.13.xx series with DPlay instead if stability and full-features are
-   needed.
+All other users should check out the official repository.
 
-Changes in this release:
- * Added the game data to the source tree.
- * Added an NSIS install script.
- * Started rewriting the lobby code to be UDP instead of TCP. It is not done
-   and does not work properly for >2 player or over anything but LAN. The game
-   port is now UDP 19255.
-
-Thanks to all who made this release possible.
 
 
 What you will find in this archive
 ---------
 * The GPL source and data files.
+* Visual Studio C++ 2010 Project Files
+* OpenAL32 headers and library file (but not the DLL)
+
+You can also check out the official repository for more information.
 
 
-What you will NOT find in this archive
----------
-* The original game music. The are provided in a separate package from 
-  7kfans.com. It is not under the GPL license, but it is free to download
-  and use with 7KAA.
-* The original translations resource file. This file was created by third
-  party distributors and Enlight does not have the right to distribute it.
-  This will be replaced by the 7kfans project.
-* Any other content from original game CDs, game manual including the version
-  2.12b game binary or older. This also includes the I*Magic Online service.
+
+Configuring your clone of this repository
+-----------------------------------------
+
+This branch of the 7kaa project runs parallel to the 7kaa master branch
+and includes project files for Microsoft Visual C++ 2010.
+
+Most of the work is done, there are just a few more steps to be taken
+before you can compile and debug your own version of the source code
+with VC++, all pertaining to including the used libraries.
+
+7kaa still has several backends, but only the following libraries/backends
+are 'supported' by this branch (though others might work).
+- SDL2           Tested using version 2.0.1
+- OpenAL32       I *think* tested with version 1.1, but Creative Labs has left OpenAL a mess,
+                  so even acquiring the library files is problematic.
+- ENet           Tested using version 1.3.10
 
 
-Building the game
----------
 
-General Requirements
-* GCC 4.xx or later
-* SDL 2.0
-* SDL_net
-* OpenAL
-* Autoconf (when using git snapshot)
-* gettext 0.18 or later
+Setting up the libraries
+------------------------
+
+--- SDL2 ----
+1. Download the latest version (or the tested version) of SDL (http://libsdl.org/).
+2. Select the Visual C++ Development Library and download it.
+3. Extract the files to 7kaa\SDL, such that the directory structure looks like 7kaa\SDL\lib, 7kaa\SDL\include.
+   The compiler and linker can now find SDL2.
+4. To enable running the compiled executable, copy the DLL file 7kaa\SDL\lib\x86\SDL2.dll to 7kaa\data.
+   This will allow the executable to find SDL2.dll, as the Debugger has been set up to use the 7kaa\data directory
+   as the working directory, allowing you to directory Run from the IDE.
+
+--- OpenAL32 ---
+It seems currently nearly impossible to find a development version, or documentation for that matter, of OpenAL.
+The include files and library are thefore directly included in the branch, under 7kaa\OpenAL.
+To run the executable OpenAL32.dll needs to be present on your system. If 7kaa.exe can not find it, search for a 32-bits
+version of OpenAL32.dll on your system (certain games include it) and copy it to 7kaa\data\ (just like SDL2.dll).
+
+--- enet ---
+1. Download the latest version (or the tested version) of ENet (http://enet.bespin.org/).
+2. Extract enet.lib, and the contents of 'include' to 7kaa\enet (no subdirectories this time; all the extracted files
+   go directly into 7kaa\enet).
+ENet is a static link library, so no DLL is required.
 
 
-Installing
---------
-You can download the game data if you do not already have the game
-installed. You can find the game data from the 7kfans sourceforge
-page at http://sourceforge.net/projects/skfans/
 
-To patch the game:
-Copy the executable file "7kaa*" from the src/client directory to your
-installed game directory.  Run the 7kaa.exe executable to start the game
-instead of the classic Enlight version called 7k.exe.
+Your setup should now be working. For any questions, remarks, suggestion or to share your work,
+please visit the 7kaa open source project at http://www.7kfans.com/forums/index.php.
 
-There are precompiled win32 install packages available.
 
+
+Disclaimer: Visual Studio is not directly supported by the 7kaa open source project. Therefore it can not be
+guaranteed that future updates will directly work with the Visual Studio project file.
+I will try to keep this branch up-to-date as the master branch advances.
