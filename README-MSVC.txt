@@ -33,7 +33,7 @@ Setting up the libraries
 
 --- OpenAL32 ---
 It seems currently nearly impossible to find a development version, or documentation for that matter, of OpenAL.
-The include files and library are thefore directly included in the branch, under 7kaa\OpenAL.
+The include files and library are therefore directly included in the branch, under 7kaa\OpenAL.
 To run the executable OpenAL32.dll needs to be present on your system. If 7kaa.exe can not find it, search for a 32-bits
 version of OpenAL32.dll on your system (certain games include it) and copy it to 7kaa\data\ (just like SDL2.dll).
 
