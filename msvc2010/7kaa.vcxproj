@@ -59,6 +59,9 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;enet.lib;OpenAL32.lib;ws2_32.lib;winmm.lib;kernel32.lib;user32.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -78,6 +81,9 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;enet.lib;OpenAL32.lib;ws2_32.lib;winmm.lib;kernel32.lib;user32.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ALL.h" />
