@@ -29,7 +29,7 @@ Setting up the libraries
    The compiler and linker can now find SDL2.
 4. To enable running the compiled executable, copy the DLL file 7kaa\SDL\lib\x86\SDL2.dll to 7kaa\data.
    This will allow the executable to find SDL2.dll, as the Debugger has been set up to use the 7kaa\data directory
-   as the working directory, allowing you to directory Run from the IDE.
+   as the working directory, allowing you to directly Run from the IDE.
 
 --- OpenAL32 ---
 It seems currently nearly impossible to find a development version, or documentation for that matter, of OpenAL.
