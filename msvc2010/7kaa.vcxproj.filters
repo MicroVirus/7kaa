@@ -624,6 +624,9 @@
     <ClInclude Include="..\include\gettext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\client\7k.ico">

@@ -273,6 +273,7 @@
     <ClInclude Include="..\include\surface_ddraw.h" />
     <ClInclude Include="..\include\surface_none.h" />
     <ClInclude Include="..\include\surface_sdl.h" />
+    <ClInclude Include="..\include\version.h" />
     <ClInclude Include="..\include\vga_base.h" />
     <ClInclude Include="..\include\vga_ddraw.h" />
     <ClInclude Include="..\include\vga_none.h" />
