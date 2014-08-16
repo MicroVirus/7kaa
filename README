@@ -22,7 +22,8 @@ All other users should check out the official repository.
 
 
 What you will find in this archive
----------
+----------------------------------
+
 * The GPL source and data files.
 * Visual Studio C++ 2010 Project Files
 * OpenAL32 headers and library file (but not the DLL)
@@ -64,6 +65,12 @@ Setting up the libraries
    SDL2.dll, as the Debugger has been set up to use the 7kaa\data directory as
    the working directory, allowing you to directly Run from the IDE.
 
+--- enet ---
+1. Download the latest version (or the tested version) of ENet (http://enet.bespin.org/).
+2. Extract enet.lib, and the contents of 'include', to 7kaa\enet (no subdirectories
+   this time; all the extracted files go directly into 7kaa\enet).
+ENet is a static link library, so no DLL is required.
+
 --- OpenAL32 ---
 It seems currently nearly impossible to find a development version, or documentation
 for that matter, of OpenAL. The include files and library are therefore directly
@@ -71,12 +78,6 @@ included in the branch, under 7kaa\OpenAL.
 To run the executable OpenAL32.dll needs to be present on your system. If 7kaa.exe can
 not find it, search for a 32-bits version of OpenAL32.dll on your system
 (certain games include it) and copy it to 7kaa\data\ (just like SDL2.dll).
-
---- enet ---
-1. Download the latest version (or the tested version) of ENet (http://enet.bespin.org/).
-2. Extract enet.lib, and the contents of 'include', to 7kaa\enet (no subdirectories
-   this time; all the extracted files go directly into 7kaa\enet).
-ENet is a static link library, so no DLL is required.
 
 
 Your setup should now be working. For any questions, remarks, suggestion or to share
@@ -86,6 +87,8 @@ your work, please visit the 7kaa open source project at
 
 
 Disclaimer: Visual Studio is not directly supported by the 7kaa open source project.
-Therefore it can not be guaranteed that future updates will directly work with the
-Visual Studio project file.
-I will try to keep this branch up-to-date as the master branch advances.
+Therefore, updates to the official source can not always be directly applied to the
+Visual Studio projects version. For instance, if a new file is added, then the project
+file will need to be updated to include this file in the compilation.
+I endeavour to keep this branch up-to-date as the official source advances, but there
+might be some delay before this tree receives the updates.
