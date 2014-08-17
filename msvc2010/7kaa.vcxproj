@@ -73,6 +73,7 @@
       <PreprocessorDefinitions>NDEBUG;WIN32;WIN32_LEAN_AND_MEAN;USE_OPENAL;USE_SDL;OPENAL_AL_H=&lt;al.h&gt;;OPENAL_ALC_H=&lt;alc.h&gt;;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;NO_ASM</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <DisableSpecificWarnings>4996;4244;4100;4189;4310;4127;4101;4706;4512</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
