@@ -894,9 +894,6 @@
     <ClCompile Include="..\src\client\OGAME.cpp">
       <Filter>Source Files\client</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\client\OGAMEMP.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\client\OGAMENCY.cpp">
       <Filter>Source Files\client</Filter>
     </ClCompile>
@@ -1604,6 +1601,9 @@
     </ClCompile>
     <ClCompile Include="..\src\client\OTownNetwork.cpp">
       <Filter>Source Files\client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\client\OGAMEMP.cpp">
+      <Filter>Source Files\multiplayer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
