@@ -48,7 +48,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\SDL\include;$(ProjectDir)..\OpenAL\include;$(ProjectDir)\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;DEBUG_NOT_DEFINED;WIN32;WIN32_LEAN_AND_MEAN;USE_OPENAL;USE_SDL;OPENAL_AL_H=&lt;al.h&gt;;OPENAL_ALC_H=&lt;alc.h&gt;;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;NO_ASM</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG_ENABLE_MESSAGES;_DEBUG;WIN32;WIN32_LEAN_AND_MEAN;USE_OPENAL;USE_SDL;OPENAL_AL_H=&lt;al.h&gt;;OPENAL_ALC_H=&lt;alc.h&gt;;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;NO_ASM</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <DisableSpecificWarnings>4996;4244;4100;4189;4310;4127;4101;4706;4512</DisableSpecificWarnings>
