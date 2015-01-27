@@ -41,8 +41,8 @@ AC_DEFUN([EVAL_SHELL_VAR], [
   AS_VAR_PUSHDEF([prev], [ac_previous_$1])
   AS_VAR_SET([prev], [$$1])
   while true; do
-    eval $1=$$1
-    AS_VAR_IF([prev], [$$1], [
+    eval $1="\"$$1\""
+    AS_VAR_IF([prev], ["$$1"], [
       break
     ])
     AS_VAR_SET([prev], [$$1])
@@ -55,6 +55,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_LN_S
+PKG_PROG_PKG_CONFIG
 
 # Checks for header files.
 dnl AC_CHECK_HEADERS([])
@@ -72,7 +73,7 @@ AC_TYPE_UINT64_T
 AC_TYPE_UINT8_T
 
 # Checks for library functions.
-dnl AC_CHECK_FUNCS([])
+AC_CHECK_FUNCS([_NSGetExecutablePath])
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18])
@@ -186,8 +187,17 @@ AS_IF([test "$input_backend" = sdl \
   LIBS="$SDL_LIBS $LIBS"
 ])
 
-SEARCH_LIB_FLAGS([enet_initialize], ["-lenet -lws2_32 -lwinmm" -lenet], [], [
-  AC_ERROR([enet not found])
+PKG_CHECK_MODULES([ENET], [libenet],, [
+  PKG_CHECK_MODULES([ENET], [enet],, [
+    SEARCH_LIB_FLAGS([enet_initialize], ["-lenet -lws2_32 -lwinmm" -lenet],, [
+      AC_ERROR([enet not found])
+    ])
+  ])
+])
+
+AS_IF([test "$ENET_CFLAGS" != "" || test "$ENET_LIBS" != ""], [
+  CXXFLAGS="$CXXFLAGS $ENET_CFLAGS"
+  LIBS="$LIBS $ENET_LIBS"
 ])
 
 AS_IF([test "$video_backend" = ddraw], [
@@ -227,6 +237,11 @@ AS_IF([test "$use_mingw" != yes], [
   EVAL_SHELL_VAR([pkgdatadir])
   AC_DEFINE_UNQUOTED([PACKAGE_DATA_PATH], ["$pkgdatadir"],
 		     [Define to the path to the game data])
+])
+
+EVAL_SHELL_VAR([localedir])
+AC_DEFINE_UNQUOTED([LOCALE_PATH], ["$localedir"], [
+  Define to the locale path
 ])
 
 AS_IF([test "$use_windows" != yes], [
@@ -286,6 +301,9 @@ AS_IF([test "$input_backend" = sdl || test "$video_backend" = sdl], [
 
 AS_IF([test "$enable_debug" = yes], [
   AC_DEFINE([DEBUG], [1], [Define to 1 if building with debugging features])
+  AC_DEFINE([DYNARRAY_DEBUG_ELEMENT_ACCESS], [1], [
+	 Define to 1 if building with element access checking for dynamic arrays
+  ])
 ])
 
 AC_DEFINE([NO_ASM], [1], [
