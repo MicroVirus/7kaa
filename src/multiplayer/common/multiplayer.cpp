@@ -361,6 +361,7 @@ int MultiPlayer::join_session(SessionDesc *session, char *playerName)
 	}
 
 	max_players = MAX_NATION;
+	allowing_connections = 1;
 
 	// register the host now, even though his name is not known yet
 	err_when(player_pool[0] != NULL);
@@ -388,8 +389,8 @@ void MultiPlayer::close_session()
 		}
 
 		host_flag = 0;
-		allowing_connections = 0;
 	}
+	allowing_connections = 0;
 
 	my_player_id = 0;
 	my_player = NULL;
@@ -402,8 +403,12 @@ void MultiPlayer::close_session()
 
 void MultiPlayer::game_starting()
 {
-	allowing_connections = 0;
 	packet_mode = ENET_PACKET_FLAG_UNSEQUENCED;
+}
+
+void MultiPlayer::disable_new_connections()
+{
+	allowing_connections = 0;
 }
 
 // Create a player and add to the pool.
@@ -411,7 +416,7 @@ void MultiPlayer::game_starting()
 // This is only called by the host upon connection from a client. The host
 // chooses the player's id.
 //
-// Returns id if the player was added to the pool, and 0 if the player
+// Returns the player pointer when added to the pool, and NULL if the player
 // wasn't added to the pool.
 //
 PlayerDesc *MultiPlayer::create_player(ENetAddress *address)
@@ -423,7 +428,7 @@ PlayerDesc *MultiPlayer::create_player(ENetAddress *address)
 		if (player_pool[i] == NULL)
 			break;
 	if (i >= max_players)
-		return 0;
+		return NULL;
 
 	player_pool[i] = new PlayerDesc(i+1, address);
 
@@ -712,7 +717,10 @@ char *MultiPlayer::receive(uint32_t *from, uint32_t *size, int *sysMsgCount)
 
 	player = (PlayerDesc *)event.peer->data;
 	if (player == NULL) {
+		// The player may actually exist via add_player, sync enet data
+		// by performing a lookup.
 		player = get_player(&event.peer->address);
+		event.peer->data = player;
 	}
 
 	if (player != NULL) {
@@ -734,23 +742,25 @@ char *MultiPlayer::receive(uint32_t *from, uint32_t *size, int *sysMsgCount)
 	case ENET_EVENT_TYPE_CONNECT:
 		(*sysMsgCount)++;
 
-		if (player == NULL &&
-			host_flag &&
-			allowing_connections) {
-			player = create_player(&event.peer->address);
-		}
-
 		if (player == NULL) {
-			enet_peer_disconnect_now(event.peer, 0);
-			break;
+			if (!allowing_connections) {
+				enet_peer_disconnect_now(event.peer, 0);
+				break;
+			}
+			if (host_flag) {
+				player = create_player(&event.peer->address);
+				if (player == NULL) {
+					enet_peer_disconnect_now(event.peer, 0);
+					break;
+				}
+			}
 		}
 
 		if (player != NULL) {
 			event.peer->data = player;
 			MSG("Player '%s' (%d) connected.\n", player->name, player->id);
+			MSG("Number of connections: %d\n", host->connectedPeers);
 		}
-
-		MSG("Number of connections: %d\n", host->connectedPeers);
 
 		break;
 
@@ -760,9 +770,8 @@ char *MultiPlayer::receive(uint32_t *from, uint32_t *size, int *sysMsgCount)
 		if (player != NULL) {
 			player->connecting = 0;
 			MSG("Player '%s' (%d) disconnected. (fixme)\n", player->name, player->id);
+			MSG("Number of connections: %d\n", host->connectedPeers);
 		}
-
-		MSG("Number of connections: %d\n", host->connectedPeers);
 
 		break;
 
