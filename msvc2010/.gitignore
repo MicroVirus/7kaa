@@ -1,7 +1,7 @@
-Debug/
-Release/
+/Debug/
+/Release/
 *.suo
 *.sdf
 *.opensdf
 *.vcxproj.user
-ipch/
+/ipch/
