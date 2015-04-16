@@ -227,6 +227,7 @@ bin_PROGRAMS = 7kaa
 	OU_MARIT.cpp \
 	OU_MONS.cpp \
 	OU_VEHI.cpp \
+	OVacateArea.cpp \
 	OVBROWIF.cpp \
 	OVBROWSE.cpp \
 	OVIDEO.cpp \

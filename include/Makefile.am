@@ -140,6 +140,7 @@ noinst_HEADERS = \
 	OU_MARI.h \
 	OU_MONS.h \
 	OU_VEHI.h \
+	OVacateArea.h \
 	OVBROWIF.h \
 	OVBROWSE.h \
 	OVGA.h \
