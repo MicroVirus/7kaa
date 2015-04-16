@@ -33,7 +33,7 @@ enum { COMMON_DATA_BUF_SIZE = 64*1024 };			// keep a 64K common buffer for all t
 
 //-------------- define constant ------------//
 
-#define FRAMES_PER_DAY	10			// no. of frames per day
+#define FRAMES_PER_DAY	10			// no. of frames per day. Note: there is also '#define GAME_FRAMES_PER_DAY 10' in OUNIT.h
 
 #define MAX_SCENARIO_PATH 2
 

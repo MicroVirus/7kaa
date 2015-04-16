@@ -34,6 +34,7 @@
 #include <OTOWN.h>
 #include <OTERRAIN.h>
 #include <OU_MARI.h>
+#include <dbglog.h>
 
 #ifdef NO_DEBUG_UNIT
 #undef err_when
@@ -48,6 +49,9 @@
 #define err_now(msg)
 #undef DEBUG
 #endif
+
+DBGLOG_DEFAULT_CHANNEL(UnitArray);
+
 
 //--------- Begin of function UnitArray::divide_array ---------//
 // divide units into arrays by their mobile_type 
@@ -1290,3 +1294,31 @@ void UnitArray::add_way_point(int pointX, int pointY, short* selectedArray, int 
 	}
 }
 //----------- End of function UnitArray::add_way_point -----------//
+
+
+//----------- Begin of function UnitArray::order_vacate_area -----------//
+// Orders all idle units of the same nation to vacate the construction area,
+// except for the caller unit.
+//
+// <int>   pointX            -  x location of the area
+// <int>   pointY            -  y location of the area
+// <int>   width             -  width of the area
+// <int>   height            -  height of the area
+// <int>   nation_recno       -  nation of the calling unit
+// <int>   caller_unit_recno -  unit calling for the clearing
+//
+void UnitArray::order_vacate_area(int pointX, int pointY, int width, int height, int nation_recno, int caller_unit_recno)
+{
+	if (!nation_recno || !caller_unit_recno ||
+		pointX < 0 || pointY < 0 || width < 1 || height < 1 ||
+		pointX + width > MAX_WORLD_X_LOC || pointY + height > MAX_WORLD_Y_LOC )
+	{
+		ERR("order_vacate_area was called with bad arguments.\n");
+		return;
+	}
+
+	// TODO: Move unit out of the way.
+	// TODO: Also account for sprite size and perhaps move magnitude?
+	// TODO: Marine units as well, for harbour
+}
+//----------- End of function UnitArray::order_vacate_area -----------//

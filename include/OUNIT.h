@@ -52,7 +52,7 @@
 #undef DEBUG
 #endif
 
-#define GAME_FRAMES_PER_DAY 10
+#define GAME_FRAMES_PER_DAY 10			// Note: there is also '#define FRAMES_PER_DAY 10' in OSYS.h
 
 //-------- action code for action_mode ---------//
 
@@ -160,6 +160,8 @@ enum  {  KEEP_PRESERVE_ACTION = 1,  // used for stop2() to keep preserve action
 
          MAX_WAITING_TERM_SAME = 3, // wait for same nation, used in handle_blocked...()
          MAX_WAITING_TERM_DIFF = 3, // wait for diff. nation, used in handle_blocked...()
+
+		 MAX_WAIT_FOR_BUILD_FRAMES = 7 * GAME_FRAMES_PER_DAY, // maximum time in wait-for-build mode
 
 			ATTACK_DETECT_DISTANCE = 6,// the distance for the unit to detect target while idle
          ATTACK_SEARCH_TRIES = 250, // the node no. used to process searching when target is close to this unit
@@ -345,6 +347,10 @@ public:
 
 	int         commanded_soldier_count();
 
+	//-------- Waiting for build mode --------//
+
+	int			wait_for_build_time; // time, in frames, that the unit has been in wait-for-build mode
+
 public:
 	Unit();
 	virtual ~Unit();
@@ -427,6 +433,7 @@ public:
 	virtual void process_idle();     // derived function of Sprite
 	virtual void process_move();     // derived function of Sprite
 	virtual void process_wait();     // derived function of Sprite
+	virtual void process_wait_for_build(); // derived function of Sprite
 	virtual void process_extra_move() {;}// derived function of Sprite, for ship only
 	virtual int  process_die();
 
@@ -557,6 +564,7 @@ public:
 	void  set_turn();
 	void  set_ship_extra_move();
 	void  set_die();
+	bool  wait_for_build(); // Goes into wait for build mode (if not already) and returns true if we should continue to wait.
 
 	int   write_file(File* filePtr);
 	int   read_file(File* filePtr);
@@ -807,7 +815,8 @@ public:
 	void  assign_to_ship(int shipXLoc, int shipYLoc, int divided, short* selectedArray, int selectedCount, char remoteAction, int shipRecno);
 	// ##### patch end Gilbert 5/8 ######//
 	void  ship_to_beach(int destX, int destY, int divided, short* selectedArray, int selectedCount, char remoteAction);
-	void	add_way_point(int pointX, int pointY, short* selectedArray, int selectedCount, char remoteAction);
+	void  add_way_point(int pointX, int pointY, short* selectedArray, int selectedCount, char remoteAction);
+	void  order_vacate_area(int pointX, int pointY, int width, int height, int nation_recno, int caller_unit_recno);
 
 	//--------- unit filter function ----------//
 	int   divide_attack_by_nation(short nationRecno, short *selectedArray, int selectedCount);

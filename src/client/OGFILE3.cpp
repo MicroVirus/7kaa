@@ -421,6 +421,10 @@ int Unit::read_file(File* filePtr)
 	//	((UnitMarine*)this)->splash.sprite_info->load_bitmap_res();
 	//}
 
+	// TODO: Remove this intermediate fixup-code when a new save-game format is established and wait_for_build_time is actually saved.
+	//       There can be issues with everything happening at once right now, because all units that were waiting get the same start time.
+	wait_for_build_time = 0;
+
    return 1;
 }
 //----------- End of function Unit::read_file ---------//

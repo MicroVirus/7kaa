@@ -1833,6 +1833,33 @@ void Unit::process_wait()
 //----------- End of function Unit::process_wait -----------//
 
 
+
+//--------- Begin of function Unit::process_wait_for_build ---------//
+// Process the unit waiting for the construction site to clear.
+// Also order any idle units inside the construction area to move out.
+//
+void Unit::process_wait_for_build()
+{
+	++wait_for_build_time;
+
+	// DEBUGGING: the unit rotates while waiting for build, giving a visual cue.
+	final_dir = (cur_dir + 1) % MAX_DIR;
+	match_dir();
+	// END DEBUGGING
+
+	//--- Order any own idle units in the construction site to move out of the way ---//
+
+	if (wait_for_build_time % GAME_FRAMES_PER_DAY == 1)
+	{
+		FirmInfo *firmInfo = firm_res[action_para];
+
+		unit_array.order_vacate_area(action_x_loc, action_y_loc, firmInfo->loc_width, firmInfo->loc_height, nation_recno, sprite_recno);
+	}
+}
+//----------- End of function Unit::process_wait_for_build -----------//
+
+
+
 //--------- Begin of function Unit::set_next --------//
 //	set the next coordinates to move to
 //
@@ -3023,3 +3050,20 @@ void Unit::set_die()
 }
 //----------------- End of function Unit::set_die ----------------//
 
+
+//------------- Begin of function Unit::wait_for_build --------------//
+// Goes into wait for build mode (if not already) and returns true if we should continue to wait.
+//
+bool Unit::wait_for_build()
+{
+	if ( cur_action != SPRITE_WAIT_FOR_BUILD )
+	{
+		//---- enter into wait-for-build mode ----//
+		wait_for_build_time = 0;
+		cur_action = SPRITE_WAIT_FOR_BUILD;
+		cur_frame = 1;
+	}
+
+	return wait_for_build_time < MAX_WAIT_FOR_BUILD_FRAMES;
+}
+//----------------- End of function Unit::wait_for_build ----------------//
