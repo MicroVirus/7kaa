@@ -34,6 +34,7 @@
 #include <OF_MONS.h>
 #include <OU_GOD.h>
 #include <OF_HARB.h>
+#include <dbglog.h>
 
 #ifdef NO_DEBUG_UNIT
 #undef err_when
@@ -48,6 +49,9 @@
 #define err_now(msg)
 #undef DEBUG
 #endif
+
+DBGLOG_DEFAULT_CHANNEL(Unit);
+
 
 //--------- Begin of function Unit::build_firm ---------//
 // Build a firm.
@@ -1168,7 +1172,9 @@ void Unit::process_build_firm()
 	err_when(action_x_loc<0 || action_x_loc>=MAX_WORLD_X_LOC);
 	err_when(action_y_loc<0 || action_y_loc>=MAX_WORLD_Y_LOC);
 
-	if( cur_action == SPRITE_IDLE )  // the unit is at the build location now
+	//--------- if waiting for build, check once every day ---------//
+
+	if( cur_action == SPRITE_IDLE || (cur_action == SPRITE_WAIT_FOR_BUILD && (wait_for_build_time+1) % GAME_FRAMES_PER_DAY == 0) )  // the unit is at the build location now
 	{
 		// **BUGHERE, the unit shouldn't be hidden when building structures
 		// otherwise, it's cargo_recno will be conflict with the structure's
@@ -1176,6 +1182,7 @@ void Unit::process_build_firm()
 
 		int succeedFlag=0;
 		int shouldProceed = 1;
+		int buildSpotOccupied = 0;
 
 		if( cur_x_loc()==move_to_x_loc && cur_y_loc()==move_to_y_loc )
 		{
@@ -1189,6 +1196,8 @@ void Unit::process_build_firm()
 			if(!is_in_surrounding(move_to_x_loc, move_to_y_loc, sprite_info->loc_width, action_x_loc, action_y_loc, width, height))
 			{
 				//---------- not in the building surrounding ---------//
+				if ( cur_action == SPRITE_WAIT_FOR_BUILD )
+					set_idle();
 				return;
 			}
 
@@ -1210,13 +1219,10 @@ void Unit::process_build_firm()
 			//---------------------------------------------------------//
 			// check whether the firm can be built in the specified location
 			//---------------------------------------------------------//
-			if( shouldProceed && world.can_build_firm(action_x_loc, action_y_loc, action_para, sprite_recno) &&
-				 firm_res[action_para]->can_build(sprite_recno) )
+			buildSpotOccupied = !world.can_build_firm(action_x_loc, action_y_loc, action_para, sprite_recno);
+			if( shouldProceed && !buildSpotOccupied && firm_res[action_para]->can_build(sprite_recno) )
 			{
-				int aiUnit			= ai_unit;
-				int actionXLoc		= action_x_loc;
-				int actionYLoc		= action_y_loc;
-				short unitRecno	= sprite_recno;
+				int curXloc = cur_x, curYloc = cur_y;
 
 				//---------------------------------------------------------------------------//
 				// if unit inside the firm location, deinit the unit to free the space for
@@ -1234,22 +1240,49 @@ void Unit::process_build_firm()
 					reset_action_para2();
 					succeedFlag = 1;
 				}
+				else
+				{
+					//--------- if we deinit'd the unit bring it back ---------//
+
+					ERR("process_build_firm failed to build firm.\n");
+					if (cur_x == -1 && curXloc != -1)
+					{
+						init_sprite(curXloc, curYloc);
+						stop2();
+					}
+					else if (cur_x == -1)
+					{
+						// This case (invisible unit is constructing) should not happen, but handle it anyhow by killing the sprite (sprite-array can handle us killing it here).
+						if ( ai_action_id && nation_recno )
+							nation_array[nation_recno]->action_failure(ai_action_id, sprite_recno);
+						unit_array.die(sprite_recno);
+						return;
+					}
+				}
 			}
 		}
 
-		//----- call action finished/failure -----//
+		//----- don't cancel the action if the build spot is occupied; go into wait-for-build mode instead -----//
 
-		if( ai_action_id && nation_recno )
+		if ( !(shouldProceed && buildSpotOccupied && wait_for_build()) )
 		{
-			if( succeedFlag )
-				nation_array[nation_recno]->action_finished(ai_action_id, sprite_recno);
-			else
-				nation_array[nation_recno]->action_failure(ai_action_id, sprite_recno);
+			//----- call action finished/failure -----//
+
+			if( ai_action_id && nation_recno )
+			{
+				if( succeedFlag )
+					nation_array[nation_recno]->action_finished(ai_action_id, sprite_recno);
+				else
+					nation_array[nation_recno]->action_failure(ai_action_id, sprite_recno);
+			}
+
+			//---------------------------------------//
+
+			reset_action_para();
+
+			if ( cur_action == SPRITE_WAIT_FOR_BUILD )
+				set_idle();
 		}
-
-		//---------------------------------------//
-
-		reset_action_para();
 	}
 }
 //----------- End of function Unit::process_build_firm -----------//
