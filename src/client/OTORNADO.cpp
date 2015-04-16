@@ -323,6 +323,10 @@ void TornadoArray::process()
 				tornadoPtr->process_wait();
 				break;
 
+			case SPRITE_WAIT_FOR_BUILD:
+				err_here();
+				break;
+
 			case SPRITE_ATTACK:
 				tornadoPtr->process_attack();
 				break;

@@ -126,7 +126,7 @@ void Unit::search_or_wait()
 		unitPtr = unit_array[unitRecno];
 		if(unitPtr->nation_recno==nation_recno && unitPtr->unit_group_id==unit_group_id &&
 			((unitPtr->cur_action==SPRITE_WAIT && unitPtr->waiting_term>1) || unitPtr->cur_action==SPRITE_TURN ||
-			  unitPtr->cur_action==SPRITE_MOVE))
+			  unitPtr->cur_action==SPRITE_MOVE || unitPtr->cur_action==SPRITE_WAIT_FOR_BUILD))
 		{
 			surrArray[i-2] = unitRecno;
 			unitPtr->unit_group_id++;
@@ -185,6 +185,16 @@ void Unit::handle_blocked_move_s11(Unit *unitPtr)
 				}
 				else // wait
 					set_wait();
+				return;
+
+		case SPRITE_WAIT_FOR_BUILD: // The blocking unit is waiting to build. Don't wait for it unless we have to.
+				if(waiting_term>=MAX_WAITING_TERM_DIFF)
+				{
+					search_or_stop(move_to_x_loc, move_to_y_loc, 1); // recall searching
+					waiting_term = 0;
+				}
+				else // try to find a way around
+					search_or_wait();
 				return;
 
 		//------------------------------------------------------------------------------------//

@@ -614,7 +614,7 @@ void Unit::target_move(Unit* targetUnit)
 		//---------------------------------------------------------------------//
 		if(!update_attack_path_dist())
 		{
-			if(cur_action==SPRITE_MOVE || cur_action==SPRITE_WAIT || cur_action==SPRITE_READY_TO_MOVE)
+			if(cur_action==SPRITE_MOVE || cur_action==SPRITE_WAIT || cur_action==SPRITE_WAIT_FOR_BUILD || cur_action==SPRITE_READY_TO_MOVE)
 				return;
 		}
 

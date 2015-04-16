@@ -46,6 +46,8 @@ enum { SPRITE_IDLE=1,
 		 SPRITE_TURN,
 		 SPRITE_SHIP_EXTRA_MOVE,	// for ship only
 		 SPRITE_DIE,
+		 // Added GAME_VERSION 213:
+		 SPRITE_WAIT_FOR_BUILD // For units that want to construct a building: wait for the construction site to clear
 	  };
 
 //----------- Define constant ----------//
@@ -131,6 +133,7 @@ public:
 	virtual void	process_idle();
 	virtual void	process_move();
 	virtual void	process_wait()		{;}
+	virtual void	process_wait_for_build()	{}
 	virtual int 	process_attack();
 	virtual int 	process_die();
 			  void	process_turn();

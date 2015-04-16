@@ -179,6 +179,7 @@ void Unit::stop(int preserveAction)
 	
 		case SPRITE_TURN:
 		case SPRITE_WAIT:
+		case SPRITE_WAIT_FOR_BUILD:
 			go_x = next_x;
 			go_y = next_y;
 			move_to_x_loc = next_x_loc();

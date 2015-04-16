@@ -146,6 +146,7 @@ SpriteFrame* Sprite::cur_sprite_frame(int *needMirror)
 		case SPRITE_TURN:
 		case SPRITE_IDLE:
 		case SPRITE_WAIT:
+		case SPRITE_WAIT_FOR_BUILD:
 			// air unit needs it own stop frames to float on air
 			{
 				if( guard_count )

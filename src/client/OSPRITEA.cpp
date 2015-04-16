@@ -299,6 +299,16 @@ void SpriteArray::process()
 				#endif
 				break;
 
+			case SPRITE_WAIT_FOR_BUILD:
+				#ifdef DEBUG
+					startTime = misc.get_time();
+				#endif
+				spritePtr->process_wait_for_build();
+				#ifdef DEBUG
+					sprite_wait_profile_time += misc.get_time() - startTime;
+				#endif
+				break;
+
 			case SPRITE_ATTACK:
 				#ifdef DEBUG
 					startTime = misc.get_time();
