@@ -1217,8 +1217,7 @@ void Town::update_target_loyalty()
 		//------- calculate the target loyalty -------//
 
 		targetLoyalty = race_harmony(i+1)/3 +				// 0 to 33
-							 (int)nationPtr->reputation/4 +	// -25 to +25
-							 (quality_of_life-50)/3;				// -17 to +17
+							 (int)nationPtr->reputation/4;	// -25 to +25
 
 		//---- employment help increase loyalty ----//
 
@@ -1302,6 +1301,24 @@ void Town::update_target_loyalty()
 				targetLoyalty = race_target_loyalty_array[j] - thisInfluence;
 				race_target_loyalty_array[j] = MAX(0, targetLoyalty);
 			}
+		}
+	}
+
+	//------- apply quality of life -------//
+
+	int qolContribution = (quality_of_life-50)/3;			// -17 to +17
+	for( i=0 ; i<MAX_RACE ; i++ )
+	{
+		if( race_pop_array[i] == 0 )
+			continue;
+
+		targetLoyalty = race_target_loyalty_array[i];
+
+		// Quality of life only applies to the part above 30 loyalty
+		if (targetLoyalty > 30)
+		{
+			targetLoyalty = MAX(30, targetLoyalty + qolContribution);
+			race_target_loyalty_array[i] = MIN(100, targetLoyalty);
 		}
 	}
 
@@ -3181,7 +3198,7 @@ void Town::distribute_demand()
 			{
 				//---- if the demand is larger than the supply -----//
 
-				if( marketGoodsInfo->total_supply < townDemand )
+				if( marketGoodsInfo->total_supply <= townDemand )
 				{
 					marketGoods->month_demand += marketGoods->stock_qty +
 														 (townDemand - marketGoodsInfo->total_supply)
@@ -3195,10 +3212,12 @@ void Town::distribute_demand()
 
 					if( firmMarket->nation_recno == nation_recno )
 					{
-						marketGoods->month_demand += ownShareDemand * marketGoods->stock_qty / marketGoodsInfo->total_own_supply;
+						if (marketGoodsInfo->total_own_supply > 0.0f) // if total_own_supply is 0 then ownShareDemand is also 0 and we put no demand on the product
+							marketGoods->month_demand += ownShareDemand * marketGoods->stock_qty / marketGoodsInfo->total_own_supply;
 					}
 					else
 					{
+						// Note: total_supply > 0.0f, because else the first case above (demand larger than supply) will be triggered
 						marketGoods->month_demand += (townDemand-ownShareDemand) * marketGoods->stock_qty / marketGoodsInfo->total_supply;
 					}
 				}
