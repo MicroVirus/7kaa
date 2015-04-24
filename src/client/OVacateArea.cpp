@@ -553,16 +553,19 @@ int VacateArea::FindNearestUnit(int locX, int locY, int searchX, int searchY, in
 	// Assuming the area is not too large, walking through it linearly gives high (and maybe best) performance.
 	int bestUnit = 0;
 	int bestDistance = INT_MAX;
+	int bestDistance2 = INT_MAX; // Secondary distance measure, to favour, on equal distance, units in a straight line over angled.
 	for (int y = searchY; y < searchY + searchHeight; ++y)
 	{
 		for (int x = searchX; x < searchX + searchWidth; ++x)
 		{
 			int flag = _Area[y * width + x];
 			int dist = std::max(std::abs(x - locX), std::abs(y - locY)); // (metric on the map is that of a rectangular grid)
-			if (flag != 0 && flag != AREA_BLOCKED && dist < bestDistance) 
+			int dist2 = std::min(std::abs(x - locX), std::abs(y - locY)); // (secondary metric is that of a rectangular lattice: no diagonal movement allowed)
+			if (flag != 0 && flag != AREA_BLOCKED && (dist < bestDistance || (dist == bestDistance && dist2 < bestDistance2)))
 			{
 				bestUnit = flag;
 				bestDistance = dist;
+				bestDistance2 = dist2;
 				*unitX = x; *unitY = y;
 				// if (bestDistance == 1) return bestUnit; // Short-circuit checks if the best possible distance is achieved. // Not going to happen in our use-case, because of PushRings. Might consider setting it to 2.
 			}
