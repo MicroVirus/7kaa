@@ -435,7 +435,17 @@ void VacateArea::MoveAccordingToSchematic(int width, int height, int xLoc, int y
 				}
 
 				if (unit->next_x_loc() != moveX || unit->next_y_loc() != moveY)
+				{
 					unit->move_to(moveX, moveY);
+
+					// Cancel move if it results in a disproportionately long path.
+					const int maxMoveDist = 3 * std::max(width, height);
+					if (unit->result_node_array && unit->result_node_count && unit->result_path_dist > maxMoveDist)
+					{
+						MSG("VacateArea: Cancelled move because it resulted in a very long path (dist=%d).\n", (int)unit->result_path_dist);
+						unit->stop2();
+					}
+				}
 			}
 		} // for (y ..)
 	} // for (x ..)
