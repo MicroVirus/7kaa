@@ -1849,7 +1849,7 @@ void Unit::process_wait_for_build()
 
 	//--- Order any own idle units in the construction site to move out of the way ---//
 
-	if (wait_for_build_time % GAME_FRAMES_PER_DAY == 1)
+	if (wait_for_build_time % (3 * GAME_FRAMES_PER_DAY) == 1)
 	{
 		FirmInfo *firmInfo = firm_res[action_para];
 
