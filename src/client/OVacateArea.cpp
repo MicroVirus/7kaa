@@ -166,10 +166,8 @@ void VacateArea::VacateIdleOfNation(int buildxLoc, int buildyLoc, int buildWidth
 	// Executed computed moves. Also 'desperately' moves units still stuck inside the build-zone to a random location on the outline ring.
 	MoveAccordingToSchematic(width, height, xLoc, yLoc, buildxLoc, buildyLoc, buildWidth, buildHeight, R0x, R0y, R0Width, R0Height, outlineRing);
 	
-	// TODO: Do not continue with the move if the result path distance is greater than ~ 2-3 times the size of max(width,height).
-	//       If we find that it is, we should cancel the move and perhaps mark the offending spot as blocked and try again.
-	// TODO: Also account for sprite size and perhaps move magnitude?
-	// TODO: Marine units as well, for harbour
+	// TODO: Also account for sprite size and perhaps move magnitude? Update: Sprite size is always 1 (see SpriteRes::loc_width and loc_height). Move magnitude is 1 for all land units and 2 for all navy units.
+	// TODO: Marine units as well, for harbour.
 }
 
 
@@ -266,21 +264,20 @@ int VacateArea::PushRings(int width, int height, int R0x, int R0y, int R0Width, 
 		for (int R = emptyRing + 1; R < outlineRing; ++R)
 		{
 			const int ringLength = RingLength(R0Width, R0Height, R);
+			const int startIndex = misc.random(ringLength);
 			bool empty = true;
-		
-			// TODO: Should the start-location on the ring be randomised?
-
 			// Move all units in the current ring.
 			for (int i = 0; i < ringLength; ++i)
 			{
+				int ringIndex = (startIndex + i) % ringLength;
 				int x, y;
-				RingIndexToXY(R0x, R0y, R0Width, R0Height, R, i, &x, &y);
+				RingIndexToXY(R0x, R0y, R0Width, R0Height, R, ringIndex, &x, &y);
 				int flag = _Area[y * width + x];
 				if (flag != AREA_BLOCKED && flag != 0)
 				{
 					// There's a unit on the current spot that needs to be pushed out.
 					int unitRecno = flag;
-					int nextRingIndex = FindPushedSpot(MAX_MOVE, width, height, R0x, R0y, R0Width, R0Height, R, i);
+					int nextRingIndex = FindPushedSpot(MAX_MOVE, width, height, R0x, R0y, R0Width, R0Height, R, ringIndex);
 					if (nextRingIndex != -1)
 					{
 						// Move the unit.
@@ -316,7 +313,7 @@ int VacateArea::PushRings(int width, int height, int R0x, int R0y, int R0Width, 
 // Filling method: fill-up outline of build zone. Returns the number of units still in the build zone after pushing.
 int VacateArea::FillOutline(int occupationCount, int width, int height, int R0x, int R0y, int R0Width, int R0Height, int outlineRing)
 {
-	// TODO: Make clear the assertion that the only blocked point in the build zone is the builder, therefore every spot in the outline area is accessible via an (almost) direct path.
+	// Note: The assertion is that the only potential blocked point in the build zone is the builder, therefore every spot in the outline area is accessible via an (almost) direct path.
 
 	// Rectangle for the build zone.
 	const int buildX = R0x - (outlineRing-1), buildY = R0y - (outlineRing-1);
