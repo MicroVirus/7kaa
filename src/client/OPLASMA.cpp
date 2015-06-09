@@ -26,6 +26,13 @@
 #include <ALL.h>
 #include <OCONFIG.h>
 #include <OPLASMA.h>
+#include <OFILE.h>
+#include <dbglog.h>
+
+DBGLOG_DEFAULT_CHANNEL(MapGen);
+
+// Command line argument for loading a custom map.
+extern char clarg_custom_height_map[MAX_PATH+1];
 
 // ---------- define constant ----------//
 
@@ -91,7 +98,7 @@ void Plasma::plot(short x, short y, short value)
 
 
 // --------- Begin of function Plasma::generate -----------//
-void Plasma::generate(int genMethod, int grainFactor, int randomSeed)
+void Plasma::generate(int genMethod, int grainFactor, int randomSeed,  bool *usingCustomHeightMap)
 {
    int i,k, n;
    U16 rnd[4];
@@ -100,31 +107,84 @@ void Plasma::generate(int genMethod, int grainFactor, int randomSeed)
 
    srand(randomSeed);
 
-   for(n = 0; n < 4; n++)
-      rnd[n] = 1+(((misc.rand()/MAX_COLOR)*(MAX_COLOR-1))>>(SHIFT_VALUE-11));
-
-   plot(    0,     0, rnd[0]);
-   plot(max_x,     0, rnd[1]);
-   plot(max_x, max_y, rnd[2]);
-   plot(    0, max_y, rnd[3]);
-
-   recur_level = 0;
-
-   if ( genMethod == 0)         // use original method
+   // Check for presence of custom map on command line.
+   
+   bool usingCustomMap = false;
+   
+   if (clarg_custom_height_map[0] != '\0')
    {
-      sub_divide(0,0,max_x,max_y);
-   }
-   else         // use new method
-   {
-      recur1 = i = k = 1;
-      while(new_sub_divide(0,0,max_x,max_y,i)==0)
+      File customMap;
+      // P5\n201 201\n255\n
+      const uint8_t pgm_header[15] = {0x50, 0x35, 0x0A, 0x32, 0x30, 0x31, 0x20, 0x32, 0x30, 0x31, 0x0A, 0x32, 0x35, 0x35, 0x0A};
+      // Size of header (15 bytes) + size of map (201 * 201 bytes) = 40416 bytes.
+      const int map_file_size = 40416;
+      uint8_t buffer[map_file_size] = {0};
+
+      if (misc.is_file_exist(clarg_custom_height_map))
       {
-         k = k * 2;
-         if (k  > max_x && k > max_y)
-            break;
-         i++;
-		}
+         customMap.file_open(clarg_custom_height_map);
+         customMap.file_read(buffer, map_file_size);
+         int file_size = customMap.file_size();
+         customMap.file_close();
+
+         if(memcmp(buffer, pgm_header, 15) == 0 && file_size == map_file_size)
+         {
+            for(int i = 15; i < map_file_size; i++)
+            {
+               if(buffer[i] == 0)
+               {
+                  matrix[i-15] = 1;
+               }
+               else
+               {
+                  matrix[i-15] = (U16)buffer[i];
+               }
+            }
+            usingCustomMap = true;
+         }
+         else
+         {
+            ERR("Not a valid PGM map file.\n");
+         }
+      }
+      else
+      {
+         ERR("Could not open custom map %s\n", clarg_custom_height_map);
+      }
    }
+
+   // Generate a height-map if not using a custom height map.
+
+   if ( ! usingCustomMap)
+   {
+      for(n = 0; n < 4; n++)
+         rnd[n] = 1+(((misc.rand()/MAX_COLOR)*(MAX_COLOR-1))>>(SHIFT_VALUE-11));
+
+      plot(    0,     0, rnd[0]);
+      plot(max_x,     0, rnd[1]);
+      plot(max_x, max_y, rnd[2]);
+      plot(    0, max_y, rnd[3]);
+
+      recur_level = 0;
+
+      if ( genMethod == 0)         // use original method
+      {
+         sub_divide(0,0,max_x,max_y);
+      }
+      else         // use new method
+      {
+         recur1 = i = k = 1;
+         while(new_sub_divide(0,0,max_x,max_y,i)==0)
+         {
+            k = k * 2;
+            if (k  > max_x && k > max_y)
+               break;
+            i++;
+         }
+      }
+   }
+
+   if (usingCustomHeightMap) *usingCustomHeightMap = usingCustomMap;
 }
 // --------- End of function Plasma::generate -----------//
 

@@ -86,9 +86,10 @@ void World::generate_map()
 	// ---------- generate plasma map ----------//
 
 	Plasma heightMap;
+	bool usingCustomHeightMap;
 	memset( loc_matrix , 0, sizeof(Location) * MAX_WORLD_X_LOC * MAX_WORLD_Y_LOC );
 	heightMap.init(max_x_loc, max_y_loc);
-	heightMap.generate( misc.random(2), 5, misc.rand() );
+	heightMap.generate( misc.random(2), 5, misc.rand(), &usingCustomHeightMap );
 
 	curGenMapSteps++;			// 1
 	if( dispProgress )
@@ -98,74 +99,78 @@ void World::generate_map()
 		vga_front.unlock_buf();
 	}
 
-	// ###### begin Gilbert 27/8 ########//
-	// ---------- add base level --------//
-	// heightMap.add_base_level(heightMap.calc_tera_base_level(TerrainRes::min_height(TERRAIN_DARK_GRASS)));
-
-	// grouping plasma sample data, find sea or land first
-	int	totalLoc = (max_x_loc+1) * (max_y_loc+1);
-	short heightLimit[2];
-	int	heightFreq[2];
-	int minLandCount, maxLandCount;
-	int	initHeightLimit = TerrainRes::min_height(TERRAIN_DARK_GRASS);
-	switch(config.land_mass)
+	// The following height-processing is not needed when using a custom height map.
+	if ( !usingCustomHeightMap )
 	{
-	case OPTION_LOW:
-		minLandCount = totalLoc *4/10;
-		maxLandCount = totalLoc *6/10;
-		break;
-	case OPTION_MODERATE:
-		minLandCount = totalLoc *6/10;
-		maxLandCount = totalLoc *8/10;
-		break;
-	case OPTION_HIGH:
-		minLandCount = totalLoc *8 /10;
-		maxLandCount = totalLoc;
-		break;
-	default:
-		err_here();
-	}
-	int avgLandCount = (minLandCount + maxLandCount) /2;
+		// ###### begin Gilbert 27/8 ########//
+		// ---------- add base level --------//
+		// heightMap.add_base_level(heightMap.calc_tera_base_level(TerrainRes::min_height(TERRAIN_DARK_GRASS)));
 
-	heightLimit[0] = 0;
-	heightLimit[1] = initHeightLimit;
-	heightMap.stat(2, heightLimit, heightFreq);
-	
-	int& landCount = heightFreq[1];
-	int& seaCount = heightFreq[0];
-
-	int loopCount = 0;
-	while( ++loopCount <= 4 && (landCount<minLandCount || landCount>maxLandCount) )
-	{
-		if( landCount < minLandCount )
+		// grouping plasma sample data, find sea or land first
+		int	totalLoc = (max_x_loc+1) * (max_y_loc+1);
+		short heightLimit[2];
+		int	heightFreq[2];
+		int minLandCount, maxLandCount;
+		int	initHeightLimit = TerrainRes::min_height(TERRAIN_DARK_GRASS);
+		switch(config.land_mass)
 		{
-			// positive add_base_level to gain more land
-			// find a level between 0 to TerrainRes::min_height(TERRAIN_DARK_GRASS)
-			// assume heightlevel below heightLimit[1] is evenly distributed,
-			// approximate a new heightLimit[1] such that landCount is avgLandCount
-
-			// (heightLimit[1] - newheightLimit[1]) * seaCount / (heightLimit[1] - heightLimit[0]) + landCount = avgLandCount
-			
-			heightLimit[1] = heightLimit[1] - (avgLandCount - landCount) * (heightLimit[1] - heightLimit[0]) / seaCount;
+		case OPTION_LOW:
+			minLandCount = totalLoc *4/10;
+			maxLandCount = totalLoc *6/10;
+			break;
+		case OPTION_MODERATE:
+			minLandCount = totalLoc *6/10;
+			maxLandCount = totalLoc *8/10;
+			break;
+		case OPTION_HIGH:
+			minLandCount = totalLoc *8 /10;
+			maxLandCount = totalLoc;
+			break;
+		default:
+			err_here();
 		}
-		else if( landCount > maxLandCount )
-		{
-			// negative add_base_level to reduce land
-			// find a level above TerrainRes::min_height(TERRAIN_DARK_GRASS)
-			// assume heightlevel above heightLimit[1] is evenly distributed,
-			// approximate a new heightLimit[1] such that landCount is avgLandCount
+		int avgLandCount = (minLandCount + maxLandCount) /2;
 
-			const int maxHeightLimit = 255;
-			// landCount * (maxHeightLimit - newheightLimit[1])/ (maxHeightLimit - heightLimit[1]) = avgLandCount
-			heightLimit[1] = maxHeightLimit - avgLandCount * (maxHeightLimit - heightLimit[1]) / landCount;
-		}
+		heightLimit[0] = 0;
+		heightLimit[1] = initHeightLimit;
 		heightMap.stat(2, heightLimit, heightFreq);
-	}
+	
+		int& landCount = heightFreq[1];
+		int& seaCount = heightFreq[0];
 
-	if( abs( heightLimit[1] - initHeightLimit ) > 2 )
-	{
-		heightMap.add_base_level(initHeightLimit - heightLimit[1]);
-	}
+		int loopCount = 0;
+		while( ++loopCount <= 4 && (landCount<minLandCount || landCount>maxLandCount) )
+		{
+			if( landCount < minLandCount )
+			{
+				// positive add_base_level to gain more land
+				// find a level between 0 to TerrainRes::min_height(TERRAIN_DARK_GRASS)
+				// assume heightlevel below heightLimit[1] is evenly distributed,
+				// approximate a new heightLimit[1] such that landCount is avgLandCount
+
+				// (heightLimit[1] - newheightLimit[1]) * seaCount / (heightLimit[1] - heightLimit[0]) + landCount = avgLandCount
+			
+				heightLimit[1] = heightLimit[1] - (avgLandCount - landCount) * (heightLimit[1] - heightLimit[0]) / seaCount;
+			}
+			else if( landCount > maxLandCount )
+			{
+				// negative add_base_level to reduce land
+				// find a level above TerrainRes::min_height(TERRAIN_DARK_GRASS)
+				// assume heightlevel above heightLimit[1] is evenly distributed,
+				// approximate a new heightLimit[1] such that landCount is avgLandCount
+
+				const int maxHeightLimit = 255;
+				// landCount * (maxHeightLimit - newheightLimit[1])/ (maxHeightLimit - heightLimit[1]) = avgLandCount
+				heightLimit[1] = maxHeightLimit - avgLandCount * (maxHeightLimit - heightLimit[1]) / landCount;
+			}
+			heightMap.stat(2, heightLimit, heightFreq);
+		}
+
+		if( abs( heightLimit[1] - initHeightLimit ) > 2 )
+		{
+			heightMap.add_base_level(initHeightLimit - heightLimit[1]);
+		}
+	} // if( !customHeightMap )
 
 	curGenMapSteps++;			// 2
 	if( dispProgress )

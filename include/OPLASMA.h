@@ -47,7 +47,7 @@ public:
 	~Plasma();
 	void	init(short x, short y);
 	void	deinit();
-	void	generate(int genMethod, int grainFactor, int randomSeed);
+	void	generate(int genMethod, int grainFactor, int randomSeed, bool *usingCustomHeightMap = NULL);
 	void	generate2(int genMethod, int grainFactor, int randomSeed);
 
 	short get_pix(short x, short y);

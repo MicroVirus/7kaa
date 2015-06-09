@@ -269,6 +269,9 @@ unsigned long last_unit_assign_profile_time = 0L;
 unsigned long unit_assign_profile_time = 0L;
 #endif
 
+// For specifying a custom height map on the command line.
+char clarg_custom_height_map[MAX_PATH+1] = {0};
+
 DBGLOG_DEFAULT_CHANNEL(am);
 
 //------- Define static functions --------//
@@ -322,6 +325,7 @@ int main(int argc, char **argv)
 	const char *lobbyJoinCmdLine = "-join";
 	const char *lobbyHostCmdLine = "-host";
 	const char *lobbyNameCmdLine = "-name";
+	const char *customHeightMapCmdLine = "-heightmap";
 	char *join_host = NULL;
 	int lobbied = 0;
 
@@ -363,6 +367,14 @@ int main(int argc, char **argv)
 			}
 			strncpy(config.player_name, argv[i+1], config.PLAYER_NAME_LEN);
 			config.player_name[config.PLAYER_NAME_LEN] = 0;
+			i++;
+		} else if (!strcmp(argv[i], customHeightMapCmdLine)) {
+			if (i >= argc - 1) {
+				ERR("The %s switch requires a filename parameter.\n", customHeightMapCmdLine);
+				return 1;
+			}
+			strncpy(clarg_custom_height_map, argv[i+1], MAX_PATH);
+			clarg_custom_height_map[MAX_PATH] = 0;
 			i++;
 		}
 	}
