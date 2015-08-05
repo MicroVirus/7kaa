@@ -159,17 +159,18 @@ noinst_HEADERS = \
 	asmfun.h \
 	audio_base.h \
 	audio_stream.h \
+	c99_printf.h \
 	dbglog.h \
-	dsound_audio.h \
 	file_input_stream.h \
 	file_io_visitor.h \
 	file_output_stream.h \
 	file_reader.h \
 	file_util.h \
 	file_writer.h \
+	gettext.h \
+	gettext-gnu.h \
 	input_stream.h \
 	mem_input_stream.h \
-	mouse_dinput.h \
 	mouse_none.h \
 	mouse_sdl.h \
 	multiplayer.h \
@@ -178,12 +179,10 @@ noinst_HEADERS = \
 	player_desc.h \
 	surface.h \
 	surface_base.h \
-	surface_ddraw.h \
 	surface_none.h \
 	surface_sdl.h \
 	version.h \
 	vga_base.h \
-	vga_ddraw.h \
 	vga_none.h \
 	vga_sdl.h \
 	vga_util.h \

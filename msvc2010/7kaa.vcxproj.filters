@@ -66,9 +66,6 @@
     <ClInclude Include="..\include\DMOUSE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\dsound_audio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\file_input_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -100,9 +97,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\mem_input_stream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\mouse_dinput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\mouse_none.h">
@@ -585,9 +579,6 @@
     <ClInclude Include="..\include\surface_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\surface_ddraw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\surface_none.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -595,9 +586,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\vga_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\vga_ddraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\vga_none.h">
@@ -625,6 +613,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c99_printf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gettext-gnu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
