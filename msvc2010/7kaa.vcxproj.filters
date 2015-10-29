@@ -63,9 +63,6 @@
     <ClInclude Include="..\include\dbglog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\DMOUSE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\file_input_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1428,123 +1425,6 @@
     <ClCompile Include="..\src\file\output_stream.cpp">
       <Filter>Source Files\file</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\imgfun\CRC.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_BAR.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_BLACK.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_EMASK.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_EREMAP.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_FONT.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_FREMAP.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_LINE.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_PIXEL.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_READ.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\I_SNOW.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB2.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_32.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_A.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_AR.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_AT.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_ATD.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_ATDM.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_ATR.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_ATRD.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_ATRDM.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_DW.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_R.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_RD.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_T.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_TD.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_TDM.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_TR.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_TRD.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IB_TRDM.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IC.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IC_R.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IJ_T.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IR.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IR_A.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IR_AM.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IR_BAR.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\imgfun\IR_M.cpp">
-      <Filter>Source Files\imgfun</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\input\sdl\OMOUSE.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
@@ -1598,6 +1478,123 @@
     </ClCompile>
     <ClCompile Include="..\src\client\OGAMEMP.cpp">
       <Filter>Source Files\multiplayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\CRC.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_BAR.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_BLACK.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_EMASK.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_EREMAP.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_FONT.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_FREMAP.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_LINE.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_PIXEL.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_READ.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\I_SNOW.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_32.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_A.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_AR.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_AT.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_ATD.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_ATDM.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_ATR.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_ATRD.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_ATRDM.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_DW.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_R.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_RD.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_T.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_TD.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_TDM.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_TR.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_TRD.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB_TRDM.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IB2.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IC.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IC_R.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IJ_T.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IR.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IR_A.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IR_AM.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IR_BAR.cpp">
+      <Filter>Source Files\imgfun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\imgfun\generic\IR_M.cpp">
+      <Filter>Source Files\imgfun</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

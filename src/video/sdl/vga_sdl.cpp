@@ -2,7 +2,7 @@
  * Seven Kingdoms: Ancient Adversaries
  *
  * Copyright 1997,1998 Enlight Software Ltd.
- * Copyright 2010 Jesse Allen
+ * Copyright 2010,2015 Jesse Allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,6 @@ VgaSDL::VgaSDL()
    memset(game_pal, 0, sizeof(SDL_Color)*VGA_PALETTE_SIZE);
    custom_pal = NULL;
    vga_color_table = NULL;
-   video_mode_flags = SDL_WINDOW_SHOWN;
 }
 //-------- End of function VgaSDL::VgaSDL ----------//
 
@@ -94,7 +93,7 @@ int VgaSDL::init()
 
    if (SDL_CreateWindowAndRenderer(window_width,
                                    window_height,
-                                   video_mode_flags,
+                                   0,
                                    &window,
                                    &renderer) < 0)
    {
@@ -260,6 +259,8 @@ int VgaSDL::init_back(VgaBuf *b, unsigned long w, unsigned long h)
 
 void VgaSDL::deinit()
 {
+   SDL_SetRelativeMouseMode(SDL_FALSE);
+
    vga_back.deinit();
    if (sys.debug_session)
       vga_true_front.deinit();
@@ -278,7 +279,6 @@ void VgaSDL::deinit()
    SDL_DestroyWindow(window);
    window = NULL;
    SDL_Quit();
-   video_mode_flags = SDL_WINDOW_HIDDEN;
 }
 //-------- End of function VgaSDL::deinit ----------//
 
@@ -508,24 +508,45 @@ void VgaSDL::flag_redraw()
 //
 int VgaSDL::is_full_screen()
 {
-   return video_mode_flags & SDL_WINDOW_FULLSCREEN_DESKTOP;
+   return ((SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0);
 }
 //-------- End of function VgaSDL::is_full_screen ----------//
 
-//-------- Begin of function VgaSDL::toggle_full_screen --------//
+
+//-------- Begin of function VgaSDL::is_input_grabbed --------//
 //
-// The previous front surface is freed by SDL_SetVideoMode.
-void VgaSDL::toggle_full_screen()
+int VgaSDL::is_input_grabbed()
+{
+   return ((SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_GRABBED) != 0);
+}
+//-------- End of function VgaSDL::is_input_grabbed ----------//
+
+
+//-------- Begin of function VgaSDL::set_full_screen_mode --------//
+//
+// mode -1: toggle
+// mode  0: windowed
+// mode  1: full screen without display mode change (stretched to desktop)
+void VgaSDL::set_full_screen_mode(int mode)
 {
    int result = 0;
+   uint32_t flags = 0;
 
-   if (!is_full_screen()) {
-      result = SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-      video_mode_flags ^= SDL_WINDOW_FULLSCREEN_DESKTOP;
-   } else {
-      result = SDL_SetWindowFullscreen(window, 0);
-      video_mode_flags ^= SDL_WINDOW_FULLSCREEN_DESKTOP;
+   switch (mode)
+   {
+      case -1:
+         flags = is_full_screen() ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP;
+         break;
+      case 0:
+         break;
+      case 1:
+         flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+         break;
+      default:
+         err_now("invalid mode");
    }
+
+   result = SDL_SetWindowFullscreen(window, flags);
    if (result < 0) {
       ERR("Could not toggle fullscreen: %s\n", SDL_GetError());
       return;
@@ -533,8 +554,37 @@ void VgaSDL::toggle_full_screen()
 
    refresh_palette();
    sys.need_redraw_flag = 1;
+   set_window_grab(flags == SDL_WINDOW_FULLSCREEN_DESKTOP);
 }
-//-------- End of function VgaSDL::toggle_full_screen ----------//
+//-------- End of function VgaSDL::set_full_screen_mode ----------//
+
+
+//-------- Begin of function VgaSDL::set_window_grab --------//
+//
+// mode -1: toggle
+// mode  0: unset grab
+// mode  1: set grab
+void VgaSDL::set_window_grab(int mode)
+{
+   SDL_bool grabbed = SDL_FALSE;
+
+   switch (mode)
+   {
+      case -1:
+         grabbed = is_input_grabbed() ? SDL_FALSE : SDL_TRUE;
+         break;
+      case 0:
+         break;
+      case 1:
+         grabbed = SDL_TRUE;
+         break;
+      default:
+         err_now("invalid mode");
+   }
+   SDL_SetWindowGrab(window, grabbed);
+   SDL_SetRelativeMouseMode(grabbed);
+}
+//-------- End of function VgaSDL::set_window_grab ----------//
 
 
 //-------- Beginning of function VgaSDL::flip ----------//

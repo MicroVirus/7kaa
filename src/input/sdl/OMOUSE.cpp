@@ -2,7 +2,7 @@
  * Seven Kingdoms: Ancient Adversaries
  *
  * Copyright 1997,1998 Enlight Software Ltd.
- * Copyright 2010 Jesse Allen
+ * Copyright 2010,2015 Jesse Allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,6 +106,7 @@ void MouseSDL::init()
 
 	SDL_StopTextInput();
 	SDL_ShowCursor(SDL_DISABLE);
+	SDL_GetMouseState(&cur_x, &cur_y);
 }
 //------------- End of MouseSDL::init -------------//
 
@@ -537,7 +538,8 @@ int MouseSDL::single_click(int x1, int y1, int x2, int y2,int buttonId)
 // [int] buttonId    = which button ( 0=left, 1-right, 2-left or right)
 //                     (default:0)
 //
-// Return : 1 - if the area has been clicked
+// Return : 1 - if the area has been clicked (left click)
+//				2 - if the area has been clicked (right click)
 //          0 - if not
 //
 int MouseSDL::double_click(int x1, int y1, int x2, int y2,int buttonId)
@@ -569,7 +571,7 @@ int MouseSDL::double_click(int x1, int y1, int x2, int y2,int buttonId)
           && cptr->x >= x1 && cptr->y >= y1
           && cptr->x <= x2 && cptr->y <= y2 )
       {
-         return 1;
+         return 2;
       }
    }
 
@@ -741,23 +743,26 @@ void MouseSDL::poll_event()
 
 		switch (event.type) {
 		case SDL_MOUSEMOTION:
-		// SDL already accelerates relative mouse motions.
-		// Disable to let the user control speed outside of game.
-#ifdef MOUSE_RELATIVE
-			cur_x += micky_to_displacement(event.motion.xrel);
-			cur_y += micky_to_displacement(event.motion.yrel);
+			if(vga.is_input_grabbed()) {
+#ifdef MOUSE_ACCEL
+				cur_x += micky_to_displacement(event.motion.xrel);
+				cur_y += micky_to_displacement(event.motion.yrel);
 #else
-			cur_x = event.motion.x;
-			cur_y = event.motion.y;
+				cur_x += event.motion.xrel;
+				cur_y += event.motion.yrel;
 #endif
-			if(cur_x < bound_x1)
-				cur_x = bound_x1;
-			if(cur_x > bound_x2)
-				cur_x = bound_x2;
-			if(cur_y < bound_y1)
-				cur_y = bound_y1;
-			if(cur_y > bound_y2)
-				cur_y = bound_y2;
+				if(cur_x < bound_x1)
+					cur_x = bound_x1;
+				else if(cur_x > bound_x2)
+					cur_x = bound_x2;
+				if(cur_y < bound_y1)
+					cur_y = bound_y1;
+				else if(cur_y > bound_y2)
+					cur_y = bound_y2;
+			} else {
+				cur_x = event.motion.x;
+				cur_y = event.motion.y;
+			}
 			moveFlag = 1;
 			break;
 		case SDL_MOUSEBUTTONDOWN:
@@ -808,7 +813,6 @@ void MouseSDL::poll_event()
 				if (event.key.keysym.sym == SDLK_RETURN) {
 					bypass = 1;
 					sys.toggle_full_screen_flag = 1;
-					sys.need_redraw_flag = 1;
 				} else if (event.key.keysym.sym == SDLK_F4) {
 					bypass = 1;
 					sys.signal_exit_flag = 1;
@@ -818,18 +822,9 @@ void MouseSDL::poll_event()
 					SDL_MinimizeWindow(window);
 				}
 			} else if (mod == KMOD_LCTRL || mod == KMOD_RCTRL) {
-				if (event.key.keysym.sym == SDLK_g &&
-						!vga.is_full_screen()) {
-					static int grabbed = 0;
+				if (event.key.keysym.sym == SDLK_g) {
 					bypass = 1;
-					SDL_Window *window = SDL_GetWindowFromID(event.key.windowID);
-					if (!grabbed) {
-						SDL_SetWindowGrab(window, SDL_TRUE);
-						grabbed = 1;
-					} else {
-						SDL_SetWindowGrab(window, SDL_FALSE);
-						grabbed = 0;
-					}
+					vga.set_window_grab(-1);
 				}
 			}
 			if (!bypass) {
@@ -973,15 +968,12 @@ void MouseSDL::reset_click()
 //--------- End of MouseSDL::reset_click --------------//
 
 
-// ------ Begin of MouseSDL::mickey_to_displacment -------//
-long MouseSDL::micky_to_displacement(unsigned long w)
+// ------ Begin of MouseSDL::micky_to_displacement -------//
+int MouseSDL::micky_to_displacement(int d)
 {
-	long d = (long)w ;
-	// long a = abs(d);
-	// return a >= double_speed_threshold ? (a >= triple_speed_threshold ? 3 * d : 2 * d) : d;
 	return abs(d) >= double_speed_threshold ? d+d : d;
 }
-// ------ End of MouseSDL::mickey_to_displacment -------//
+// ------ End of MouseSDL::micky_to_displacement -------//
 
 
 // ------ Begin of MouseSDL::is_key -------//
