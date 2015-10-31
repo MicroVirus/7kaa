@@ -743,7 +743,7 @@ void MouseSDL::poll_event()
 
 		switch (event.type) {
 		case SDL_MOUSEMOTION:
-			if(vga.is_input_grabbed()) {
+			if(vga.is_full_screen()) {
 #ifdef MOUSE_ACCEL
 				cur_x += micky_to_displacement(event.motion.xrel);
 				cur_y += micky_to_displacement(event.motion.yrel);
@@ -751,18 +751,20 @@ void MouseSDL::poll_event()
 				cur_x += event.motion.xrel;
 				cur_y += event.motion.yrel;
 #endif
-				if(cur_x < bound_x1)
-					cur_x = bound_x1;
-				else if(cur_x > bound_x2)
-					cur_x = bound_x2;
-				if(cur_y < bound_y1)
-					cur_y = bound_y1;
-				else if(cur_y > bound_y2)
-					cur_y = bound_y2;
 			} else {
 				cur_x = event.motion.x;
 				cur_y = event.motion.y;
 			}
+
+			if(cur_x < bound_x1)
+				cur_x = bound_x1;
+			else if(cur_x > bound_x2)
+				cur_x = bound_x2;
+			if(cur_y < bound_y1)
+				cur_y = bound_y1;
+			else if(cur_y > bound_y2)
+				cur_y = bound_y2;
+
 			moveFlag = 1;
 			break;
 		case SDL_MOUSEBUTTONDOWN:

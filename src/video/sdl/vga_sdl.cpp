@@ -531,16 +531,19 @@ void VgaSDL::set_full_screen_mode(int mode)
 {
    int result = 0;
    uint32_t flags = 0;
+   SDL_bool relativeMode = SDL_FALSE;
 
    switch (mode)
    {
       case -1:
          flags = is_full_screen() ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP;
+         if (flags != 0) relativeMode = SDL_TRUE;
          break;
       case 0:
          break;
       case 1:
          flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+         relativeMode = SDL_TRUE;
          break;
       default:
          err_now("invalid mode");
@@ -555,6 +558,7 @@ void VgaSDL::set_full_screen_mode(int mode)
    refresh_palette();
    sys.need_redraw_flag = 1;
    set_window_grab(flags == SDL_WINDOW_FULLSCREEN_DESKTOP);
+   SDL_SetRelativeMouseMode(relativeMode);
 }
 //-------- End of function VgaSDL::set_full_screen_mode ----------//
 
@@ -582,7 +586,6 @@ void VgaSDL::set_window_grab(int mode)
          err_now("invalid mode");
    }
    SDL_SetWindowGrab(window, grabbed);
-   SDL_SetRelativeMouseMode(grabbed);
 }
 //-------- End of function VgaSDL::set_window_grab ----------//
 
