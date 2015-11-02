@@ -36,7 +36,7 @@ private:
 public:
    Error();
 
-   void internal(char*,const char*,int);
+   void internal_error(char*,const char*,int);
    void mem();
         void msg(const char*,...);
    void run(const char*,...);
@@ -49,8 +49,8 @@ extern Error err;
 //-------- error handling functions ----------//
 
 #ifdef DEBUG
-   #define err_when(cond)   if(cond) err.internal(NULL,__FILE__, __LINE__)
-   #define err_here()       err.internal(NULL,__FILE__, __LINE__)
+   #define err_when(cond)   if(cond) err.internal_error(NULL,__FILE__, __LINE__)
+   #define err_here()       err.internal_error(NULL,__FILE__, __LINE__)
    #define err_if(cond)     if(cond)
    #define err_else         else
    #define err_now(msg)     err.run(msg)        // internal error

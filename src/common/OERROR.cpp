@@ -78,7 +78,7 @@ static void new_func_handler()
 //-------- End of function new_func_handler --------------//
 
 
-//------- BEGIN OF FUNCTION Error::internal -----------//
+//------- BEGIN OF FUNCTION Error::internal_error -----------//
 //
 // sample error message :
 //
@@ -94,7 +94,7 @@ static void new_func_handler()
 // <int>   lineNum  - the line number of program cause error
 //                    usually is __LINE__
 //
-void Error::internal(char* errMsg,const char* fileName,int lineNum)
+void Error::internal_error(char* errMsg,const char* fileName,int lineNum)
 {
  	if( error_flag )	// prevent error message dead loop
 		return;
@@ -127,7 +127,7 @@ void Error::internal(char* errMsg,const char* fileName,int lineNum)
 
 	exit( -2 );
 }
-//--------- END OF FUNCTION Error::internal ----------//
+//--------- END OF FUNCTION Error::internal_error ----------//
 
 
 //------- BEGIN OF FUNCTION Error::mem -----------//
