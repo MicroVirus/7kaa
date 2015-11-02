@@ -73,6 +73,13 @@ int GameFile::save_game(const char* fileName)
 		errStr = _("Path too long to the saved game.");
 	}
 
+	// Developer version check (set to true for when current version has changed some critical structures, so we cannot support saving until a new savegame format/version is established)
+	if (/* developer version? */ true)
+	{
+		rc = 0;
+		errStr = _("The current developer version does not support saving, because critical structures have changed.");
+	}
+
 	if( rc )
 	{
 		rc = file.file_create(full_path, 0, 1); // 0=tell File don't handle error itself
