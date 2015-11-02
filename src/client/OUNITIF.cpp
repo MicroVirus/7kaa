@@ -1606,6 +1606,7 @@ static void disp_debug_info(Unit* unitPtr, int dispY1, int refreshFlag)
 		"Turn",
 		"Ship extra move",
 		"Die",
+		"Wait for build",
 	};
 
 	if( refreshFlag == INFO_REPAINT )
