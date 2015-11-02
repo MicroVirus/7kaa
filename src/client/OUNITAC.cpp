@@ -1280,7 +1280,7 @@ void Unit::process_build_firm()
 
 			reset_action_para();
 
-			if ( cur_action == SPRITE_WAIT_FOR_BUILD )
+			if ( !succeedFlag && cur_action == SPRITE_WAIT_FOR_BUILD && is_visible() )
 				set_idle();
 		}
 	}
