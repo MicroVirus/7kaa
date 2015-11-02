@@ -812,7 +812,7 @@ void ZoomMatrix::draw_build_marker()
 		locWidth  = firmInfo->loc_width;
 		locHeight = firmInfo->loc_height;
 
-		validAction  = world.can_build_firm( top_x_loc+xLoc, top_y_loc+yLoc, power.command_para, unit_array.selected_recno );
+		validAction  = world.can_build_firm( top_x_loc+xLoc, top_y_loc+yLoc, power.command_para, unit_array.selected_recno, true /* ignore units */ );
 	}
 
 	//------- if it's in settling mode now ----//
