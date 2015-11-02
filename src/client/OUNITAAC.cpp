@@ -34,6 +34,7 @@
 #include <OTOWN.h>
 #include <OTERRAIN.h>
 #include <OU_MARI.h>
+#include <OVacateArea.h>
 #include <dbglog.h>
 
 #ifdef NO_DEBUG_UNIT
@@ -51,6 +52,10 @@
 #endif
 
 DBGLOG_DEFAULT_CHANNEL(UnitArray);
+
+
+// Helper class for ordering units out of the build area. Used by order_vacate_area.
+static VacateArea VacateAreaHelper;
 
 
 //--------- Begin of function UnitArray::divide_array ---------//
@@ -1317,8 +1322,6 @@ void UnitArray::order_vacate_area(int pointX, int pointY, int width, int height,
 		return;
 	}
 
-	// TODO: Move unit out of the way.
-	// TODO: Also account for sprite size and perhaps move magnitude?
-	// TODO: Marine units as well, for harbour
+	VacateAreaHelper.VacateIdleOfNation(pointX, pointY, width, height, nation_recno, caller_unit_recno);
 }
 //----------- End of function UnitArray::order_vacate_area -----------//
