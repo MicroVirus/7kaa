@@ -1103,8 +1103,9 @@ int World::locate_space_random(int& xLoc1, int& yLoc1, int xLoc2, int yLoc2,
 // [short] unitRecno    = the unit recno of the unit to build the firm
 //								  if the builder unit stands on the building area, still consider the area as buildable
 //								  (default: -1, do not take the builder into account)
+// [bool]  ignoreUnits  = true if any units standing in the area do not count as it being blocked. (default: false) 
 //
-int World::can_build_firm(int xLoc1, int yLoc1, int firmId, short unitRecno)
+int World::can_build_firm(int xLoc1, int yLoc1, int firmId, short unitRecno, bool ignoreUnits)
 {
 	if( xLoc1 < 0 || yLoc1 < 0 || xLoc1 > MAX_WORLD_X_LOC || yLoc1 > MAX_WORLD_Y_LOC )	
 		return 0;		
@@ -1136,7 +1137,7 @@ int World::can_build_firm(int xLoc1, int yLoc1, int firmId, short unitRecno)
 			{
 				// ##### patch begin Gilbert 14/3 ######//
 				if(!locPtr->can_build_firm(teraMask) && 
-					(!locPtr->has_unit(UNIT_LAND) || locPtr->unit_recno(UNIT_LAND)!=unitRecno))
+					(!locPtr->has_unit(UNIT_LAND) || (!ignoreUnits && locPtr->unit_recno(UNIT_LAND)!=unitRecno)))
 					return 0;
 				// ##### patch end Gilbert 14/3 ######//
 

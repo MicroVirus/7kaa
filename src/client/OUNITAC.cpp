@@ -85,7 +85,8 @@ void Unit::build_firm(int buildXLoc, int buildYLoc, int firmId, char remoteActio
 	//----------------------------------------------------------------//
 	// location is blocked, cannot build. so move there instead
 	//----------------------------------------------------------------//
-	if(!world.can_build_firm(buildXLoc, buildYLoc, firmId, sprite_recno))
+	int canBuildFirm = world.can_build_firm(buildXLoc, buildYLoc, firmId, sprite_recno, true /* ignore units */);
+	if(!canBuildFirm)
 	{
 		//reset_action_para2();
 		move_to(buildXLoc, buildYLoc);
@@ -96,7 +97,7 @@ void Unit::build_firm(int buildXLoc, int buildYLoc, int firmId, char remoteActio
 	// different territory
 	//----------------------------------------------------------------//
 
-	int harborDir = world.can_build_firm(buildXLoc, buildYLoc, firmId, sprite_recno);
+	int harborDir = canBuildFirm;
 	int goX = buildXLoc, goY = buildYLoc;
 	if( firm_res[firmId]->tera_type == 4)
 	{
