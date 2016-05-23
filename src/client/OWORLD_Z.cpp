@@ -829,7 +829,7 @@ void ZoomMatrix::draw_build_marker()
 		locWidth  = STD_TOWN_LOC_WIDTH;
 		locHeight = STD_TOWN_LOC_HEIGHT;
 
-		validAction  = world.can_build_town( top_x_loc+xLoc, top_y_loc+yLoc, unit_array.selected_recno );
+		validAction  = world.can_build_town( top_x_loc+xLoc, top_y_loc+yLoc, unit_array.selected_recno, true /* ignore units */);
 	}
 
 	//------- COMMAND_BUILD_WALL --------//
