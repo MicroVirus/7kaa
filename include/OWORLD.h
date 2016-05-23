@@ -128,7 +128,7 @@ public:
 	void		visit_shell(int xLoc1, int yLoc1, int xLoc2, int yLoc2, int visitLevel);
 
 	int		can_build_firm(int xLoc1, int yLoc1, int firmId, short unitRecno= -1, bool ignoreUnits = false);
-	int		can_build_town(int xLoc1, int yLoc1, short unitRecno= -1);
+	int		can_build_town(int xLoc1, int yLoc1, short unitRecno= -1, bool ignoreUnits = false);
 	int		can_build_wall(int xLoc1, int yLoc1, short nationRecno);
 	int		can_destruct_wall(int xLoc1, int yLoc1, short nationRecno);
 	void		build_wall_tile(int xLoc1, int yLoc1, short nationRecno, char remoteAction);

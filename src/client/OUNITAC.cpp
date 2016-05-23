@@ -397,7 +397,7 @@ void Unit::settle(int settleXLoc, int settleYLoc, short curSettleUnitNum)
 	//----------------------------------------------------------------//
 	// move there if cannot settle
 	//----------------------------------------------------------------//
-	if(!world.can_build_town(settleXLoc, settleYLoc, sprite_recno))
+	if(!world.can_build_town(settleXLoc, settleYLoc, sprite_recno, true /* ignore units */))
 	{
 		Location *locPtr = world.get_loc(settleXLoc, settleYLoc);
 		if(locPtr->is_town() && town_array[locPtr->town_recno()]->nation_recno==nation_recno)

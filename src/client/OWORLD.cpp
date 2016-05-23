@@ -1203,8 +1203,9 @@ static char eastPierTera[3][3] = { {3,2,2},{1,2,2},{3,2,2} };
 // [short] unitRecno    = the unit recno of the unit to build the town
 //								  if the builder unit stands on the building area, still consider the area as buildable
 //								  (default: -1, do not take the builder into account)
+// [bool]  ignoreUnits  = true if any units standing in the area do not count as it being blocked. (default: false)
 //
-int World::can_build_town(int xLoc1, int yLoc1, short unitRecno)
+int World::can_build_town(int xLoc1, int yLoc1, short unitRecno, bool ignoreUnits)
 {
 	int xLoc, yLoc;
 	int xLoc2 = xLoc1 + STD_TOWN_LOC_WIDTH  - 1;
@@ -1224,7 +1225,7 @@ int World::can_build_town(int xLoc1, int yLoc1, short unitRecno)
 			// ##### patch begin Gilbert 14/3 ######//
 			// allow the building unit to stand in the area
 			if( !locPtr->can_build_town() && 
-				(!locPtr->has_unit(UNIT_LAND) || locPtr->unit_recno(UNIT_LAND)!=unitRecno) )
+				(!locPtr->has_unit(UNIT_LAND) || (!ignoreUnits && locPtr->unit_recno(UNIT_LAND)!=unitRecno)) )
 				return 0;
 			// ##### patch end Gilbert 14/3 ######//
 		}
