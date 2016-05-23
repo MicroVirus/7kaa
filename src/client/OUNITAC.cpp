@@ -1552,7 +1552,7 @@ void Unit::process_settle()
 {
 	err_when(sprite_info->loc_width>1 || sprite_info->loc_height>1);
 
-	if( cur_action == SPRITE_IDLE )  // the unit is at the build location now
+	if( cur_action == SPRITE_IDLE || (cur_action == SPRITE_WAIT_FOR_BUILD && (wait_for_build_time + 1) % GAME_FRAMES_PER_DAY == 0) )  // the unit is at the build location now
 	{
 		reset_path();
 
@@ -1560,7 +1560,11 @@ void Unit::process_settle()
 		{
 			if(!is_in_surrounding(move_to_x_loc, move_to_y_loc, sprite_info->loc_width, action_x_loc, action_y_loc,
 				STD_TOWN_LOC_WIDTH, STD_TOWN_LOC_HEIGHT))
+			{
+				if (cur_action == SPRITE_WAIT_FOR_BUILD)
+					set_idle();
 				return;
+			}
 
 			Location* locPtr = world.get_loc(action_x_loc, action_y_loc);
 			if(!locPtr->is_town())
@@ -1568,9 +1572,21 @@ void Unit::process_settle()
 				//##### begin trevor 1/9 ########//
 				int unitRecno = sprite_recno;
 
+				// Enter wait-for-build mode when the settle site is occupied.
+				if (!world.can_build_town(action_x_loc, action_y_loc, unitRecno))
+				{
+					if (!wait_for_build())
+					{
+						reset_action_para();
+						reset_action_para2();
+						set_idle();
+					}
+					return;
+				}
+
 				reset_action_para2();
 				//------------ settle the unit now -------------//
-				town_array.settle(sprite_recno, action_x_loc, action_y_loc);
+				town_array.settle(unitRecno, action_x_loc, action_y_loc);
 
 				if( unit_array.is_deleted(unitRecno) )
 					return;
