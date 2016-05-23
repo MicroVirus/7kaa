@@ -33,6 +33,7 @@
 #include <OSERES.h>
 #include <OLOG.h>
 #include <OEFFECT.h>
+#include <dbglog.h>
 
 #ifdef NO_DEBUG_UNIT
 #undef err_when
@@ -47,6 +48,8 @@
 #define err_now(msg)
 #undef DEBUG
 #endif
+
+DBGLOG_DEFAULT_CHANNEL(Unit);
 
 //-*********** simulate aat ************-//
 #ifdef DEBUG
@@ -1835,8 +1838,8 @@ void Unit::process_wait()
 
 
 //--------- Begin of function Unit::process_wait_for_build ---------//
-// Process the unit waiting for the construction site to clear.
-// Also order any idle units inside the construction area to move out.
+// Process the unit waiting for the construction/settle site to clear.
+// Also order any idle units inside the area to move out.
 //
 void Unit::process_wait_for_build()
 {
@@ -1847,13 +1850,28 @@ void Unit::process_wait_for_build()
 	match_dir();
 	// END DEBUGGING
 
-	//--- Order any own idle units in the construction site to move out of the way ---//
+	//--- Order any own idle units in the construction/settle site to move out of the way ---//
 
 	if (wait_for_build_time % (3 * GAME_FRAMES_PER_DAY) == 1)
 	{
-		FirmInfo *firmInfo = firm_res[action_para];
+		int locWidth, locHeight;
 
-		unit_array.order_vacate_area(action_x_loc, action_y_loc, firmInfo->loc_width, firmInfo->loc_height, nation_recno, sprite_recno);
+		if (action_mode == ACTION_BUILD_FIRM)
+		{
+			FirmInfo *firmInfo = firm_res[action_para];
+			locWidth = firmInfo->loc_width; locHeight = firmInfo->loc_height;
+		}
+		else if (action_mode == ACTION_SETTLE)
+		{
+			locWidth = STD_TOWN_LOC_WIDTH; locHeight = STD_TOWN_LOC_HEIGHT;
+		}
+		else
+		{
+			ERR("process_wait_for_build: Unit waiting for build, but not building firm or settling town (bad action_mode).");
+			return;
+		}
+
+		unit_array.order_vacate_area(action_x_loc, action_y_loc, locWidth, locHeight, nation_recno, sprite_recno);
 	}
 }
 //----------- End of function Unit::process_wait_for_build -----------//
