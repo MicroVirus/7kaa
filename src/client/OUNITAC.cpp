@@ -1223,6 +1223,10 @@ void Unit::process_build_firm()
 			buildSpotOccupied = !world.can_build_firm(action_x_loc, action_y_loc, action_para, sprite_recno);
 			if( shouldProceed && !buildSpotOccupied && firm_res[action_para]->can_build(sprite_recno) )
 			{
+				// Go out of wait-for-build mode now that we can build.
+				if (cur_action == SPRITE_WAIT_FOR_BUILD)
+					set_idle();
+
 				int curXloc = cur_x, curYloc = cur_y;
 
 				//---------------------------------------------------------------------------//
