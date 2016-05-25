@@ -76,8 +76,8 @@ int GameFile::save_game(const char* fileName)
 	// Developer version check (set to true for when current version has changed some critical structures, so we cannot support saving until a new savegame format/version is established)
 	if (/* developer version? */ true)
 	{
-		if ( ! (strcmp("AUTO.SAV", fileName) == 0 || strcmp("AUTO2.SAV", fileName) == 0 || strcmp("ERROR.SAV", fileName) == 0 ||
-				strcmp("DEBUG1.SAV", fileName) == 0 || strcmp("DEBUG2.SAV", fileName) == 0 || strcmp("DEBUG3.SAV", fileName) == 0))
+		if ( ! (strcmp("AUTO.SAV", file_name) == 0 || strcmp("AUTO2.SAV", file_name) == 0 || strcmp("ERROR.SAV", file_name) == 0 ||
+				strcmp("DEBUG1.SAV", file_name) == 0 || strcmp("DEBUG2.SAV", file_name) == 0 || strcmp("DEBUG3.SAV", file_name) == 0))
 		{
 			rc = 0;
 			errStr = _("The current developer version does not support saving, because critical structures have changed.");
