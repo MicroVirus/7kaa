@@ -120,6 +120,7 @@ SpriteFrame* Sprite::cur_sprite_frame(int *needMirror)
 		//### begin alex 14/4 ###//
 		case SPRITE_SHIP_EXTRA_MOVE:
 		//#### end alex 14/4 ####//
+		case SPRITE_WAIT_FOR_BUILD:
 			if( guard_count)
 			{
 				if( curDir >= MAX_SPRITE_DIR_TYPE)
@@ -146,7 +147,6 @@ SpriteFrame* Sprite::cur_sprite_frame(int *needMirror)
 		case SPRITE_TURN:
 		case SPRITE_IDLE:
 		case SPRITE_WAIT:
-		case SPRITE_WAIT_FOR_BUILD:
 			// air unit needs it own stop frames to float on air
 			{
 				if( guard_count )

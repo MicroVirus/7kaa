@@ -1845,11 +1845,6 @@ void Unit::process_wait_for_build()
 {
 	++wait_for_build_time;
 
-	// DEBUGGING: the unit rotates while waiting for build, giving a visual cue.
-	final_dir = (cur_dir + 1) % MAX_DIR;
-	match_dir();
-	// END DEBUGGING
-
 	//--- Order any own idle units in the construction/settle site to move out of the way ---//
 
 	if (wait_for_build_time % (3 * GAME_FRAMES_PER_DAY) == 1)
@@ -3079,7 +3074,9 @@ bool Unit::wait_for_build()
 		//---- enter into wait-for-build mode ----//
 		wait_for_build_time = 0;
 		cur_action = SPRITE_WAIT_FOR_BUILD;
-		cur_frame = 1;
+		char moveFrameCount = cur_sprite_move()->frame_count;
+		char middleFrame = moveFrameCount / 2;
+		cur_frame = (middleFrame < 1 ? 1 : middleFrame);
 	}
 
 	return wait_for_build_time < MAX_WAIT_FOR_BUILD_FRAMES;
