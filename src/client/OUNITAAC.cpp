@@ -1309,7 +1309,7 @@ void UnitArray::add_way_point(int pointX, int pointY, short* selectedArray, int 
 // <int>   pointY            -  y location of the area
 // <int>   width             -  width of the area
 // <int>   height            -  height of the area
-// <int>   nation_recno       -  nation of the calling unit
+// <int>   nation_recno      -  nation of the calling unit
 // <int>   caller_unit_recno -  unit calling for the clearing
 //
 void UnitArray::order_vacate_area(int pointX, int pointY, int width, int height, int nation_recno, int caller_unit_recno)
