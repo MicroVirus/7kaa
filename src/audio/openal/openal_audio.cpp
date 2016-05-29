@@ -277,6 +277,9 @@ int OpenALAudio::init_wav()
 
 	normal_sources = 0; long_sources = 0; loop_sources = 0;
 
+	// Set OpenAL distance model to none, because the game already does manual attenuation calculations.
+	alDistanceModel(AL_NONE);
+
 	this->wav_init_flag = true;
 	return 1;
 
