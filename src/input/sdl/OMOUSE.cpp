@@ -107,6 +107,8 @@ void MouseSDL::init()
 	SDL_StopTextInput();
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_GetMouseState(&cur_x, &cur_y);
+
+	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1");
 }
 //------------- End of MouseSDL::init -------------//
 
