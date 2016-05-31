@@ -24,6 +24,10 @@
 #include <ALL.h>
 #include <version.h>
 
+// For hacky mod
+#include <fstream>
+#include <string>
+
 #ifdef WIN32
 #include <initguid.h>
 #endif
@@ -292,6 +296,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 #endif
 
+bool read_hacky_mod_file(char *);
+
+
 //---------- Begin of function main ----------//
 //
 // Compilation constants:
@@ -337,6 +344,12 @@ int main(int argc, char **argv)
 	{
 		new_config_dat_flag = 1;
 		config.init();
+	}
+
+	// Mod/hack: Allow custom setting for number of Fryhtan lairs and other 'moddable' things.
+	if ( misc.is_file_exist("fryhtan-settings.txt") )
+	{
+		read_hacky_mod_file("fryhtan-settings.txt");
 	}
 
 	//----- read command line arguments -----//
@@ -460,3 +473,43 @@ static void extra_error_handler()
 	box.msg( "Error encountered. The game has been saved to ERROR.SAV" );
 }
 //----------- End of function extra_error_handler -------------//
+
+
+// Read certain settings, such as number of Fryhtan lairs, from the given file name.
+int hacky_mod_frythan_lairs = -1;
+int hacky_mod_independent_towns = -1;
+static bool read_hacky_mod_file(char *fileName)
+{
+	std::ifstream f(fileName);
+
+	if (!f)
+	{
+		sys.show_error_dialog("Could not open file hacky mod file '%s'.", fileName);
+		return false;
+	}
+
+	std::string line;
+	while( std::getline(f, line) )
+	{
+		int num;
+
+		if (line.empty()) continue;
+		else if (line.length() >= 2 && line[0] == '/' && line[1] == '/') continue; // Rudimentary comment line
+		
+		if (std::sscanf(line.c_str(), "Fryhtan Lairs = %d", &num) == 1)
+		{
+			hacky_mod_frythan_lairs = num;
+		}
+		else if (std::sscanf(line.c_str(), "Independent Towns = %d", &num) == 1)
+		{
+			hacky_mod_independent_towns = num;
+		}
+		else
+		{
+			sys.show_error_dialog("[Hacky mod] Unknown setting: %s", line.c_str());
+			return false;
+		}
+	}
+	
+	return true;
+}
