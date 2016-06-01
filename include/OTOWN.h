@@ -445,7 +445,7 @@ public:
 	int	independent_town_resistance();
 	void	think_new_independent_town();
 
-	int 	think_town_loc(int maxTries, int& xLoc, int& yLoc);
+	int 	think_town_loc(int maxTries, int *xLoc, int *yLoc, bool desireFreeSpace);
 	int   find_nearest_town(int xLoc, int yLoc, int nationRecno=0);
 
 	int   settle(int unitRecno, int xLoc, int yLoc);

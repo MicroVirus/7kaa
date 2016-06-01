@@ -425,7 +425,7 @@ void Battle::create_pregame_object()
 
 		//--------- create town -----------//
 
-		townRecno = create_town( nationRecno, nationPtr->race_id, xLoc, yLoc );
+		townRecno = create_town( nationRecno, nationPtr->race_id, xLoc, yLoc, true /* more free space for nation towns */ );
 
 		if( !townRecno )
 		{
@@ -554,18 +554,16 @@ void Battle::create_pregame_object()
 		{
 			//------ create independent towns -------//
 			raceId = i%MAX_RACE+1;
-			if(!create_town( 0, raceId, xLoc, yLoc ) )
+			if(!create_town( 0, raceId, xLoc, yLoc, false /* less free space needed for independent towns */ ))
 			{
 				startUpIndependentTown = 0;
-				break;
 			}
 			// ##### begin Gilbert 24/10 #######//
 			else
 				startUpIndependentTown--;
 			// ###### end Gilbert 24/10 ########//
 		}
-
-		if(startUpMonsterFirm)
+		else if(startUpMonsterFirm)
 		{
 			//------- create mosnters --------//
 			if(config.monster_type != OPTION_MONSTER_NONE)
@@ -720,15 +718,16 @@ void Battle::create_test_unit(int nationRecno)
 //
 // <int&> xLoc = for the starting location of the town
 // <int&> yLoc = for the starting location of the town
+// <bool> desireFreeSpace = true if we should allocate more free space around the town, such as for nation start towns.
 //
 // return: <int> townRecno - >0  the recno of the town created
 //                           ==0 no town created
 //
-int Battle::create_town(int nationRecno, int raceId, int& xLoc, int& yLoc)
+int Battle::create_town(int nationRecno, int raceId, int& xLoc, int& yLoc, bool desireFreeSpace)
 {
 	//------- locate for a space to build the town ------//
 
-	if( !town_array.think_town_loc(MAX_WORLD_X_LOC*MAX_WORLD_Y_LOC, xLoc, yLoc) )
+	if( !town_array.think_town_loc(MAX_WORLD_X_LOC*MAX_WORLD_Y_LOC, &xLoc, &yLoc, desireFreeSpace) )
 		return 0;
 
 	//--------------- create town ---------------//
