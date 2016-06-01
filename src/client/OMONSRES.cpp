@@ -207,7 +207,8 @@ void MonsterRes::generate(int generateCount)
 //
 int MonsterInfo::create_firm_monster()
 {
-   #define MIN_MONSTER_CIVILIAN_DISTANCE  10    // the minimum distance between monster firms and civilian towns & firms
+   enum {MIN_MONSTER_CIVILIAN_DISTANCE = 10, // the minimum distance between monster firms and civilian towns & firms
+         MIN_MONSTER_NEUTRAL_DISTANCE = 6};
 
    if( !firm_build_code[0] )     // this monster does not have a home
       return 0;
@@ -235,8 +236,9 @@ int MonsterInfo::create_firm_monster()
 
       Town* townPtr = town_array[townRecno];
 
+      const int MIN_DISTANCE = townPtr->nation_recno ? MIN_MONSTER_CIVILIAN_DISTANCE : MIN_MONSTER_NEUTRAL_DISTANCE;
       if( misc.points_distance(xLoc, yLoc, townPtr->center_x,
-          townPtr->center_y) < MIN_MONSTER_CIVILIAN_DISTANCE )
+          townPtr->center_y) < MIN_DISTANCE )
       {
          return 0;
       }
