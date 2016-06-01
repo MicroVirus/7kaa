@@ -51,7 +51,7 @@ private:
 	void 	create_ai_nation(int aiNationCount);
 	void 	create_pregame_object();
 
-	int 	create_town(int nationRecno, int raceId, int& xLoc, int& yLoc);
+	int 	create_town(int nationRecno, int raceId, int& xLoc, int& yLoc, bool desireFreeSpace);
 	int 	create_unit(int townRecno, int unitId, int rankId);
 	void	create_test_unit(int nationRecno);
 };

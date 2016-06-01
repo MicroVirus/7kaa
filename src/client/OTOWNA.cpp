@@ -308,7 +308,7 @@ void TownArray::think_new_independent_town()
 
 	int xLoc, yLoc;
 
-	if( !think_town_loc(MAX_WORLD_X_LOC*MAX_WORLD_Y_LOC/4, xLoc, yLoc) )
+	if( !think_town_loc(MAX_WORLD_X_LOC*MAX_WORLD_Y_LOC/4, &xLoc, &yLoc, false /* less space needed for independent towns */) )
 		return;
 
 	//--------------- create town ---------------//
@@ -398,17 +398,22 @@ int TownArray::independent_town_resistance()
 // Locate for an area of free space
 //
 // <int>  maxTries       = maximum no. of tries
-// <int&> xLoc           = for returning result
-// <int&> yLoc           = for returning result
+// <int*> xLoc           = for returning result
+// <int*> yLoc           = for returning result
+// <bool> desireFreeSpace = nation towns desire more free space around them than neutral towns
 //
 // return : <int> 1 - free space found
 //                0 - free space found
 //
-int TownArray::think_town_loc(int maxTries, int& xLoc, int& yLoc)
+int TownArray::think_town_loc(int maxTries, int *pxLoc, int *pyLoc, bool desireFreeSpace)
 {
-	#define MIN_INTER_TOWN_DISTANCE  16
-	#define BUILD_TOWN_LOC_WIDTH     16
-	#define BUILD_TOWN_LOC_HEIGHT    16
+	enum {MIN_INTER_TOWN_DISTANCE = 16, BUILD_TOWN_LOC_WIDTH = 16, BUILD_TOWN_LOC_HEIGHT = 16,
+		  BUILD_TOWN_LOC_WIDTH_SMALL = 8, BUILD_TOWN_LOC_HEIGHT_SMALL = 8};
+
+	const int LOCWIDTH = desireFreeSpace ? BUILD_TOWN_LOC_WIDTH : BUILD_TOWN_LOC_WIDTH_SMALL;
+	const int LOCHEIGHT = desireFreeSpace ? BUILD_TOWN_LOC_HEIGHT : BUILD_TOWN_LOC_HEIGHT_SMALL;
+
+	int &xLoc = *pxLoc, &yLoc = *pyLoc;
 
 	int       i, x, y, canBuildFlag, townRecno, firmRecno;
 	Location* locPtr;
@@ -417,18 +422,20 @@ int TownArray::think_town_loc(int maxTries, int& xLoc, int& yLoc)
 
    for( i=0 ; i<maxTries ; i++ )
 	{
-		xLoc = misc.random(MAX_WORLD_X_LOC-BUILD_TOWN_LOC_WIDTH);
-		yLoc = 2+misc.random(MAX_WORLD_Y_LOC-BUILD_TOWN_LOC_HEIGHT-2);		// do not build on the upper most location as the flag will go beyond the view area
+		xLoc = misc.random(MAX_WORLD_X_LOC-LOCWIDTH);
+		yLoc = 2+misc.random(MAX_WORLD_Y_LOC-LOCHEIGHT-2);		// do not build on the upper most location as the flag will go beyond the view area
 
 		canBuildFlag=1;
 
 		//---------- check if the area is all free ----------//
 
-		for( y=yLoc ; y<yLoc+BUILD_TOWN_LOC_HEIGHT ; y++ )
+		for( y=yLoc ; y<yLoc+LOCHEIGHT ; y++ )
 		{
+			if (!canBuildFlag) break;
+
 			locPtr = world.get_loc(xLoc, y);
 
-			for( x=xLoc ; x<xLoc+BUILD_TOWN_LOC_WIDTH ; x++, locPtr++ )
+			for( x=xLoc ; x<xLoc+LOCWIDTH ; x++, locPtr++ )
 			{
 				if( !locPtr->can_build_town() )
 				{
