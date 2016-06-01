@@ -188,17 +188,23 @@ MonsterInfo* MonsterRes::operator[](int monsterId)
 
 
 //---------- Begin of function MonsterRes::generate -----------//
-
-void MonsterRes::generate(int generateCount)
+// Returns the number of monster firms placed.
+int MonsterRes::generate(int generateCount, int retryCount)
 {
+	int placedCount = 0;
 	int monsterId;
 
-	for( int i=0 ; i<generateCount ; i++ )
+	if (retryCount < 1) retryCount = 1;
+
+	for( int i=0 ; i<retryCount && placedCount < generateCount ; i++ )
 	{
 		monsterId = active_monster_array[misc.random(MAX_ACTIVE_MONSTER)];
 
-		monster_res[monsterId]->create_firm_monster();
+		if (monster_res[monsterId]->create_firm_monster())
+			placedCount++;
 	}
+
+	return placedCount;
 }
 //---------- End of function MonsterRes::generate -----------//
 
