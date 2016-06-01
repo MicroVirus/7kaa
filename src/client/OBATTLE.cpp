@@ -568,8 +568,10 @@ void Battle::create_pregame_object()
 			//------- create mosnters --------//
 			if(config.monster_type != OPTION_MONSTER_NONE)
 			{
-				monster_res.generate(1);
-				startUpMonsterFirm--;
+				if (monster_res.generate(1, MAX_WORLD_X_LOC * MAX_WORLD_Y_LOC / 100) == 1)
+					startUpMonsterFirm--;
+				else
+					startUpMonsterFirm = 0;
 			}
 			else
 				startUpMonsterFirm = 0;

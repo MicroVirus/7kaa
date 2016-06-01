@@ -92,7 +92,7 @@ public:
 	void        deinit();
 
 	void			init_active_monster();
-	void 			generate(int generateCount);
+	int 			generate(int generateCount, int retryCount);
 	void 			stop_attack_nation(short nationRecno);
 
 	int 			write_file(File* filePtr);
