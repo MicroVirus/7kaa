@@ -214,7 +214,7 @@ int MonsterRes::generate(int generateCount, int retryCount)
 int MonsterInfo::create_firm_monster()
 {
    enum {MIN_MONSTER_CIVILIAN_DISTANCE = 10, // the minimum distance between monster firms and civilian towns & firms
-         MIN_MONSTER_NEUTRAL_DISTANCE = 6};
+         MIN_MONSTER_NEUTRAL_DISTANCE = 8};
 
    if( !firm_build_code[0] )     // this monster does not have a home
       return 0;
