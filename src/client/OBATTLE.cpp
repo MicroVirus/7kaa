@@ -47,6 +47,10 @@
 #include <OMOUSECR.h>
 #include <vga_util.h>
 
+// Hacky mod stuff
+extern int hacky_mod_frythan_lairs;
+
+
 //---------- define static functions -------------//
 
 static int is_space(int xLoc1, int yLoc1, int xLoc2, int yLoc2, char mobileType);
@@ -530,7 +534,7 @@ void Battle::create_pregame_object()
 	//### begin alex 27/8 ###//
 	int startUpIndependentTown = config.start_up_independent_town;
 	//int startUpRawSite = config.start_up_raw_site;
-	int startUpMonsterFirm = 10;
+	int startUpMonsterFirm = (hacky_mod_frythan_lairs > 0 ? hacky_mod_frythan_lairs : 10);
 	int i, j, raceId;
 
 	site_array.generate_raw_site(config.start_up_raw_site);
