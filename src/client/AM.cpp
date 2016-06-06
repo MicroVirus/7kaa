@@ -496,11 +496,11 @@ static bool read_hacky_mod_file(char *fileName)
 		if (line.empty()) continue;
 		else if (line.length() >= 2 && line[0] == '/' && line[1] == '/') continue; // Rudimentary comment line
 		
-		if (std::sscanf(line.c_str(), "Fryhtan Lairs = %d", &num) == 1)
+		if (std::sscanf(line.c_str(), " Fryhtan Lairs = %d", &num) == 1)
 		{
 			hacky_mod_frythan_lairs = num;
 		}
-		else if (std::sscanf(line.c_str(), "Independent Villages = %d", &num) == 1)
+		else if (std::sscanf(line.c_str(), " Independent Villages = %d", &num) == 1)
 		{
 			hacky_mod_independent_villages = num;
 		}
