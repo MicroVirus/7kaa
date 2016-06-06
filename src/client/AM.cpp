@@ -478,6 +478,7 @@ static void extra_error_handler()
 // Read certain settings, such as number of Fryhtan lairs, from the given file name.
 int hacky_mod_frythan_lairs = -1;
 int hacky_mod_independent_villages = -1;
+float hacky_mod_fryhtan_aggressiveness_modifier = 1;
 static bool read_hacky_mod_file(char *fileName)
 {
 	std::ifstream f(fileName);
@@ -492,6 +493,7 @@ static bool read_hacky_mod_file(char *fileName)
 	while( std::getline(f, line) )
 	{
 		int num;
+		float fnum;
 
 		// Skip over empty lines and comment lines
 		char firstToken[3];
@@ -501,6 +503,10 @@ static bool read_hacky_mod_file(char *fileName)
 		if (std::sscanf(line.c_str(), " Fryhtan Lairs = %d", &num) == 1)
 		{
 			hacky_mod_frythan_lairs = num;
+		}
+		else if (std::sscanf(line.c_str(), " Fryhtan Aggressiveness Modifier = %f", &fnum) == 1)
+		{
+			hacky_mod_fryhtan_aggressiveness_modifier = fnum;
 		}
 		else if (std::sscanf(line.c_str(), " Independent Villages = %d", &num) == 1)
 		{
