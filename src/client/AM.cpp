@@ -493,8 +493,10 @@ static bool read_hacky_mod_file(char *fileName)
 	{
 		int num;
 
-		if (line.empty()) continue;
-		else if (line.length() >= 2 && line[0] == '/' && line[1] == '/') continue; // Rudimentary comment line
+		// Skip over empty lines and comment lines
+		char firstToken[3];
+		int ret = std::sscanf(line.c_str(), "%2s", firstToken);
+		if (ret == EOF || (ret == 1 && strcmp(firstToken, "//") == 0)) continue;
 		
 		if (std::sscanf(line.c_str(), " Fryhtan Lairs = %d", &num) == 1)
 		{
