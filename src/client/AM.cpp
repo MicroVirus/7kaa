@@ -347,10 +347,20 @@ int main(int argc, char **argv)
 	}
 
 	// Mod/hack: Allow custom setting for number of Fryhtan lairs and other 'moddable' things.
-	if ( misc.is_file_exist("fryhtan-settings.txt") )
+	if ( ! sys.dir_config[0])
 	{
-		read_hacky_mod_file("fryhtan-settings.txt");
+		sys.show_error_dialog("Warning: 7kaa failed to detect/open the config directory. Can't start hacky mod; other stuff might be broken too.");
 	}
+	else
+	{
+		char settingsFile[MAX_PATH];
+		bool havePath = !!misc.path_cat(settingsFile, sys.dir_config, "hacky-mod.txt", sizeof(settingsFile)/sizeof(settingsFile[0]));
+		if ( havePath && misc.is_file_exist(settingsFile) )
+		{
+			read_hacky_mod_file(settingsFile);
+		}
+	}
+
 
 	//----- read command line arguments -----//
 
