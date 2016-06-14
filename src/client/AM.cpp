@@ -489,6 +489,7 @@ static void extra_error_handler()
 int settings_mod_frythan_lairs = -1;
 float settings_mod_fryhtan_aggressiveness_modifier = 1;
 int settings_mod_independent_villages = -1;
+bool settings_mod_true_fullscreen = false;
 static bool read_settings_mod_file(char *fileName)
 {
 	std::ifstream f(fileName);
@@ -499,9 +500,14 @@ static bool read_settings_mod_file(char *fileName)
 		return false;
 	}
 
+#define QUOTE(x)	QUOTE2(x)
+#define QUOTE2(x)   #x
+#define STR_SIZE    32
+
 	std::string line;
 	while( std::getline(f, line) )
 	{
+		char str[STR_SIZE + 1];
 		int num;
 		float fnum;
 
@@ -522,12 +528,28 @@ static bool read_settings_mod_file(char *fileName)
 		{
 			settings_mod_independent_villages = num;
 		}
+		else if (std::sscanf(line.c_str(), " True Fullscreen = %" QUOTE(STR_SIZE) "s", str) == 1)
+		{
+			if (strcmp(str, "true") == 0)
+				settings_mod_true_fullscreen = true;
+			else if (strcmp(str, "false") == 0)
+				settings_mod_true_fullscreen = false;
+			else
+			{
+				sys.show_error_dialog("[Settings Mod] Invalid value for 'True Fullscreen'; must be 'true' or 'false'.");
+				return false;
+			}
+		}
 		else
 		{
-			sys.show_error_dialog("[Settings mod] Unknown setting: %s", line.c_str());
+			sys.show_error_dialog("[Settings Mod] Unknown setting: %s", line.c_str());
 			return false;
 		}
 	}
+
+#undef STR_SIZE
+#undef QUOTE2
+#undef QUOTE
 	
 	return true;
 }
