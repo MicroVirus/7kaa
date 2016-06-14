@@ -910,6 +910,7 @@ int MouseSDL::wait_press(int timeOutSecond)
 	while( mouse.left_press || mouse.any_click() || mouse.key_code )		// avoid repeat clicking
 	{
 		sys.yield();
+		vga.flip();
 		mouse.get_event();
 	}
 
@@ -919,6 +920,7 @@ int MouseSDL::wait_press(int timeOutSecond)
 	while(1)
 	{
 		sys.yield();
+		vga.flip();
 		mouse.get_event();
 
 		if( sys.signal_exit_flag == 1 )
@@ -948,6 +950,7 @@ int MouseSDL::wait_press(int timeOutSecond)
 	while( mouse.left_press || mouse.any_click() || mouse.key_code )		// avoid repeat clicking 
 	{
 		sys.yield();
+		vga.flip();
 		mouse.get_event();
 	}
 

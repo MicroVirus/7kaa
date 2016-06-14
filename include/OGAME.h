@@ -37,8 +37,9 @@ enum { GAME_PREGAME=1,
 		 GAME_CAMPAIGN,
 		 GAME_ENCYCLOPEDIA,
 		 // ####### begin Gilbert 2/9 ######//
-		 GAME_CREDITS
+		 GAME_CREDITS,
 		 // ####### end Gilbert 2/9 ######//
+		 GAME_DEMO
 	  };
 
 //--------- Define struct ColorRemapMethod ----------//
@@ -146,7 +147,7 @@ private:
 
 	//------- multiplayer game functions -------//
 
-	int 			mp_select_mode(char *saveGameName);
+	int 			mp_select_mode(char *saveGameName, int service_mode);
 	int			mp_get_leader_board();
 	int			mp_join_session(int session_id, char *player_name);
 	void			mp_close_session();

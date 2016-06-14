@@ -322,8 +322,12 @@ int main(int argc, char **argv)
 	const char *lobbyJoinCmdLine = "-join";
 	const char *lobbyHostCmdLine = "-host";
 	const char *lobbyNameCmdLine = "-name";
+	const char *demoCmdLine = "-demo";
+	const char *demoSpeedCmdLine = "-speed";
 	char *join_host = NULL;
 	int lobbied = 0;
+	int demoSelection = 0;
+	int demoSpeed = 99;
 
 	sys.set_config_dir();
 
@@ -340,11 +344,11 @@ int main(int argc, char **argv)
 	for (int i = 0; i < argc; i++) {
 		if (!strcmp(argv[i], lobbyJoinCmdLine)) {
 			if (lobbied) {
-				ERR("You cannot specify multiple -host or -join options.\n");
+				sys.show_error_dialog(_("You cannot specify multiple -host or -join options."));
 				return 1;
 			}
 			if (i >= argc - 1) {
-				ERR("The %s switch requires a hostname parameter.\n", lobbyJoinCmdLine);
+				sys.show_error_dialog(_("Expected argument after %s."), lobbyJoinCmdLine);
 				return 1;
 			}
 			lobbied = 1;
@@ -352,17 +356,26 @@ int main(int argc, char **argv)
 			i++;
 		} else if (!strcmp(argv[i], lobbyHostCmdLine)) {
 			if (lobbied) {
-				ERR("You cannot specify multiple -host or -join options.\n");
+				sys.show_error_dialog(_("You cannot specify multiple -host or -join options."));
 				return 1;
 			}
 			lobbied = 1;
 		} else if (!strcmp(argv[i], lobbyNameCmdLine)) {
 			if (i >= argc - 1) {
-				ERR("The %s switch requires a hostname parameter.\n", lobbyNameCmdLine);
+				sys.show_error_dialog(_("Expected argument after %s."), lobbyNameCmdLine);
 				return 1;
 			}
 			strncpy(config.player_name, argv[i+1], config.PLAYER_NAME_LEN);
 			config.player_name[config.PLAYER_NAME_LEN] = 0;
+			i++;
+		} else if (!strcmp(argv[i], demoCmdLine)) {
+			demoSelection = 1;
+		} else if (!strcmp(argv[i], demoSpeedCmdLine)) {
+			if (i >= argc - 1) {
+				sys.show_error_dialog(_("Expected argument after %s."), demoSpeedCmdLine);
+				return 1;
+			}
+			demoSpeed = atoi(argv[i+1]);
 			i++;
 		}
 	}
@@ -373,7 +386,7 @@ int main(int argc, char **argv)
 	if (!sys.set_game_dir())
 		return 1;
 
-	if (!lobbied)
+	if (!lobbied && !demoSelection)
 	{
 		String movieFileStr;
 		movieFileStr = DIR_MOVIE;
@@ -410,12 +423,23 @@ int main(int argc, char **argv)
 
 	err.set_extra_handler( extra_error_handler );   // set extra error handler, save the game when a error happens
 
-	if (!lobbied)
+	if (!lobbied && !demoSelection)
 		game.main_menu();
 #ifndef DISABLE_MULTI_PLAYER
-	else
+	else if (!demoSelection)
 		game.multi_player_menu(lobbied, join_host);
 #endif // DISABLE_MULTI_PLAYER
+	else if (!lobbied)
+	{
+		mouse_cursor.set_icon(CURSOR_NORMAL);
+		sys.set_speed(demoSpeed);
+		sys.disp_fps_flag = 1;
+		config.help_mode = NO_HELP;
+		game.game_mode = GAME_DEMO;
+		game.init();
+		battle.run_test();
+		game.deinit();
+	}
 
 	sys.deinit();
 

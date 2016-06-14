@@ -1054,7 +1054,7 @@ void Sys::blt_virtual_buf()
 //
 void Sys::disp_frames_per_second()
 {
-	if( !config.show_ai_info )			// only display this in a debug session
+	if( !config.show_ai_info && !sys.disp_fps_flag )// only display this in a debug session
 		return;
 
 	if( game.game_mode == GAME_TUTORIAL )		// don't display in tutorial mode as it overlaps with the tutorial text
@@ -1091,6 +1091,13 @@ void Sys::disp_frames_per_second()
 
 	str  = "Frames per second: ";
 	str += frames_per_second;
+
+	if( frames_per_second < config.frame_speed-1 ) // -1 for rounding
+	{
+		str += " (expecting ";
+		str += config.frame_speed;
+		str += ")";
+	}
 
 	vga.use_back();
 

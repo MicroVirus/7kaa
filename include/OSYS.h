@@ -88,6 +88,7 @@ public:
 	char		toggle_full_screen_flag;
 	char		cheat_enabled_flag;
 	char		user_pause_flag;
+	char		disp_fps_flag;
 
 	char 		view_mode;				// the view mode can be MODE_???
 
@@ -168,6 +169,8 @@ public:
 
 	void		pause();
 	void		unpause();
+
+	void		show_error_dialog(const char *formatStr, ...);
 
 	void		mp_request_save(DWORD frame);
 	void		mp_clear_request_save();
