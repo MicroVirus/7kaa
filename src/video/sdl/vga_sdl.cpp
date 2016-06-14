@@ -30,6 +30,8 @@
 
 DBGLOG_DEFAULT_CHANNEL(Vga);
 
+// Settings Mod
+extern bool settings_mod_true_fullscreen;
 
 //------ Define static class member vars ---------//
 
@@ -209,6 +211,8 @@ int VgaSDL::init()
    vga_back.lock_buf();
 
    refresh_palette();
+
+   fullscreen_flag = settings_mod_true_fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_FULLSCREEN_DESKTOP;
 
    return 1;
 }
@@ -509,7 +513,7 @@ void VgaSDL::flag_redraw()
 //
 int VgaSDL::is_full_screen()
 {
-   return ((SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0);
+   return ((SDL_GetWindowFlags(window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP)) != 0);
 }
 //-------- End of function VgaSDL::is_full_screen ----------//
 
@@ -536,12 +540,12 @@ void VgaSDL::set_full_screen_mode(int mode)
    switch (mode)
    {
       case -1:
-         flags = is_full_screen() ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP;
+         flags = is_full_screen() ? 0 : fullscreen_flag;
          break;
       case 0:
          break;
       case 1:
-         flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+         flags = fullscreen_flag;
          break;
       default:
          err_now("invalid mode");
@@ -555,7 +559,7 @@ void VgaSDL::set_full_screen_mode(int mode)
 
    refresh_palette();
    sys.need_redraw_flag = 1;
-   set_window_grab(flags == SDL_WINDOW_FULLSCREEN_DESKTOP);
+   set_window_grab(flags == fullscreen_flag);
 }
 //-------- End of function VgaSDL::set_full_screen_mode ----------//
 

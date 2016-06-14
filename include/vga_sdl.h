@@ -43,6 +43,7 @@ private:
 	SDL_Surface*   target;
 	SDL_Color      game_pal[VGA_PALETTE_SIZE];
 	SDL_Color*     custom_pal;
+	Uint32         fullscreen_flag; // Selects the fullscreen mode to use; SDL_WINDOW_FULLSCREEN_DESKTOP or SDL_WINDOW_FULLSCREEN.
 
 public:
 	ColorTable*    vga_color_table;
