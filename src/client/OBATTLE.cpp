@@ -47,9 +47,9 @@
 #include <OMOUSECR.h>
 #include <vga_util.h>
 
-// Hacky mod stuff
-extern int hacky_mod_frythan_lairs;
-extern int hacky_mod_independent_villages;
+// Settings mod
+extern int settings_mod_frythan_lairs;
+extern int settings_mod_independent_villages;
 
 
 //---------- define static functions -------------//
@@ -533,9 +533,9 @@ void Battle::create_pregame_object()
 	//------ create independent towns -------//
 
 	//### begin alex 27/8 ###//
-	int startUpIndependentTown = (hacky_mod_independent_villages >= 0 ? hacky_mod_independent_villages : config.start_up_independent_town);
+	int startUpIndependentTown = (settings_mod_independent_villages >= 0 ? settings_mod_independent_villages : config.start_up_independent_town);
 	//int startUpRawSite = config.start_up_raw_site;
-	int startUpMonsterFirm = (hacky_mod_frythan_lairs > 0 ? hacky_mod_frythan_lairs : 10);
+	int startUpMonsterFirm = (settings_mod_frythan_lairs > 0 ? settings_mod_frythan_lairs : 10);
 	int i, j, raceId;
 
 	site_array.generate_raw_site(config.start_up_raw_site);

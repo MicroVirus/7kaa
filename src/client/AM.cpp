@@ -24,7 +24,7 @@
 #include <ALL.h>
 #include <version.h>
 
-// For hacky mod
+// For Settings Mod
 #include <fstream>
 #include <string>
 
@@ -296,7 +296,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 #endif
 
-bool read_hacky_mod_file(char *);
+bool read_settings_mod_file(char *);
 
 
 //---------- Begin of function main ----------//
@@ -346,18 +346,18 @@ int main(int argc, char **argv)
 		config.init();
 	}
 
-	// Mod/hack: Allow custom setting for number of Fryhtan lairs and other 'moddable' things.
+	// Settings Mod: Allow custom setting for number of Fryhtan lairs and other 'moddable' things.
 	if ( ! sys.dir_config[0])
 	{
-		sys.show_error_dialog("Warning: 7kaa failed to detect/open the config directory. Can't start hacky mod; other stuff might be broken too.");
+		sys.show_error_dialog("Warning: 7kaa failed to detect/open the config directory. Can't start Settings Mod; other stuff might be broken too.");
 	}
 	else
 	{
 		char settingsFile[MAX_PATH];
-		bool havePath = !!misc.path_cat(settingsFile, sys.dir_config, "hacky-mod.txt", sizeof(settingsFile)/sizeof(settingsFile[0]));
+		bool havePath = !!misc.path_cat(settingsFile, sys.dir_config, "settings-mod.txt", sizeof(settingsFile)/sizeof(settingsFile[0]));
 		if ( havePath && misc.is_file_exist(settingsFile) )
 		{
-			read_hacky_mod_file(settingsFile);
+			read_settings_mod_file(settingsFile);
 		}
 	}
 
@@ -486,16 +486,16 @@ static void extra_error_handler()
 
 
 // Read certain settings, such as number of Fryhtan lairs, from the given file name.
-int hacky_mod_frythan_lairs = -1;
-int hacky_mod_independent_villages = -1;
-float hacky_mod_fryhtan_aggressiveness_modifier = 1;
-static bool read_hacky_mod_file(char *fileName)
+int settings_mod_frythan_lairs = -1;
+float settings_mod_fryhtan_aggressiveness_modifier = 1;
+int settings_mod_independent_villages = -1;
+static bool read_settings_mod_file(char *fileName)
 {
 	std::ifstream f(fileName);
 
 	if (!f)
 	{
-		sys.show_error_dialog("Could not open file hacky mod file '%s'.", fileName);
+		sys.show_error_dialog("Could not open settings mod file '%s'.", fileName);
 		return false;
 	}
 
@@ -512,19 +512,19 @@ static bool read_hacky_mod_file(char *fileName)
 		
 		if (std::sscanf(line.c_str(), " Fryhtan Lairs = %d", &num) == 1)
 		{
-			hacky_mod_frythan_lairs = num;
+			settings_mod_frythan_lairs = num;
 		}
 		else if (std::sscanf(line.c_str(), " Fryhtan Aggressiveness Modifier = %f", &fnum) == 1)
 		{
-			hacky_mod_fryhtan_aggressiveness_modifier = fnum;
+			settings_mod_fryhtan_aggressiveness_modifier = fnum;
 		}
 		else if (std::sscanf(line.c_str(), " Independent Villages = %d", &num) == 1)
 		{
-			hacky_mod_independent_villages = num;
+			settings_mod_independent_villages = num;
 		}
 		else
 		{
-			sys.show_error_dialog("[Hacky mod] Unknown setting: %s", line.c_str());
+			sys.show_error_dialog("[Settings mod] Unknown setting: %s", line.c_str());
 			return false;
 		}
 	}

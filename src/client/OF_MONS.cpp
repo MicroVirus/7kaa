@@ -47,8 +47,8 @@ static char current_monster_action_mode;
 
 static int fryhtan_attacks_per_six_months(int numOfLairs);
 
-// Hacky mod
-extern float hacky_mod_fryhtan_aggressiveness_modifier;
+// Settings mod
+extern float settings_mod_fryhtan_aggressiveness_modifier;
 
 
 //--------- Begin of function FirmMonster::init_derived ---------//
@@ -223,9 +223,9 @@ void FirmMonster::next_day()
 			// Note that Desired < (6 * Lairs). We can use: rand(6 * Lairs) < Desired to simulate this chance.
 			int numOfLairs = firm_res[FIRM_MONSTER]->total_firm_count;
 			int attacksPerSixMonths = fryhtan_attacks_per_six_months(numOfLairs);
-			if (hacky_mod_fryhtan_aggressiveness_modifier > 0)
+			if (settings_mod_fryhtan_aggressiveness_modifier > 0)
 			{
-				attacksPerSixMonths = int(hacky_mod_fryhtan_aggressiveness_modifier * attacksPerSixMonths);
+				attacksPerSixMonths = int(settings_mod_fryhtan_aggressiveness_modifier * attacksPerSixMonths);
 				if (attacksPerSixMonths < 1) attacksPerSixMonths = 1;
 			}
 			if (misc.random(6 * numOfLairs) < attacksPerSixMonths)
