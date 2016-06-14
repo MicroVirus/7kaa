@@ -361,6 +361,8 @@ void Game::disp_version()
 	str += " ";
 	str += GAME_VERSION_STR;
 
+	str += " Settings Mod";
+
 	#ifdef DEBUG
 		str += " (DEBUG)";
 	#endif
