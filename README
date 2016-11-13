@@ -1,7 +1,7 @@
 Seven Kingdoms: Ancient Adversaries - Visual Studio Projects version
 --------------------------------------------------------------------
 
-Release version 2.14.5
+Release version 2.14.7-dev
 Project website: www.7kfans.com
 
 This is a GPL release of the Seven Kingdoms: Ancient Adversaries thanks to
@@ -19,7 +19,19 @@ on the latest development branch.
 
 All other users should check out the official repository.
 
-For the change notes and general notes about 7kaa, check out the official
+Summary of changes in the 2.14.7 release
+---------
+ * Added support for 7kfans.com match-making.
+ * Added LAN game browsing support.
+ * Added Mobilize Worker button on firms. (sraboy/Microvirus)
+ * Improvements to mouse acceleration.
+ * Fixes to mouse movement in fullscreen mode.
+ * Fixed a bug with 64-bit multiplayer matches.
+ * Begun translation work. (toaster)
+ * Fix character encoding with accented characters. (MicroVirus)
+ * Bugfixes...
+
+For the latest change notes and general notes about 7kaa, check out the official
 repository README.
 
 

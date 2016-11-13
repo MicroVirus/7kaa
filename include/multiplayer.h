@@ -30,6 +30,7 @@
 #include <ODYNARRB.h>
 #include <stdint.h>
 #include <enet/enet.h>
+#include <OMISC.h>
 
 #define MP_SERVICE_PROVIDER_NAME_LEN 64
 #define MP_SESSION_NAME_LEN 64
@@ -50,72 +51,78 @@ enum ProtocolType
 enum
 {
 	MPMSG_USER_SESSION_STATUS = 0x1f960001,
-	MPMSG_GET_LOGIN_ID,
+	MPMSG_REQ_LOGIN_ID,
 	MPMSG_LOGIN_ID,
-	MPMSG_REGISTER_SESSION,
-	MPMSG_REGISTER_SESSION_ACK,
-	MPMSG_REQ_SESSION_LIST_SIZE,
-	MPMSG_SESSION_LIST_SIZE,
-	MPMSG_REQ_SESSION_INFO,
-	MPMSG_SESSION_INFO_IPV4,
+	MPMSG_REQ_SESSION_ID,
+	MPMSG_SESSION_ID,
+	MPMSG_POLL_SESSIONS,
+	MPMSG_SESSION,
+	MPMSG_REQ_SESSION_ADDR,
+	MPMSG_SESSION_ADDR,
+	MPMSG_PING,
+};
+
+enum
+{
+	MP_POLL_NO_UPDATE,
+	MP_POLL_UPDATE,
+	MP_POLL_LOGIN_PENDING,
+	MP_POLL_LOGIN_FAILED,
+	MP_POLL_NO_SOCKET,
+	MP_POLL_NO_SESSION,
 };
 
 struct MpMsgUserSessionStatus {
 	uint32_t msg_id;
-	uint16_t game_version[3];
-	uint16_t reserved0;
+	guuid_t login_id;
+	guuid_t session_id;
+	uint32_t player_id;
 	uint32_t flags;
 	char session_name[MP_FRIENDLY_NAME_LEN];
 };
-struct MpMsgGetLoginId {
+struct MpMsgReqLoginId {
 	uint32_t msg_id;
-	uint32_t reserved0;
 	char name[MP_FRIENDLY_NAME_LEN];
 };
 struct MpMsgLoginId {
 	uint32_t msg_id;
-	uint32_t login_id;
+	guuid_t login_id;
 };
-struct MpMsgRegisterSession {
+struct MpMsgReqSessionId {
 	uint32_t msg_id;
-	uint32_t login_id;
-	uint16_t game_version[3];
-	uint16_t reserved0;
-	uint32_t flags;
-	uint32_t reserved1;
+	guuid_t login_id;
 	char session_name[MP_FRIENDLY_NAME_LEN];
 	char session_password[MP_FRIENDLY_NAME_LEN];
 };
-struct MpMsgRegisterSessionAck {
+struct MpMsgSessionId {
 	uint32_t msg_id;
-	uint32_t reserved0;
+	guuid_t session_id;
 };
-struct MpMsgReqSessionListSize {
+struct MpMsgPollSessions {
 	uint32_t msg_id;
-	uint32_t login_id;
+	guuid_t login_id;
 };
-struct MpMsgSessionListSize {
+struct MpMsgSession {
 	uint32_t msg_id;
-	uint32_t size;
-};
-struct MpMsgReqSessionInfo {
-	uint32_t msg_id;
-	uint32_t login_id;
-	uint32_t session_id_start;
-	uint32_t reserved0;
-	char password[MP_FRIENDLY_NAME_LEN];
-};
-struct MpMsgSessionInfoIPv4 {
-	uint32_t msg_id;
-	uint32_t session_id;
-	uint16_t game_version[3];
-	uint16_t reserved0;
+	guuid_t session_id;
 	uint32_t flags;
+	char session_name[MP_FRIENDLY_NAME_LEN];
+};
+struct MpMsgReqSessionAddr {
+	uint32_t msg_id;
+	guuid_t login_id;
+	guuid_t session_id;
+	char session_password[MP_FRIENDLY_NAME_LEN];
+};
+struct MpMsgSessionAddr {
+	uint32_t msg_id;
+	guuid_t session_id;
 	uint32_t host;
 	uint16_t port;
-	uint16_t reserved1;
-	uint32_t reserved2;
-	char session_name[MP_FRIENDLY_NAME_LEN];
+	uint16_t reserved0;
+};
+struct MpMsgPing {
+	uint32_t msg_id;
 };
 
 #define SESSION_HOSTING         1
@@ -128,7 +135,7 @@ struct SessionDesc
 {
 	char session_name[MP_FRIENDLY_NAME_LEN+1];
 	char password[MP_FRIENDLY_NAME_LEN+1];
-	uint32_t id;
+	guuid_t id;
 	uint32_t flags;
 	int max_players;
 	int player_count;
@@ -139,9 +146,10 @@ struct SessionDesc
 	SessionDesc& operator= (const SessionDesc &);
 	SessionDesc(const char *name, const char *pass, ENetAddress *address);
 	SessionDesc(MpMsgUserSessionStatus *m, ENetAddress *address);
+	SessionDesc(MpMsgSession *m);
 
 	char *name_str() { return session_name; };
-	uint32_t session_id() { return id; }
+	guuid_t &session_id() { return id; }
 };
 
 
@@ -168,9 +176,9 @@ private:
 	uint32_t          packet_mode;
 
 	ENetSocket        session_monitor;
-	ENetAddress       remote_session_provider_address;
+	ENetAddress       service_provider;
+	guuid_t            service_login_id;
 
-	int use_remote_session_provider;
 	int update_available;
 
 public:
@@ -195,22 +203,24 @@ public:
 	void   disable_new_connections();
 
 	// ------- functions on session --------//
-	int    set_remote_session_provider(const char *server);
+	int    set_service_provider(const char *host);
 	int    poll_sessions();
 	void   sort_sessions(int sortType);
-	int    create_session(char *sessionName, char *password, char *playerName, int maxPlayers);
-	int    join_session(SessionDesc *session, char *playerName);
+	int    create_session(char *sessionName, char *password, int maxPlayers);
+	int    join_session(SessionDesc *session);
 	int    close_session();
 	SessionDesc* get_session(int i);
 	SessionDesc* get_session(ENetAddress *address);
+	SessionDesc* get_session(guuid_t id);
 	SessionDesc* get_current_session();
 
 	// -------- functions on player management -------//
 	int         add_player(uint32_t playerId, char *name, ENetAddress *address, char contact);
 	int         auth_player(uint32_t playerId, char *name, char *password);
+	void        create_my_player(char *playerName);
 	int         set_my_player_id(uint32_t playerId);
 	void        delete_player(uint32_t playerId);
-	void        poll_players();
+	int         poll_players();
 	PlayerDesc* get_player(int i);
 	PlayerDesc* search_player(uint32_t playerId);
 	int         is_player_connecting(uint32_t playerId);
@@ -224,12 +234,18 @@ public:
 private:
 	int open_port(uint16_t port, int fallback);
 	void close_port();
+	int connect_host();
 
 	ENetSocket create_socket(uint16_t port);
 	void destroy_socket(ENetSocket socket);
 
-	void send_user_session_status(ENetAddress *address);
+	void send_user_session_status(ENetAddress *a);
+	void send_req_login_id();
+	void send_poll_sessions();
+	void send_req_session_id();
+	void send_req_session_addr();
 
+	void update_player_pool();
 	uint32_t get_avail_player_id();
 	int add_pending_player(PlayerDesc *player);
 	PlayerDesc* yank_pending_player(uint32_t playerId);

@@ -297,279 +297,14 @@
     <ClInclude Include="..\include\win32_compat.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\client\7k.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\src\client\ico.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\audio\openal\openal_audio.cpp" />
-    <ClCompile Include="..\src\audio\openal\wav_stream.cpp" />
-    <ClCompile Include="..\src\client\AM.cpp" />
-    <ClCompile Include="..\src\client\OAI_ACT.cpp" />
-    <ClCompile Include="..\src\client\OAI_ACT2.cpp" />
-    <ClCompile Include="..\src\client\OAI_ATTK.cpp" />
-    <ClCompile Include="..\src\client\OAI_BUIL.cpp" />
-    <ClCompile Include="..\src\client\OAI_CAP2.cpp" />
-    <ClCompile Include="..\src\client\OAI_CAPT.cpp" />
-    <ClCompile Include="..\src\client\OAI_DEFE.cpp" />
-    <ClCompile Include="..\src\client\OAI_DIPL.cpp" />
-    <ClCompile Include="..\src\client\OAI_ECO.cpp" />
-    <ClCompile Include="..\src\client\OAI_GRAN.cpp" />
-    <ClCompile Include="..\src\client\OAI_INFO.cpp" />
-    <ClCompile Include="..\src\client\OAI_MAIN.cpp" />
-    <ClCompile Include="..\src\client\OAI_MAR2.cpp" />
-    <ClCompile Include="..\src\client\OAI_MAR3.cpp" />
-    <ClCompile Include="..\src\client\OAI_MARI.cpp" />
-    <ClCompile Include="..\src\client\OAI_MILI.cpp" />
-    <ClCompile Include="..\src\client\OAI_MONS.cpp" />
-    <ClCompile Include="..\src\client\OAI_QUER.cpp" />
-    <ClCompile Include="..\src\client\OAI_SEEK.cpp" />
-    <ClCompile Include="..\src\client\OAI_SPY.cpp" />
-    <ClCompile Include="..\src\client\OAI_TALK.cpp" />
-    <ClCompile Include="..\src\client\OAI_TOWN.cpp" />
-    <ClCompile Include="..\src\client\OAI_TRAD.cpp" />
-    <ClCompile Include="..\src\client\OAI_UNIT.cpp" />
-    <ClCompile Include="..\src\client\OANLINE.cpp" />
-    <ClCompile Include="..\src\client\OBATTLE.cpp" />
-    <ClCompile Include="..\src\client\OBLOB.cpp" />
-    <ClCompile Include="..\src\client\OBOX.cpp" />
-    <ClCompile Include="..\src\client\OBULLET.cpp" />
-    <ClCompile Include="..\src\client\OBULLETA.cpp" />
-    <ClCompile Include="..\src\client\OBUTT3D.cpp" />
-    <ClCompile Include="..\src\client\OBUTTCUS.cpp" />
-    <ClCompile Include="..\src\client\OBUTTON.cpp" />
-    <ClCompile Include="..\src\client\OB_FLAME.cpp" />
-    <ClCompile Include="..\src\client\OB_HOMIN.cpp" />
-    <ClCompile Include="..\src\client\OB_PROJ.cpp" />
-    <ClCompile Include="..\src\client\OCRC_STO.cpp" />
-    <ClCompile Include="..\src\client\ODYNARR.cpp" />
-    <ClCompile Include="..\src\client\ODYNARRB.cpp" />
-    <ClCompile Include="..\src\client\OEFFECT.cpp" />
-    <ClCompile Include="..\src\client\OEXPMASK.cpp" />
-    <ClCompile Include="..\src\client\OFILETXT.cpp" />
-    <ClCompile Include="..\src\client\OFIRM.cpp" />
-    <ClCompile Include="..\src\client\OFIRM2.cpp" />
-    <ClCompile Include="..\src\client\OFIRMA.cpp" />
-    <ClCompile Include="..\src\client\OFIRMAI.cpp" />
-    <ClCompile Include="..\src\client\OFIRMDIE.cpp" />
-    <ClCompile Include="..\src\client\OFIRMDRW.cpp" />
-    <ClCompile Include="..\src\client\OFIRMIF.cpp" />
-    <ClCompile Include="..\src\client\OFIRMIF2.cpp" />
-    <ClCompile Include="..\src\client\OFIRMIF3.cpp" />
-    <ClCompile Include="..\src\client\OFIRMRES.cpp" />
-    <ClCompile Include="..\src\client\OFLAME.cpp" />
-    <ClCompile Include="..\src\client\OFONT.cpp" />
-    <ClCompile Include="..\src\client\OF_BASE.cpp" />
-    <ClCompile Include="..\src\client\OF_BASE2.cpp" />
-    <ClCompile Include="..\src\client\OF_CAMP.cpp" />
-    <ClCompile Include="..\src\client\OF_CAMP2.cpp" />
-    <ClCompile Include="..\src\client\OF_FACT.cpp" />
-    <ClCompile Include="..\src\client\OF_FACT2.cpp" />
-    <ClCompile Include="..\src\client\OF_HARB.cpp" />
-    <ClCompile Include="..\src\client\OF_HARB2.cpp" />
-    <ClCompile Include="..\src\client\OF_INN.cpp" />
-    <ClCompile Include="..\src\client\OF_INN2.cpp" />
-    <ClCompile Include="..\src\client\OF_MARK.cpp" />
-    <ClCompile Include="..\src\client\OF_MARK2.cpp" />
-    <ClCompile Include="..\src\client\OF_MINE.cpp" />
-    <ClCompile Include="..\src\client\OF_MINE2.cpp" />
-    <ClCompile Include="..\src\client\OF_MONS.cpp" />
-    <ClCompile Include="..\src\client\OF_RESE.cpp" />
-    <ClCompile Include="..\src\client\OF_RESE2.cpp" />
-    <ClCompile Include="..\src\client\OF_WAR.cpp" />
-    <ClCompile Include="..\src\client\OF_WAR2.cpp" />
-    <ClCompile Include="..\src\client\OGAMCRED.cpp" />
-    <ClCompile Include="..\src\client\OGAME.cpp" />
-    <ClCompile Include="..\src\client\OGAMEMP.cpp" />
-    <ClCompile Include="..\src\client\OGAMENCY.cpp" />
-    <ClCompile Include="..\src\client\OGAMEND.cpp" />
-    <ClCompile Include="..\src\client\OGAMESET.cpp" />
-    <ClCompile Include="..\src\client\OGAMHALL.cpp" />
-    <ClCompile Include="..\src\client\OGAMMAIN.cpp" />
-    <ClCompile Include="..\src\client\OGAMMENU.cpp" />
-    <ClCompile Include="..\src\client\OGAMSCE2.cpp" />
-    <ClCompile Include="..\src\client\OGAMSCEN.cpp" />
-    <ClCompile Include="..\src\client\OGAMSING.cpp" />
-    <ClCompile Include="..\src\client\OGENHILL.cpp" />
-    <ClCompile Include="..\src\client\OGENMAP.cpp" />
-    <ClCompile Include="..\src\client\OGETA.cpp" />
-    <ClCompile Include="..\src\client\OGFILE.cpp" />
-    <ClCompile Include="..\src\client\OGFILE2.cpp" />
-    <ClCompile Include="..\src\client\OGFILE3.cpp" />
-    <ClCompile Include="..\src\client\OGFILEA.cpp" />
-    <ClCompile Include="..\src\client\OGF_V1.cpp" />
-    <ClCompile Include="..\src\client\OGODRES.cpp" />
-    <ClCompile Include="..\src\client\OGRPSEL.cpp" />
-    <ClCompile Include="..\src\client\OHELP.cpp" />
-    <ClCompile Include="..\src\client\OHILLRES.cpp" />
-    <ClCompile Include="..\src\client\OIMGRES.cpp" />
-    <ClCompile Include="..\src\client\OINFO.cpp" />
-    <ClCompile Include="..\src\client\OINGMENU.cpp" />
-    <ClCompile Include="..\src\client\OLIGHTN.cpp" />
-    <ClCompile Include="..\src\client\OLIGHTN2.cpp" />
-    <ClCompile Include="..\src\client\OLOG.cpp" />
-    <ClCompile Include="..\src\client\OLONGLOG.cpp" />
-    <ClCompile Include="..\src\client\OLZW.cpp" />
-    <ClCompile Include="..\src\client\OMATRIX.cpp" />
-    <ClCompile Include="..\src\client\OMONSRES.cpp" />
-    <ClCompile Include="..\src\client\OMOUSECR.cpp" />
-    <ClCompile Include="..\src\client\OMP_CRC.cpp" />
-    <ClCompile Include="..\src\client\OMUSIC.cpp" />
-    <ClCompile Include="..\src\client\ONATIONA.cpp" />
-    <ClCompile Include="..\src\client\ONATIONB.cpp" />
-    <ClCompile Include="..\src\client\ONEWS.cpp" />
-    <ClCompile Include="..\src\client\ONEWS2.cpp" />
-    <ClCompile Include="..\src\client\ONEWSENG.cpp" />
-    <ClCompile Include="..\src\client\ONEWSFRE.cpp" />
-    <ClCompile Include="..\src\client\ONEWSGER.cpp" />
-    <ClCompile Include="..\src\client\ONEWSSPA.cpp" />
-    <ClCompile Include="..\src\client\OOPTMENU.cpp" />
-    <ClCompile Include="..\src\client\OPLANT.cpp" />
-    <ClCompile Include="..\src\client\OPLASMA.cpp" />
-    <ClCompile Include="..\src\client\OPOWER.cpp" />
-    <ClCompile Include="..\src\client\ORACERES.cpp" />
-    <ClCompile Include="..\src\client\ORAIN1.cpp" />
-    <ClCompile Include="..\src\client\ORAIN2.cpp" />
-    <ClCompile Include="..\src\client\ORAIN3.cpp" />
-    <ClCompile Include="..\src\client\ORAWRES.cpp" />
-    <ClCompile Include="..\src\client\OREBEL.cpp" />
-    <ClCompile Include="..\src\client\OREGION.cpp" />
-    <ClCompile Include="..\src\client\OREGIONS.cpp" />
-    <ClCompile Include="..\src\client\OROCK.cpp" />
-    <ClCompile Include="..\src\client\OROCKRES.cpp" />
-    <ClCompile Include="..\src\client\OR_AI.cpp" />
-    <ClCompile Include="..\src\client\OR_ECO.cpp" />
-    <ClCompile Include="..\src\client\OR_MIL.cpp" />
-    <ClCompile Include="..\src\client\OR_NAT.cpp" />
-    <ClCompile Include="..\src\client\OR_NEWS.cpp" />
-    <ClCompile Include="..\src\client\OR_RANK.cpp" />
-    <ClCompile Include="..\src\client\OR_SPY.cpp" />
-    <ClCompile Include="..\src\client\OR_TECH.cpp" />
-    <ClCompile Include="..\src\client\OR_TOWN.cpp" />
-    <ClCompile Include="..\src\client\OR_TRADE.cpp" />
-    <ClCompile Include="..\src\client\OSCROLL.cpp" />
-    <ClCompile Include="..\src\client\OSE.cpp" />
-    <ClCompile Include="..\src\client\OSERES.cpp" />
-    <ClCompile Include="..\src\client\OSFRMRES.cpp" />
-    <ClCompile Include="..\src\client\OSITE.cpp" />
-    <ClCompile Include="..\src\client\OSITEDRW.cpp" />
-    <ClCompile Include="..\src\client\OSKILL.cpp" />
-    <ClCompile Include="..\src\client\OSLIDCUS.cpp" />
-    <ClCompile Include="..\src\client\OSNOW1.cpp" />
-    <ClCompile Include="..\src\client\OSNOW2.cpp" />
-    <ClCompile Include="..\src\client\OSNOWG.cpp" />
-    <ClCompile Include="..\src\client\OSNOWRES.cpp" />
-    <ClCompile Include="..\src\client\OSPATH.cpp" />
-    <ClCompile Include="..\src\client\OSPATHBT.cpp" />
-    <ClCompile Include="..\src\client\OSPREDBG.cpp" />
-    <ClCompile Include="..\src\client\OSPREOFF.cpp" />
-    <ClCompile Include="..\src\client\OSPRESMO.cpp" />
-    <ClCompile Include="..\src\client\OSPREUSE.cpp" />
-    <ClCompile Include="..\src\client\OSPRITE.cpp" />
-    <ClCompile Include="..\src\client\OSPRITE2.cpp" />
-    <ClCompile Include="..\src\client\OSPRITEA.cpp" />
-    <ClCompile Include="..\src\client\OSPRTRES.cpp" />
-    <ClCompile Include="..\src\client\OSPY.cpp" />
-    <ClCompile Include="..\src\client\OSPY2.cpp" />
-    <ClCompile Include="..\src\client\OSPYA.cpp" />
-    <ClCompile Include="..\src\client\OSYS.cpp" />
-    <ClCompile Include="..\src\client\OSYS2.cpp" />
-    <ClCompile Include="..\src\client\OSYS3.cpp" />
-    <ClCompile Include="..\src\client\OTALKENG.cpp" />
-    <ClCompile Include="..\src\client\OTALKFRE.cpp" />
-    <ClCompile Include="..\src\client\OTALKGER.cpp" />
-    <ClCompile Include="..\src\client\OTALKMSG.cpp" />
-    <ClCompile Include="..\src\client\OTALKRES.cpp" />
-    <ClCompile Include="..\src\client\OTALKSPA.cpp" />
-    <ClCompile Include="..\src\client\OTECHRES.cpp" />
-    <ClCompile Include="..\src\client\OTERRAIN.cpp" />
-    <ClCompile Include="..\src\client\OTORNADO.cpp" />
-    <ClCompile Include="..\src\client\OTOWN.cpp" />
-    <ClCompile Include="..\src\client\OTOWNA.cpp" />
-    <ClCompile Include="..\src\client\OTOWNAI.cpp" />
-    <ClCompile Include="..\src\client\OTOWNBLD.cpp" />
-    <ClCompile Include="..\src\client\OTOWNDRW.cpp" />
-    <ClCompile Include="..\src\client\OTOWNIF.cpp" />
-    <ClCompile Include="..\src\client\OTOWNIND.cpp" />
-    <ClCompile Include="..\src\client\OTownNetwork.cpp" />
-    <ClCompile Include="..\src\client\OTOWNRES.cpp" />
-    <ClCompile Include="..\src\client\OTRANSL.cpp" />
-    <ClCompile Include="..\src\client\OTUTOR.cpp" />
-    <ClCompile Include="..\src\client\OTUTOR2.cpp" />
-    <ClCompile Include="..\src\client\OUNIT.cpp" />
-    <ClCompile Include="..\src\client\OUNIT2.cpp" />
-    <ClCompile Include="..\src\client\OUNITA.cpp" />
-    <ClCompile Include="..\src\client\OUNITAAC.cpp" />
-    <ClCompile Include="..\src\client\OUNITAAT.cpp" />
-    <ClCompile Include="..\src\client\OUNITAC.cpp" />
-    <ClCompile Include="..\src\client\OUNITAI.cpp" />
-    <ClCompile Include="..\src\client\OUNITAM.cpp" />
-    <ClCompile Include="..\src\client\OUNITAMT.cpp" />
-    <ClCompile Include="..\src\client\OUNITAT.cpp" />
-    <ClCompile Include="..\src\client\OUNITAT2.cpp" />
-    <ClCompile Include="..\src\client\OUNITAT3.cpp" />
-    <ClCompile Include="..\src\client\OUNITATB.cpp" />
-    <ClCompile Include="..\src\client\OUNITD.cpp" />
-    <ClCompile Include="..\src\client\OUNITDRW.cpp" />
-    <ClCompile Include="..\src\client\OUNITHB.cpp" />
-    <ClCompile Include="..\src\client\OUNITI.cpp" />
-    <ClCompile Include="..\src\client\OUNITIF.cpp" />
-    <ClCompile Include="..\src\client\OUNITIND.cpp" />
-    <ClCompile Include="..\src\client\OUNITM.cpp" />
-    <ClCompile Include="..\src\client\OUNITRES.cpp" />
-    <ClCompile Include="..\src\client\OUNITS.cpp" />
-    <ClCompile Include="..\src\client\OU_CARA.cpp" />
-    <ClCompile Include="..\src\client\OU_CARA2.cpp" />
-    <ClCompile Include="..\src\client\OU_CARAS.cpp" />
-    <ClCompile Include="..\src\client\OU_CARAT.cpp" />
-    <ClCompile Include="..\src\client\OU_CART.cpp" />
-    <ClCompile Include="..\src\client\OU_GOD.cpp" />
-    <ClCompile Include="..\src\client\OU_GOD2.cpp" />
-    <ClCompile Include="..\src\client\OU_MARI.cpp" />
-    <ClCompile Include="..\src\client\OU_MARI2.cpp" />
-    <ClCompile Include="..\src\client\OU_MARIF.cpp" />
-    <ClCompile Include="..\src\client\OU_MARIS.cpp" />
-    <ClCompile Include="..\src\client\OU_MARIT.cpp" />
-    <ClCompile Include="..\src\client\OU_MONS.cpp" />
-    <ClCompile Include="..\src\client\OU_VEHI.cpp" />
-    <ClCompile Include="..\src\client\OVBROWIF.cpp" />
-    <ClCompile Include="..\src\client\OVBROWSE.cpp" />
-    <ClCompile Include="..\src\client\OVIDEO.cpp" />
-    <ClCompile Include="..\src\client\OVOLUME.cpp" />
-    <ClCompile Include="..\src\client\OVQUEUE.cpp" />
-    <ClCompile Include="..\src\client\OWALLRES.cpp" />
-    <ClCompile Include="..\src\client\OWARPT.cpp" />
-    <ClCompile Include="..\src\client\OWEATHER.cpp" />
-    <ClCompile Include="..\src\client\OWORLD.cpp" />
-    <ClCompile Include="..\src\client\OWORLD_M.cpp" />
-    <ClCompile Include="..\src\client\OWORLD_Z.cpp" />
-    <ClCompile Include="..\src\client\OW_FIRE.cpp" />
-    <ClCompile Include="..\src\client\OW_PLANT.cpp" />
-    <ClCompile Include="..\src\client\OW_ROCK.cpp" />
-    <ClCompile Include="..\src\client\OW_SOUND.cpp" />
-    <ClCompile Include="..\src\client\OW_WALL.cpp" />
-    <ClCompile Include="..\src\common\dbglog.cpp" />
-    <ClCompile Include="..\src\common\OCONFIG.cpp" />
-    <ClCompile Include="..\src\common\ODATE.cpp" />
-    <ClCompile Include="..\src\common\OERROR.cpp" />
-    <ClCompile Include="..\src\common\OMEM.cpp" />
-    <ClCompile Include="..\src\common\OMISC.cpp" />
-    <ClCompile Include="..\src\common\OSTR.cpp" />
-    <ClCompile Include="..\src\file\file_input_stream.cpp" />
-    <ClCompile Include="..\src\file\file_output_stream.cpp" />
-    <ClCompile Include="..\src\file\file_reader.cpp" />
-    <ClCompile Include="..\src\file\file_util.cpp" />
-    <ClCompile Include="..\src\file\file_writer.cpp" />
-    <ClCompile Include="..\src\file\input_stream.cpp" />
-    <ClCompile Include="..\src\file\mem_input_stream.cpp" />
-    <ClCompile Include="..\src\file\ODB.cpp" />
-    <ClCompile Include="..\src\file\ODIR.cpp" />
-    <ClCompile Include="..\src\file\OFILE.cpp" />
-    <ClCompile Include="..\src\file\ORES.cpp" />
-    <ClCompile Include="..\src\file\ORESDB.cpp" />
-    <ClCompile Include="..\src\file\ORESX.cpp" />
-    <ClCompile Include="..\src\file\output_stream.cpp" />
+    <ClCompile Include="..\src\AM.cpp" />
+    <ClCompile Include="..\src\dbglog.cpp" />
+    <ClCompile Include="..\src\enet\multiplayer.cpp" />
+    <ClCompile Include="..\src\file_input_stream.cpp" />
+    <ClCompile Include="..\src\file_output_stream.cpp" />
+    <ClCompile Include="..\src\file_reader.cpp" />
+    <ClCompile Include="..\src\file_util.cpp" />
+    <ClCompile Include="..\src\file_writer.cpp" />
     <ClCompile Include="..\src\imgfun\generic\CRC.cpp" />
     <ClCompile Include="..\src\imgfun\generic\IB.cpp" />
     <ClCompile Include="..\src\imgfun\generic\IB2.cpp" />
@@ -609,22 +344,482 @@
     <ClCompile Include="..\src\imgfun\generic\I_PIXEL.cpp" />
     <ClCompile Include="..\src\imgfun\generic\I_READ.cpp" />
     <ClCompile Include="..\src\imgfun\generic\I_SNOW.cpp" />
-    <ClCompile Include="..\src\input\sdl\OMOUSE.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\multiplayer.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\OERRCTRL.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\OREMOTE.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\OREMOTE2.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\OREMOTEM.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\OREMOTEQ.cpp" />
-    <ClCompile Include="..\src\multiplayer\common\player_desc.cpp" />
-    <ClCompile Include="..\src\video\common\OCOLTBL.cpp" />
-    <ClCompile Include="..\src\video\common\OVGABUF.cpp" />
-    <ClCompile Include="..\src\video\common\OVGABUF2.cpp" />
-    <ClCompile Include="..\src\video\common\OVGALOCK.cpp" />
-    <ClCompile Include="..\src\video\common\vgautil.cpp" />
-    <ClCompile Include="..\src\video\common\vgautil2.cpp" />
-    <ClCompile Include="..\src\video\sdl\surface_sdl.cpp" />
-    <ClCompile Include="..\src\video\sdl\vga_sdl.cpp" />
+    <ClCompile Include="..\src\input_stream.cpp" />
+    <ClCompile Include="..\src\mem_input_stream.cpp" />
+    <ClCompile Include="..\src\misc_uuid.cpp" />
+    <ClCompile Include="..\src\OAI_ACT.cpp" />
+    <ClCompile Include="..\src\OAI_ACT2.cpp" />
+    <ClCompile Include="..\src\OAI_ATTK.cpp" />
+    <ClCompile Include="..\src\OAI_BUIL.cpp" />
+    <ClCompile Include="..\src\OAI_CAP2.cpp" />
+    <ClCompile Include="..\src\OAI_CAPT.cpp" />
+    <ClCompile Include="..\src\OAI_DEFE.cpp" />
+    <ClCompile Include="..\src\OAI_DIPL.cpp" />
+    <ClCompile Include="..\src\OAI_ECO.cpp" />
+    <ClCompile Include="..\src\OAI_GRAN.cpp" />
+    <ClCompile Include="..\src\OAI_INFO.cpp" />
+    <ClCompile Include="..\src\OAI_MAIN.cpp" />
+    <ClCompile Include="..\src\OAI_MAR2.cpp" />
+    <ClCompile Include="..\src\OAI_MAR3.cpp" />
+    <ClCompile Include="..\src\OAI_MARI.cpp" />
+    <ClCompile Include="..\src\OAI_MILI.cpp" />
+    <ClCompile Include="..\src\OAI_MONS.cpp" />
+    <ClCompile Include="..\src\OAI_QUER.cpp" />
+    <ClCompile Include="..\src\OAI_SEEK.cpp" />
+    <ClCompile Include="..\src\OAI_SPY.cpp" />
+    <ClCompile Include="..\src\OAI_TALK.cpp" />
+    <ClCompile Include="..\src\OAI_TOWN.cpp" />
+    <ClCompile Include="..\src\OAI_TRAD.cpp" />
+    <ClCompile Include="..\src\OAI_UNIT.cpp" />
+    <ClCompile Include="..\src\OANLINE.cpp" />
+    <ClCompile Include="..\src\OBATTLE.cpp" />
+    <ClCompile Include="..\src\OBLOB.cpp" />
+    <ClCompile Include="..\src\OBOX.cpp" />
+    <ClCompile Include="..\src\OBULLET.cpp" />
+    <ClCompile Include="..\src\OBULLETA.cpp" />
+    <ClCompile Include="..\src\OBUTT3D.cpp" />
+    <ClCompile Include="..\src\OBUTTCUS.cpp" />
+    <ClCompile Include="..\src\OBUTTON.cpp" />
+    <ClCompile Include="..\src\OB_FLAME.cpp" />
+    <ClCompile Include="..\src\OB_HOMIN.cpp" />
+    <ClCompile Include="..\src\OB_PROJ.cpp" />
+    <ClCompile Include="..\src\OCOLTBL.cpp" />
+    <ClCompile Include="..\src\OCONFIG.cpp" />
+    <ClCompile Include="..\src\OCRC_STO.cpp" />
+    <ClCompile Include="..\src\ODATE.cpp" />
+    <ClCompile Include="..\src\ODB.cpp" />
+    <ClCompile Include="..\src\ODIR.cpp" />
+    <ClCompile Include="..\src\ODYNARR.cpp" />
+    <ClCompile Include="..\src\ODYNARRB.cpp" />
+    <ClCompile Include="..\src\OEFFECT.cpp" />
+    <ClCompile Include="..\src\OERRCTRL.cpp" />
+    <ClCompile Include="..\src\OERROR.cpp" />
+    <ClCompile Include="..\src\OEXPMASK.cpp" />
+    <ClCompile Include="..\src\OFILE.cpp" />
+    <ClCompile Include="..\src\OFILETXT.cpp" />
+    <ClCompile Include="..\src\OFIRM.cpp" />
+    <ClCompile Include="..\src\OFIRM2.cpp" />
+    <ClCompile Include="..\src\OFIRMA.cpp" />
+    <ClCompile Include="..\src\OFIRMAI.cpp" />
+    <ClCompile Include="..\src\OFIRMDIE.cpp" />
+    <ClCompile Include="..\src\OFIRMDRW.cpp" />
+    <ClCompile Include="..\src\OFIRMIF.cpp" />
+    <ClCompile Include="..\src\OFIRMIF2.cpp" />
+    <ClCompile Include="..\src\OFIRMIF3.cpp" />
+    <ClCompile Include="..\src\OFIRMRES.cpp" />
+    <ClCompile Include="..\src\OFLAME.cpp" />
+    <ClCompile Include="..\src\OFONT.cpp" />
+    <ClCompile Include="..\src\OF_BASE.cpp" />
+    <ClCompile Include="..\src\OF_BASE2.cpp" />
+    <ClCompile Include="..\src\OF_CAMP.cpp" />
+    <ClCompile Include="..\src\OF_CAMP2.cpp" />
+    <ClCompile Include="..\src\OF_FACT.cpp" />
+    <ClCompile Include="..\src\OF_FACT2.cpp" />
+    <ClCompile Include="..\src\OF_HARB.cpp" />
+    <ClCompile Include="..\src\OF_HARB2.cpp" />
+    <ClCompile Include="..\src\OF_INN.cpp" />
+    <ClCompile Include="..\src\OF_INN2.cpp" />
+    <ClCompile Include="..\src\OF_MARK.cpp" />
+    <ClCompile Include="..\src\OF_MARK2.cpp" />
+    <ClCompile Include="..\src\OF_MINE.cpp" />
+    <ClCompile Include="..\src\OF_MINE2.cpp" />
+    <ClCompile Include="..\src\OF_MONS.cpp" />
+    <ClCompile Include="..\src\OF_RESE.cpp" />
+    <ClCompile Include="..\src\OF_RESE2.cpp" />
+    <ClCompile Include="..\src\OF_WAR.cpp" />
+    <ClCompile Include="..\src\OF_WAR2.cpp" />
+    <ClCompile Include="..\src\OGAMCRED.cpp" />
+    <ClCompile Include="..\src\OGAME.cpp" />
+    <ClCompile Include="..\src\OGAMEMP.cpp" />
+    <ClCompile Include="..\src\OGAMENCY.cpp" />
+    <ClCompile Include="..\src\OGAMEND.cpp" />
+    <ClCompile Include="..\src\OGAMESET.cpp" />
+    <ClCompile Include="..\src\OGAMHALL.cpp" />
+    <ClCompile Include="..\src\OGAMMAIN.cpp" />
+    <ClCompile Include="..\src\OGAMMENU.cpp" />
+    <ClCompile Include="..\src\OGAMSCE2.cpp" />
+    <ClCompile Include="..\src\OGAMSCEN.cpp" />
+    <ClCompile Include="..\src\OGAMSING.cpp" />
+    <ClCompile Include="..\src\OGENHILL.cpp" />
+    <ClCompile Include="..\src\OGENMAP.cpp" />
+    <ClCompile Include="..\src\OGETA.cpp" />
+    <ClCompile Include="..\src\OGFILE.cpp" />
+    <ClCompile Include="..\src\OGFILE2.cpp" />
+    <ClCompile Include="..\src\OGFILE3.cpp" />
+    <ClCompile Include="..\src\OGFILEA.cpp" />
+    <ClCompile Include="..\src\OGF_V1.cpp" />
+    <ClCompile Include="..\src\OGODRES.cpp" />
+    <ClCompile Include="..\src\OGRPSEL.cpp" />
+    <ClCompile Include="..\src\OHELP.cpp" />
+    <ClCompile Include="..\src\OHILLRES.cpp" />
+    <ClCompile Include="..\src\OIMGRES.cpp" />
+    <ClCompile Include="..\src\OINFO.cpp" />
+    <ClCompile Include="..\src\OINGMENU.cpp" />
+    <ClCompile Include="..\src\OLIGHTN.cpp" />
+    <ClCompile Include="..\src\OLIGHTN2.cpp" />
+    <ClCompile Include="..\src\OLOG.cpp" />
+    <ClCompile Include="..\src\OLONGLOG.cpp" />
+    <ClCompile Include="..\src\OLZW.cpp" />
+    <ClCompile Include="..\src\OMATRIX.cpp" />
+    <ClCompile Include="..\src\OMEM.cpp" />
+    <ClCompile Include="..\src\OMISC.cpp" />
+    <ClCompile Include="..\src\OMONSRES.cpp" />
+    <ClCompile Include="..\src\OMOUSE.cpp" />
+    <ClCompile Include="..\src\OMOUSECR.cpp" />
+    <ClCompile Include="..\src\OMP_CRC.cpp" />
+    <ClCompile Include="..\src\OMUSIC.cpp" />
+    <ClCompile Include="..\src\ONATIONA.cpp" />
+    <ClCompile Include="..\src\ONATIONB.cpp" />
+    <ClCompile Include="..\src\ONEWS.cpp" />
+    <ClCompile Include="..\src\ONEWS2.cpp" />
+    <ClCompile Include="..\src\ONEWSENG.cpp" />
+    <ClCompile Include="..\src\ONEWSFRE.cpp" />
+    <ClCompile Include="..\src\ONEWSGER.cpp" />
+    <ClCompile Include="..\src\ONEWSSPA.cpp" />
+    <ClCompile Include="..\src\OOPTMENU.cpp" />
+    <ClCompile Include="..\src\openal\openal_audio.cpp" />
+    <ClCompile Include="..\src\openal\wav_stream.cpp" />
+    <ClCompile Include="..\src\OPLANT.cpp" />
+    <ClCompile Include="..\src\OPLASMA.cpp" />
+    <ClCompile Include="..\src\OPOWER.cpp" />
+    <ClCompile Include="..\src\ORACERES.cpp" />
+    <ClCompile Include="..\src\ORAIN1.cpp" />
+    <ClCompile Include="..\src\ORAIN2.cpp" />
+    <ClCompile Include="..\src\ORAIN3.cpp" />
+    <ClCompile Include="..\src\ORAWRES.cpp" />
+    <ClCompile Include="..\src\OREBEL.cpp" />
+    <ClCompile Include="..\src\OREGION.cpp" />
+    <ClCompile Include="..\src\OREGIONS.cpp" />
+    <ClCompile Include="..\src\OREMOTE.cpp" />
+    <ClCompile Include="..\src\OREMOTE2.cpp" />
+    <ClCompile Include="..\src\OREMOTEM.cpp" />
+    <ClCompile Include="..\src\OREMOTEQ.cpp" />
+    <ClCompile Include="..\src\ORES.cpp" />
+    <ClCompile Include="..\src\ORESDB.cpp" />
+    <ClCompile Include="..\src\ORESX.cpp" />
+    <ClCompile Include="..\src\OROCK.cpp" />
+    <ClCompile Include="..\src\OROCKRES.cpp" />
+    <ClCompile Include="..\src\OR_AI.cpp" />
+    <ClCompile Include="..\src\OR_ECO.cpp" />
+    <ClCompile Include="..\src\OR_MIL.cpp" />
+    <ClCompile Include="..\src\OR_NAT.cpp" />
+    <ClCompile Include="..\src\OR_NEWS.cpp" />
+    <ClCompile Include="..\src\OR_RANK.cpp" />
+    <ClCompile Include="..\src\OR_SPY.cpp" />
+    <ClCompile Include="..\src\OR_TECH.cpp" />
+    <ClCompile Include="..\src\OR_TOWN.cpp" />
+    <ClCompile Include="..\src\OR_TRADE.cpp" />
+    <ClCompile Include="..\src\OSCROLL.cpp" />
+    <ClCompile Include="..\src\OSE.cpp" />
+    <ClCompile Include="..\src\OSERES.cpp" />
+    <ClCompile Include="..\src\OSFRMRES.cpp" />
+    <ClCompile Include="..\src\OSITE.cpp" />
+    <ClCompile Include="..\src\OSITEDRW.cpp" />
+    <ClCompile Include="..\src\OSKILL.cpp" />
+    <ClCompile Include="..\src\OSLIDCUS.cpp" />
+    <ClCompile Include="..\src\OSNOW1.cpp" />
+    <ClCompile Include="..\src\OSNOW2.cpp" />
+    <ClCompile Include="..\src\OSNOWG.cpp" />
+    <ClCompile Include="..\src\OSNOWRES.cpp" />
+    <ClCompile Include="..\src\OSPATH.cpp" />
+    <ClCompile Include="..\src\OSPATHBT.cpp" />
+    <ClCompile Include="..\src\OSPREDBG.cpp" />
+    <ClCompile Include="..\src\OSPREOFF.cpp" />
+    <ClCompile Include="..\src\OSPRESMO.cpp" />
+    <ClCompile Include="..\src\OSPREUSE.cpp" />
+    <ClCompile Include="..\src\OSPRITE.cpp" />
+    <ClCompile Include="..\src\OSPRITE2.cpp" />
+    <ClCompile Include="..\src\OSPRITEA.cpp" />
+    <ClCompile Include="..\src\OSPRTRES.cpp" />
+    <ClCompile Include="..\src\OSPY.cpp" />
+    <ClCompile Include="..\src\OSPY2.cpp" />
+    <ClCompile Include="..\src\OSPYA.cpp" />
+    <ClCompile Include="..\src\OSTR.cpp" />
+    <ClCompile Include="..\src\OSYS.cpp" />
+    <ClCompile Include="..\src\OSYS2.cpp" />
+    <ClCompile Include="..\src\OSYS3.cpp" />
+    <ClCompile Include="..\src\OTALKENG.cpp" />
+    <ClCompile Include="..\src\OTALKFRE.cpp" />
+    <ClCompile Include="..\src\OTALKGER.cpp" />
+    <ClCompile Include="..\src\OTALKMSG.cpp" />
+    <ClCompile Include="..\src\OTALKRES.cpp" />
+    <ClCompile Include="..\src\OTALKSPA.cpp" />
+    <ClCompile Include="..\src\OTECHRES.cpp" />
+    <ClCompile Include="..\src\OTERRAIN.cpp" />
+    <ClCompile Include="..\src\OTORNADO.cpp" />
+    <ClCompile Include="..\src\OTOWN.cpp" />
+    <ClCompile Include="..\src\OTOWNA.cpp" />
+    <ClCompile Include="..\src\OTOWNAI.cpp" />
+    <ClCompile Include="..\src\OTOWNBLD.cpp" />
+    <ClCompile Include="..\src\OTOWNDRW.cpp" />
+    <ClCompile Include="..\src\OTOWNIF.cpp" />
+    <ClCompile Include="..\src\OTOWNIND.cpp" />
+    <ClCompile Include="..\src\OTownNetwork.cpp" />
+    <ClCompile Include="..\src\OTOWNRES.cpp" />
+    <ClCompile Include="..\src\OTRANSL.cpp" />
+    <ClCompile Include="..\src\OTUTOR.cpp" />
+    <ClCompile Include="..\src\OTUTOR2.cpp" />
+    <ClCompile Include="..\src\OUNIT.cpp" />
+    <ClCompile Include="..\src\OUNIT2.cpp" />
+    <ClCompile Include="..\src\OUNITA.cpp" />
+    <ClCompile Include="..\src\OUNITAAC.cpp" />
+    <ClCompile Include="..\src\OUNITAAT.cpp" />
+    <ClCompile Include="..\src\OUNITAC.cpp" />
+    <ClCompile Include="..\src\OUNITAI.cpp" />
+    <ClCompile Include="..\src\OUNITAM.cpp" />
+    <ClCompile Include="..\src\OUNITAMT.cpp" />
+    <ClCompile Include="..\src\OUNITAT.cpp" />
+    <ClCompile Include="..\src\OUNITAT2.cpp" />
+    <ClCompile Include="..\src\OUNITAT3.cpp" />
+    <ClCompile Include="..\src\OUNITATB.cpp" />
+    <ClCompile Include="..\src\OUNITD.cpp" />
+    <ClCompile Include="..\src\OUNITDRW.cpp" />
+    <ClCompile Include="..\src\OUNITHB.cpp" />
+    <ClCompile Include="..\src\OUNITI.cpp" />
+    <ClCompile Include="..\src\OUNITIF.cpp" />
+    <ClCompile Include="..\src\OUNITIND.cpp" />
+    <ClCompile Include="..\src\OUNITM.cpp" />
+    <ClCompile Include="..\src\OUNITRES.cpp" />
+    <ClCompile Include="..\src\OUNITS.cpp" />
+    <ClCompile Include="..\src\output_stream.cpp" />
+    <ClCompile Include="..\src\OU_CARA.cpp" />
+    <ClCompile Include="..\src\OU_CARA2.cpp" />
+    <ClCompile Include="..\src\OU_CARAS.cpp" />
+    <ClCompile Include="..\src\OU_CARAT.cpp" />
+    <ClCompile Include="..\src\OU_CART.cpp" />
+    <ClCompile Include="..\src\OU_GOD.cpp" />
+    <ClCompile Include="..\src\OU_GOD2.cpp" />
+    <ClCompile Include="..\src\OU_MARI.cpp" />
+    <ClCompile Include="..\src\OU_MARI2.cpp" />
+    <ClCompile Include="..\src\OU_MARIF.cpp" />
+    <ClCompile Include="..\src\OU_MARIS.cpp" />
+    <ClCompile Include="..\src\OU_MARIT.cpp" />
+    <ClCompile Include="..\src\OU_MONS.cpp" />
+    <ClCompile Include="..\src\OU_VEHI.cpp" />
+    <ClCompile Include="..\src\OVBROWIF.cpp" />
+    <ClCompile Include="..\src\OVBROWSE.cpp" />
+    <ClCompile Include="..\src\OVGABUF.cpp" />
+    <ClCompile Include="..\src\OVGABUF2.cpp" />
+    <ClCompile Include="..\src\OVGALOCK.cpp" />
+    <ClCompile Include="..\src\OVIDEO.cpp" />
+    <ClCompile Include="..\src\OVOLUME.cpp" />
+    <ClCompile Include="..\src\OVQUEUE.cpp" />
+    <ClCompile Include="..\src\OWALLRES.cpp" />
+    <ClCompile Include="..\src\OWARPT.cpp" />
+    <ClCompile Include="..\src\OWEATHER.cpp" />
+    <ClCompile Include="..\src\OWORLD.cpp" />
+    <ClCompile Include="..\src\OWORLD_M.cpp" />
+    <ClCompile Include="..\src\OWORLD_Z.cpp" />
+    <ClCompile Include="..\src\OW_FIRE.cpp" />
+    <ClCompile Include="..\src\OW_PLANT.cpp" />
+    <ClCompile Include="..\src\OW_ROCK.cpp" />
+    <ClCompile Include="..\src\OW_SOUND.cpp" />
+    <ClCompile Include="..\src\OW_WALL.cpp" />
+    <ClCompile Include="..\src\player_desc.cpp" />
+    <ClCompile Include="..\src\surface_sdl.cpp" />
+    <ClCompile Include="..\src\vgautil.cpp" />
+    <ClCompile Include="..\src\vgautil2.cpp" />
+    <ClCompile Include="..\src\vga_sdl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\7k.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\ico.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\imgfun\x86\ALL.inc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\COLCODE.inc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\CRC.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB2.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_32.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_A.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_AR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_AT.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATD.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATDM.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATM.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATRD.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATRDM.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_DW.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_R.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_RD.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_T.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TD.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TDM.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TM1.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TM2.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TM3.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TRD.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TRDM.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IC.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IC_R.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IJ_T.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IMGFUN.inc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_A.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_AM.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_BAR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_M.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_BAR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_BLACK.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_CTRL.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_EMASK.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_EREMAP.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_FONT.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_FREMAP.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_LINE.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_PIXEL.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_READ.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_SNOW.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\src\imgfun\x86\I_XOR.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

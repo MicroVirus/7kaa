@@ -16,26 +16,11 @@
     <Filter Include="Source Files\audio">
       <UniqueIdentifier>{114e334a-e853-47b7-865e-525998f143e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\common">
-      <UniqueIdentifier>{e17933bb-fc76-45a2-8164-fc5dba31b13b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\client">
-      <UniqueIdentifier>{139a38b3-92c0-45ed-aa14-e19f469ab31d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\file">
-      <UniqueIdentifier>{45fcbc90-6edf-4a75-87d7-27c8c0fa1faf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\input">
-      <UniqueIdentifier>{fb78816a-db56-4660-ae39-c8dac7ee60ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\multiplayer">
-      <UniqueIdentifier>{c2008f80-d5e9-42b6-a453-b0d9ff5cc965}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\video">
-      <UniqueIdentifier>{da594d09-001b-4a1a-be6a-05afeccd9f12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\imgfun">
       <UniqueIdentifier>{4904b2d0-d328-4c8e-97bd-b8f45e87e3d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgfun\x86">
+      <UniqueIdentifier>{6294b019-062f-4559-8068-bdd3720cd0af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -641,865 +626,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\client\7k.ico">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\src\client\ico.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\audio\openal\openal_audio.cpp">
-      <Filter>Source Files\audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\audio\openal\wav_stream.cpp">
-      <Filter>Source Files\audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\dbglog.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\OCONFIG.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\ODATE.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\OERROR.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\OMEM.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\OMISC.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\OSTR.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\AM.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_ACT2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_ACT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_ATTK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_BUIL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_CAP2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_CAPT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_DEFE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_DIPL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_ECO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_GRAN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_INFO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_MAIN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_MAR2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_MAR3.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_MARI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_MILI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_MONS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_QUER.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_SEEK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_SPY.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_TALK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_TOWN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_TRAD.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OAI_UNIT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OANLINE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OB_FLAME.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OB_HOMIN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OB_PROJ.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBATTLE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBLOB.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBOX.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBULLET.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBULLETA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBUTT3D.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBUTTCUS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OBUTTON.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OCRC_STO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ODYNARR.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ODYNARRB.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OEFFECT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OEXPMASK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_BASE2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_BASE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_CAMP2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_CAMP.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_FACT2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_FACT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_HARB2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_HARB.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_INN2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_INN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_MARK2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_MARK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_MINE2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_MINE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_MONS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_RESE2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_RESE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_WAR2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OF_WAR.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFILETXT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRM2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRM.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMAI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMDIE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMDRW.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMIF2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMIF3.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMIF.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFIRMRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFLAME.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OFONT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMCRED.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAME.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMENCY.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMEND.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMESET.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMHALL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMMAIN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMMENU.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMSCE2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMSCEN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMSING.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGENHILL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGENMAP.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGETA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGF_V1.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGFILE2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGFILE3.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGFILE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGFILEA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGODRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGRPSEL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OHELP.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OHILLRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OIMGRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OINFO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OINGMENU.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OLIGHTN2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OLIGHTN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OLOG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OLONGLOG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OLZW.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OMATRIX.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OMONSRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OMOUSECR.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OMP_CRC.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OMUSIC.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONATIONA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONATIONB.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONEWS2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONEWS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONEWSENG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONEWSFRE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONEWSGER.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ONEWSSPA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OOPTMENU.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OPLANT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OPLASMA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OPOWER.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_AI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_ECO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_MIL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_NAT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_NEWS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_RANK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_SPY.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_TECH.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_TOWN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OR_TRADE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ORACERES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ORAIN1.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ORAIN2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ORAIN3.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\ORAWRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OREBEL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OREGION.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OREGIONS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OROCK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OROCKRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSCROLL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSERES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSFRMRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSITE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSITEDRW.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSKILL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSLIDCUS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSNOW1.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSNOW2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSNOWG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSNOWRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPATH.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPATHBT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPREDBG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPREOFF.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPRESMO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPREUSE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPRITE2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPRITE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPRITEA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPRTRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPY2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPY.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSPYA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSYS2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSYS3.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OSYS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTALKENG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTALKFRE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTALKGER.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTALKMSG.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTALKRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTALKSPA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTECHRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTERRAIN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTORNADO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWN.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNAI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNBLD.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNDRW.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNIF.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNIND.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTOWNRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTRANSL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTUTOR2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTUTOR.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_CARA2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_CARA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_CARAS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_CARAT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_CART.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_GOD2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_GOD.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_MARI2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_MARI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_MARIF.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_MARIS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_MARIT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_MONS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OU_VEHI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNIT2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNIT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITA.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAAC.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAAT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAC.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAM.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAMT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAT2.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAT3.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITAT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITATB.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITD.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITDRW.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITHB.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITI.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITIF.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITIND.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITM.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OUNITS.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OVBROWIF.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OVBROWSE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OVIDEO.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OVOLUME.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OVQUEUE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OW_FIRE.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OW_PLANT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OW_ROCK.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OW_SOUND.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OW_WALL.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OWALLRES.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OWARPT.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OWEATHER.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OWORLD.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OWORLD_M.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OWORLD_Z.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\file_input_stream.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\file_output_stream.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\file_reader.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\file_util.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\file_writer.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\input_stream.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\mem_input_stream.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\ODB.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\ODIR.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\OFILE.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\ORES.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\ORESDB.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\ORESX.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\file\output_stream.cpp">
-      <Filter>Source Files\file</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\input\sdl\OMOUSE.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\multiplayer.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\OERRCTRL.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\OREMOTE2.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\OREMOTE.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\OREMOTEM.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\OREMOTEQ.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\multiplayer\common\player_desc.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\common\OCOLTBL.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\common\OVGABUF2.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\common\OVGABUF.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\common\OVGALOCK.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\common\vgautil2.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\common\vgautil.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\sdl\surface_sdl.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\video\sdl\vga_sdl.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OTownNetwork.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\client\OGAMEMP.cpp">
-      <Filter>Source Files\multiplayer</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\imgfun\generic\CRC.cpp">
       <Filter>Source Files\imgfun</Filter>
     </ClCompile>
@@ -1617,5 +743,1013 @@
     <ClCompile Include="..\src\imgfun\generic\IR_M.cpp">
       <Filter>Source Files\imgfun</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\openal\openal_audio.cpp">
+      <Filter>Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\openal\wav_stream.cpp">
+      <Filter>Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dbglog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\file_input_stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\file_output_stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\file_reader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\file_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\file_writer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\input_stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mem_input_stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\misc_uuid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_ACT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_ACT2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_ATTK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_BUIL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_CAP2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_CAPT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_DEFE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_DIPL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_ECO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_GRAN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_INFO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_MAIN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_MAR2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_MAR3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_MARI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_MILI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_MONS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_QUER.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_SEEK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_SPY.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_TALK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_TOWN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_TRAD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OAI_UNIT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OANLINE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OB_FLAME.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OB_HOMIN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OB_PROJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBATTLE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBLOB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBOX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBULLET.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBULLETA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBUTT3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBUTTCUS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBUTTON.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OCOLTBL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OCONFIG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OCRC_STO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ODATE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ODB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ODIR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ODYNARR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ODYNARRB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OEFFECT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OERRCTRL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OERROR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OEXPMASK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_BASE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_BASE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_CAMP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_CAMP2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_FACT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_FACT2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_HARB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_HARB2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_INN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_INN2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_MARK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_MARK2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_MINE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_MINE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_MONS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_RESE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_RESE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_WAR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OF_WAR2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFILE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFILETXT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRM2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMDIE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMDRW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMIF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMIF2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMIF3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFIRMRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFLAME.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OFONT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMCRED.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAME.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMEMP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMENCY.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMEND.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMESET.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMHALL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMMAIN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMMENU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMSCE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMSCEN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGAMSING.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGENHILL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGENMAP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGETA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGF_V1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGFILE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGFILE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGFILE3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGFILEA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGODRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OGRPSEL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OHELP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OHILLRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OIMGRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OINFO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OINGMENU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OLIGHTN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OLIGHTN2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OLOG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OLONGLOG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OLZW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMATRIX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMEM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMISC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMONSRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMOUSE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMOUSECR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMP_CRC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OMUSIC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONATIONA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONATIONB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONEWS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONEWS2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONEWSENG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONEWSFRE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONEWSGER.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ONEWSSPA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OOPTMENU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OPLANT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OPLASMA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OPOWER.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_AI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_ECO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_MIL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_NAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_NEWS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_RANK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_SPY.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_TECH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_TOWN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OR_TRADE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORACERES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORAIN1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORAIN2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORAIN3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORAWRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREBEL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREGION.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREGIONS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREMOTE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREMOTE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREMOTEM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OREMOTEQ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORESDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ORESX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OROCK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OROCKRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSCROLL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSERES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSFRMRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSITE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSITEDRW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSKILL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSLIDCUS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSNOW1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSNOW2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSNOWG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSNOWRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPATH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPATHBT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPREDBG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPREOFF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPRESMO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPREUSE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPRITE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPRITE2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPRITEA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPRTRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPY.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPY2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSPYA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSTR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSYS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSYS2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSYS3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTALKENG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTALKFRE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTALKGER.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTALKMSG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTALKRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTALKSPA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTECHRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTERRAIN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTORNADO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNBLD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNDRW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNIF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNIND.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTownNetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTOWNRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTRANSL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTUTOR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OTUTOR2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_CARA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_CARA2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_CARAS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_CARAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_CART.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_GOD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_GOD2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_MARI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_MARI2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_MARIF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_MARIS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_MARIT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_MONS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OU_VEHI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNIT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNIT2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAAC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAMT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAT2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITAT3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITATB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITDRW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITHB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITIF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITIND.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OUNITS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\output_stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVBROWIF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVBROWSE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVGABUF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVGABUF2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVGALOCK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVIDEO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVOLUME.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVQUEUE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OW_FIRE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OW_PLANT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OW_ROCK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OW_SOUND.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OW_WALL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OWALLRES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OWARPT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OWEATHER.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OWORLD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OWORLD_M.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OWORLD_Z.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\player_desc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\surface_sdl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\vga_sdl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\vgautil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\vgautil2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\enet\multiplayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\7k.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\ico.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\imgfun\x86\ALL.inc">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\COLCODE.inc">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\CRC.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_BAR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_BLACK.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_CTRL.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_EMASK.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_EREMAP.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_FONT.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_FREMAP.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_LINE.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_PIXEL.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_READ.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_SNOW.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\I_XOR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_32.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_A.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_AR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_AT.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATD.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATDM.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATM.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATRD.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_ATRDM.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_DW.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_R.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_RD.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_T.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TD.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TDM.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TM1.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TM2.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TM3.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TRD.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB_TRDM.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IB2.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IC.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IC_R.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IJ_T.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IMGFUN.inc">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_A.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_AM.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_BAR.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
+    <None Include="..\src\imgfun\x86\IR_M.asm">
+      <Filter>Source Files\imgfun\x86</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,3 +1,0 @@
-The Visual Studio 2010 project is deprecated. Please use the 2015 project instead.
-
-The 2010 project files will be removed in a future change, specifically when a change comes along that requires modification of the project files (e.g. source file added, source file removed).

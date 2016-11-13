@@ -99,6 +99,8 @@ Section "7kaa (required)" 7kaareq
   Rename "$INSTDIR\README" "$INSTDIR\README.txt"
   File ".\COPYING"
   Rename "$INSTDIR\COPYING" "$INSTDIR\COPYING.txt"
+  File ".\COPYING.uuid"
+  Rename "$INSTDIR\COPYING.uuid" "$INSTDIR\COPYING-uuid.txt"
   File ".\doc\7kaa-hotkeys-2.14.5.png"
   File /r ".\data\encyc"
   File /r ".\data\encyc2"
@@ -109,7 +111,7 @@ Section "7kaa (required)" 7kaareq
   File /r ".\data\sound"
   File /r ".\data\sprite"
   File /r ".\data\tutorial"
-  File .\src\client\7kaa.exe
+  File .\src\7kaa.exe
   
   ;Reset Install path
   ;SetOutPath "$INSTDIR"
