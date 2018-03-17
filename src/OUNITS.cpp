@@ -93,6 +93,7 @@ void Unit::assign_to_ship(int destX, int destY, short shipRecno, int miscNo)
 	Unit *shipPtr = unit_array[shipRecno];
 	int shipXLoc = shipPtr->next_x_loc();
 	int shipYLoc = shipPtr->next_y_loc();
+	bool resultXYLocWritten = false;
 	int resultXLoc, resultYLoc;
 	int xShift, yShift;
 	if(!miscNo)
@@ -102,7 +103,7 @@ void Unit::assign_to_ship(int destX, int destY, short shipRecno, int miscNo)
 		{
 			int checkXLoc, checkYLoc;
 			Location *locPtr = world.get_loc(next_x_loc(), next_y_loc());
-			UCHAR regionId = locPtr->region_id;
+			uint8_t regionId = locPtr->region_id;
 			for(int i=2; i<=9; i++)
 			{
 				misc.cal_move_around_a_point(i, 3, 3, xShift, yShift);
@@ -115,6 +116,7 @@ void Unit::assign_to_ship(int destX, int destY, short shipRecno, int miscNo)
 				if(locPtr->region_id!=regionId)
 					continue;
 
+				resultXYLocWritten = true;
 				resultXLoc = checkXLoc;
 				resultYLoc = checkYLoc;
 
@@ -127,10 +129,12 @@ void Unit::assign_to_ship(int destX, int destY, short shipRecno, int miscNo)
 		}
 		else
 		{
+			resultXYLocWritten = true;
 			resultXLoc = action_x_loc2;
 			resultYLoc = action_y_loc2;
 		}
 
+		err_when(!resultXYLocWritten);
 		err_when(resultXLoc<0 || resultXLoc>=MAX_WORLD_X_LOC || resultYLoc<0 || resultYLoc>=MAX_WORLD_Y_LOC);
 	}
 	else
@@ -291,7 +295,7 @@ void Unit::ship_to_beach(int destX, int destY, int& finalDestX, int& finalDestY)
 		// get a suitable location in the territory as a reference location
 		//-----------------------------------------------------------------------------//
 		Location *locPtr = world.get_loc(destX, destY);
-		UCHAR regionId = locPtr->region_id;
+		uint8_t regionId = locPtr->region_id;
 		int xStep = curXLoc-destX;
 		int yStep = curYLoc-destY;
 		int absXStep = abs(xStep);
@@ -362,7 +366,7 @@ void Unit::ship_to_beach(int destX, int destY, int& finalDestX, int& finalDestY)
 // return 1 if normal execution
 // return 0 if calling move_to() instead
 //
-int Unit::ship_to_beach_path_edit(int& resultXLoc, int& resultYLoc, UCHAR regionId)
+int Unit::ship_to_beach_path_edit(int& resultXLoc, int& resultYLoc, uint8_t regionId)
 {
 	int curXLoc = next_x_loc();
 	int curYLoc = next_y_loc();

@@ -449,7 +449,8 @@ int OpenALAudio::play_resided_wav(char *buf, const DsVolume &vol)
 		return 0;
 
 	/* read the wav size from the RIFF header */
-	size = buf[4] | (buf[5] << 8) | (buf[6] << 16) | (buf[7] << 24);
+	unsigned char* ubuf = reinterpret_cast<unsigned char*>(buf);
+	size = uint32_t(ubuf[4]) | (uint32_t(ubuf[5]) << 8) | (uint32_t(ubuf[6]) << 16) | (uint32_t(ubuf[7]) << 24);
 	size += 8;
 
 	in = new MemInputStream;
@@ -875,12 +876,12 @@ int OpenALAudio::is_cd_playing()
 	return 0;
 }
 
-void OpenALAudio::toggle_mid(int midFlag)
+void OpenALAudio::toggle_mid(bool midFlag)
 {
 	WARN_UNIMPLEMENTED("toggle_mid");
 }
 
-void OpenALAudio::toggle_wav(int wav_flag)
+void OpenALAudio::toggle_wav(bool wav_flag)
 {
 	if (!wav_flag)
 		this->stop_wav();
@@ -888,7 +889,7 @@ void OpenALAudio::toggle_wav(int wav_flag)
 	this->wav_flag = wav_flag;
 }
 
-void OpenALAudio::toggle_cd(int cdFlag)
+void OpenALAudio::toggle_cd(bool cdFlag)
 {
 	WARN_UNIMPLEMENTED("toggle_cd");
 }

@@ -90,7 +90,7 @@ public:
 
 	short			last_mouse_x;
 	short			last_mouse_y;
-	int			mouse_still_time;
+	unsigned long		mouse_still_time;
 
 public:
 	Help();
@@ -107,7 +107,7 @@ public:
 
 	void		  set_help(int x1, int y1, int x2, int y2, const char* helpCode);
 	void		  set_unit_help(int unitId, int rankId, int x1, int y1, int x2, int y2);
-	void		  set_custom_help(int x1, int y1, int x2, int y2, char* helpTitle, char* helpDetail=NULL);
+	void		  set_custom_help(int x1, int y1, int x2, int y2, const char* helpTitle, const char* helpDetail=NULL);
 
 	int		  should_disp();
 	void       disp();

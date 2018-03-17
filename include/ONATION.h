@@ -80,15 +80,15 @@ enum	{	STD_ACTION_RETRY_COUNT = 4,		// retry this number of times before giving 
 			MIGRATE_STOCK_QTY=150,
 
 			TRADE_STOCK_QTY=125,
-			MAX_TRADE_MARKET = 4,
+			MAX_TRADE_MARKET = 4
 
-			MAX_BASE_TOWN = 10,
+			//MAX_BASE_TOWN = 10 // Unused.
 		};
 
 enum  {  ACTION_DYNAMIC,     		// for ActionNode::action_type
 			ACTION_FIXED		};
 
-enum	{	ACTION_AI_BUILD_FIRM=1,		// define ActionNode action_type
+enum	{	ACTION_AI_BUILD_FIRM=1,		// define ActionNode::action_mode
 			ACTION_AI_ASSIGN_OVERSEER,
 			ACTION_AI_ASSIGN_CONSTRUCTION_WORKER,
 			ACTION_AI_ASSIGN_WORKER,
@@ -105,7 +105,7 @@ enum  {  SEA_ACTION_SETTLE=1, 			// for AI marine actions
 			SEA_ACTION_BUILD_CAMP,
 			SEA_ACTION_ASSIGN_TO_FIRM,
 			SEA_ACTION_MOVE,
-         SEA_ACTION_NONE,			// just transport them to the specific region and disemark and wait for their own actions 
+         SEA_ACTION_NONE,			// just transport them to the specific region and disembark and wait for their own actions
 		};
 
 //--------- define AIRegion ---------//
@@ -113,7 +113,7 @@ enum  {  SEA_ACTION_SETTLE=1, 			// for AI marine actions
 #pragma pack(1)
 struct AIRegion
 {
-	BYTE	region_id;
+	uint8_t	region_id;
 	char  town_count;
 	char  base_town_count;
 };
@@ -127,13 +127,13 @@ struct ActionNode
 	enum { MAX_ACTION_GROUP_UNIT = 9 };
 
 	char 	action_mode;		// eg build firm, attack, etc
-	char	action_type;
+	char	action_type;		// action type. For 7kaa, this is always ACTION_FIXED.
 	short action_para;		// parameter for the action. e.g. firmId for AI_BUILD_FIRM
 	short action_para2;		// parameter for the action. e.g. firm race id. for building FirmBase
-	WORD	action_id;			// an unique id. for identifying this node
+	uint16_t	action_id;			// an unique id. for identifying this node
 
 	int32_t add_date;			// when this action is added
-	short	unit_recno;
+	short	unit_recno;			// unit associated with this action.
 
 	short	action_x_loc;		// can be firm loc, or target loc, etc
 	short	action_y_loc;
@@ -178,7 +178,7 @@ class Nation : public NationBase
 {
 public:
 	DynArray		action_array;
-	WORD			last_action_id; 	// a 16-bit id. for identifying ActionNode
+	uint16_t			last_action_id; 	// a 16-bit id. for identifying ActionNode
 
 public:
 	Nation();
@@ -306,7 +306,7 @@ public:
 	//--------------------------------------------------------------//
 	// functions to init. parameters and process ai actions
 	//--------------------------------------------------------------//
-	void			init(int nationType, int raceId, int colorSchemeId, DWORD playerId); // init local parameters
+	void			init(int nationType, int raceId, int colorSchemeId, uint32_t playerId); // init local parameters
 	void			deinit();
 
 	void 			init_all_ai_info();
@@ -398,8 +398,8 @@ public:
 	int 			process_action(int priorityActionRecno=0, int processActionMode=0);	// waiting --> processing
 	int 			process_action_id(int actionId);
 
-	void			action_finished(WORD aiActionId, short unitRecno=0, int actionFailure=0);
-	void			action_failure(WORD aiActionId, short unitRecno=0);
+	void			action_finished(uint16_t aiActionId, short unitRecno=0, int actionFailure=0);
+	void			action_failure(uint16_t aiActionId, short unitRecno=0);
 	void 			auto_next_action(ActionNode* actionNode);
 
 	void 			stop_unit_action(short unitRecno);
@@ -484,9 +484,9 @@ public:
 	//--------------------------------------------------------------//
 
 	int 			think_capture_independent();
-	int 			capture_expected_resistance(int townRecno);
-	int 			start_capture(int townRecno);
-	int 			capture_build_camp(int townRecno, int raceId);
+	int 			capture_expected_resistance(int townRecno, int *captureUnitRecno);
+	int 			start_capture(int townRecno, int captureUnitRecno);
+	int 			capture_build_camp(int townRecno, int raceId, int captureUnitRecno);
 	int 			find_best_capturer(int townRecno, int raceId, int& bestResistanceReduce);
 	int 			hire_best_capturer(int townRecno, int raceId);
 	int			mobilize_capturer(int unitRecno);

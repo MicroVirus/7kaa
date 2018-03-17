@@ -64,7 +64,7 @@ public:
 	ZoomMatrix   *zoom_matrix;
 	Location     *loc_matrix;
 
-	DWORD	 		 next_scroll_time;		 // next scroll time
+	unsigned long	 		 next_scroll_time;		 // next scroll time
 
 	char			 scan_fire_x;				// cycle from 0 to SCAN_FIRE_DIST-1
 	char			 scan_fire_y;
@@ -106,12 +106,12 @@ public:
 public:
 	#ifdef DEBUG3
 		Location* get_loc(int xLoc,int yLoc);
-		BYTE		 get_region_id(int xLoc,int yLoc);
+		uint8_t		 get_region_id(int xLoc,int yLoc);
 	#else
 		Location* get_loc(int xLoc,int yLoc)
 						{ return loc_matrix + MAX_WORLD_X_LOC * yLoc + xLoc; }
 
-		BYTE		 get_region_id(int xLoc,int yLoc)
+		uint8_t		 get_region_id(int xLoc,int yLoc)
 						{ return loc_matrix[MAX_WORLD_X_LOC*yLoc+xLoc].region_id; }
 	#endif
 
@@ -134,7 +134,7 @@ public:
 	void		build_wall_tile(int xLoc1, int yLoc1, short nationRecno, char remoteAction);
 	void		destruct_wall_tile(int xLoc1, int yLoc1, short nationRecno, char remoteAction);
 
-	int 		locate_space(int& xLoc1, int& yLoc1, int xLoc2, int yLoc2,
+	int 		locate_space(int* /*in/out*/ xLoc1, int* /*in/out*/ yLoc1, int xLoc2, int yLoc2,
 										int spaceLocWidth, int spaceLocHeight, int mobileType=UNIT_LAND, int regionId=0, int buildFlag=0);
 	int		check_unit_space(int xLoc1, int yLoc1, int xLoc2, int yLoc2, int mobileType=UNIT_LAND, int buildFlag=0);
 

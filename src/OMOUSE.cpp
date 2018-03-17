@@ -53,6 +53,7 @@ static unsigned long click_threshold = (long)(0.3 * 1000);
 //
 MouseSDL::MouseSDL()
 {
+	init_flag = 0;
 	handle_flicking = 0;
 	vga_update_buf = NULL;
 	cur_x = cur_y = 0;
@@ -92,6 +93,9 @@ MouseSDL::~MouseSDL()
 //
 void MouseSDL::init()
 {
+	if( !SDL_WasInit(SDL_INIT_VIDEO) )
+		return;
+
 	update_skey_state();
 
 	//------- initialize VGA update buffer -------//
@@ -107,6 +111,8 @@ void MouseSDL::init()
 	SDL_StopTextInput();
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_GetMouseState(&cur_x, &cur_y);
+
+	init_flag = 1;
 }
 //------------- End of MouseSDL::init -------------//
 
@@ -121,7 +127,7 @@ void MouseSDL::deinit()
 		vga_update_buf = NULL;
 	}
 
-	SDL_ShowCursor(SDL_DISABLE);
+	init_flag = 0;
 }
 //------------- End of MouseSDL::deinit -------------//
 
@@ -365,7 +371,7 @@ int MouseSDL::get_event()
 
 	case KEY_PRESS:
 		scan_code = eptr->scan_code;
-		key_code = mouse.is_key(scan_code, event_skey_state, (WORD) 0, K_CHAR_KEY);
+		key_code = mouse.is_key(scan_code, event_skey_state, (unsigned short)0, K_CHAR_KEY);
 		has_mouse_event = 0;
 		break;
 
@@ -728,6 +734,9 @@ int MouseSDL::release_click(int x1, int y1, int x2, int y2,int buttonId)
 //
 void MouseSDL::poll_event()
 {
+	if( !init_flag )
+		return;
+
 	SDL_Event event;
 	int moveFlag;
 
@@ -986,10 +995,10 @@ int MouseSDL::micky_to_displacement(int d)
 //
 // pass 0 as charValue to disable checking in charValue
 // e.g pressed key is 'a'
-// mouse.is_key(mouse.scan_code, mouse.event_skey_state, (WORD) 0, K_CHAR_KEY) returns 'a'
+// mouse.is_key(mouse.scan_code, mouse.event_skey_state, (unsigned short) 0, K_CHAR_KEY) returns 'a'
 // but if key pressed is alt-a
 // the same function call returns 0
-// use mouse.is_key(mouse.scan_code, mouse.event_skey_state, (WORD) 0, K_CHAR_KEY | K_IS_ALT ) instead
+// use mouse.is_key(mouse.scan_code, mouse.event_skey_state, (unsigned short) 0, K_CHAR_KEY | K_IS_ALT ) instead
 //
 int MouseSDL::is_key(unsigned scanCode, unsigned short skeyState, unsigned short charValue, unsigned flags)
 {
@@ -1118,7 +1127,7 @@ int MouseSDL::is_key(unsigned scanCode, unsigned short skeyState, unsigned short
 	case 0x2b:  priChar = capitalChar = '#'; shiftChar = '\''; break;
 #else
 	case SDLK_SEMICOLON: priChar = capitalChar = ';'; shiftChar = ':'; break;
-	case SDLK_QUOTEDBL: priChar = capitalChar = '\''; shiftChar = '\"'; break;
+	case SDLK_QUOTE: priChar = capitalChar = '\''; shiftChar = '\"'; break;
 	case SDLK_BACKQUOTE: priChar = capitalChar = '~'; shiftChar = '`'; break; // Note: this can be reversed on certain keyboards (at the very least on Dutch USA-international keyboards) where ` is the base and ~ the shift
 	case SDLK_BACKSLASH: priChar = capitalChar = '\\'; shiftChar = '|'; break;
 #endif

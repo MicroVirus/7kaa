@@ -1,5 +1,6 @@
 noinst_HEADERS = \
 	ALL.h \
+	storage_constants.h \
 	COLCODE.h \
 	COLOR.h \
 	CRC.h \
@@ -54,6 +55,7 @@ noinst_HEADERS = \
 	OF_WAR.h \
 	OGAME.h \
 	OGAMESET.h \
+	OGAMHALL.h \
 	OGET.h \
 	OGETA.h \
 	OGFILE.h \
@@ -101,6 +103,9 @@ noinst_HEADERS = \
 	ORESX.h \
 	OROCK.h \
 	OROCKRES.h \
+	OSaveGameArray.h \
+	OSaveGameInfo.h \
+	OSaveGameProvider.h \
 	OSCROLL.h \
 	OSE.h \
 	OSERES.h \
@@ -155,6 +160,7 @@ noinst_HEADERS = \
 	OWORLDMT.h \
 	RESOURCE.h \
 	WALLTILE.h \
+	WebService.h \
 	asmfun.h \
 	audio_base.h \
 	audio_stream.h \
@@ -175,6 +181,7 @@ noinst_HEADERS = \
 	multiplayer.h \
 	openal_audio.h \
 	output_stream.h \
+	platform.h \
 	player_desc.h \
 	surface.h \
 	surface_base.h \
@@ -183,5 +190,4 @@ noinst_HEADERS = \
 	vga_base.h \
 	vga_sdl.h \
 	vga_util.h \
-	wav_stream.h \
-	win32_compat.h
+	wav_stream.h

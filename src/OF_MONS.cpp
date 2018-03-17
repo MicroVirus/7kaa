@@ -19,7 +19,7 @@
  */
 
 //Filename    : OF_MONS.CPP
-//Description : Firm Airport
+//Description : Fryhtan Lair
 
 #include <OINFO.h>
 #include <OVGA.h>
@@ -37,12 +37,17 @@
 #include <ONATION.h>
 #include <OMONSRES.h>
 #include <OF_MONS.h>
+#include <locale.h>
 #include "gettext.h"
+
 
 //----------- Define constant ------------//
 
 #define MONSTER_SOLDIER_COMBAT_LEVEL_DIVIDER		2
 static char current_monster_action_mode;
+
+static int fryhtan_attacks_per_six_months(int numOfLairs);
+
 
 //--------- Begin of function FirmMonster::init_derived ---------//
 //
@@ -128,7 +133,8 @@ char* FirmMonster::firm_name()
 {
 	static String str;
 
-	snprintf(str, MAX_STR_LEN+1, _("%s Lair"), monster_res[monster_id]->name);
+	// TRANSLATORS: <Fryhtan Type> Lair
+	snprintf(str, MAX_STR_LEN+1, pgettext ("FirmUI|Name", "%s Lair"), _(monster_res[monster_id]->name));
 
 	return str;
 }
@@ -209,10 +215,17 @@ void FirmMonster::next_day()
 		//------ attack human towns and firms randomly -----//
 
 		if( info.game_date > info.game_start_date + 1000 &&	// only start attacking 3 years after the game starts so the human can build up things
-			 info.game_date%30 == firm_recno%30 &&
-			 misc.random( firm_res[FIRM_MONSTER]->total_firm_count*6 )==0 )		// it will expand slower when there are already a lot of the monster structures on the map
+			info.game_date%30 == firm_recno%30 )
 		{
-			think_attack_human();
+			// From the desired average number of attacks per 6 months, we want the attack chance per lair (which is per month):
+			//   Lairs * P(Attack) * 6 = Desired      <=>    P(Attack) = Desired / 6 / Lairs
+			// Note that Desired < (6 * Lairs). We can use: rand(6 * Lairs) < Desired to simulate this chance.
+			int numOfLairs = firm_res[FIRM_MONSTER]->total_firm_count;
+			int attacksPerSixMonths = fryhtan_attacks_per_six_months(numOfLairs);
+			if (misc.random(6 * numOfLairs) < attacksPerSixMonths)
+			{
+				think_attack_human();
+			}
 		}
 
 		//--------- think expansion ---------//
@@ -225,6 +238,46 @@ void FirmMonster::next_day()
 	}
 }
 //----------- End of function FirmMonster::next_day -----------//
+
+
+//------- Begin of function fryhtan_attacks_per_six_months -------//
+//
+// Encodes the Fryhtan attack curve.
+// Returns the average number of Fryhtan attacks in 6 months for the given number of lairs.
+//
+int fryhtan_attacks_per_six_months(int numOfLairs)
+{
+	// This algorithm encodes the continuation of the following table:
+	//
+	// # Lairs     | 0   5   10  15  20  30  40  50  60  70  80  95  110 ...
+	// -----------------------------------------------------------------------
+	// # attacks   | 1   2   3   4   5   6   7   8   9   10  11  12  13  ...
+	//
+	//                      4 x +5            6 x +10                  8 x +15 
+	//
+	// The plateaus in this table are given by
+	//   x0 = 0
+	//   x1 = x0 + 4 * 5    = 20
+	//   x2 = x1 + 6 * 10   = 80
+	//   x3 = x2 + 8 * 15   = 200
+	//   ...
+	// 
+	int attacks = 1;
+	int plateauThreshold = 0;
+	int plateauLength = 4;
+	int plateau = 5;
+
+	while (plateauThreshold < numOfLairs)
+	{
+		int currentPlateau = numOfLairs - plateauThreshold;
+		plateauThreshold += plateauLength * plateau;
+		attacks += MIN(currentPlateau, plateauThreshold)  / plateau;
+		plateauLength += 2;
+		plateau += 5;
+	}
+	return attacks;
+}
+//----------- End of function fryhtan_attacks_per_six_months -----------//
 
 
 //------- Begin of function FirmMonster::recover_hit_points -------//
@@ -315,7 +368,7 @@ void FirmMonster::add_general(int generalUnitRecno)
 	if( monsterInFirm->hit_points == 0 )		// 0.? will become 0 in (float) to (int) conversion
 		monsterInFirm->hit_points = 1;
 
-	monsterInFirm->soldier_monster_id = unitPtr->get_monster_soldier_id();		// skill id is used for storing the soldier monster id temporarily
+	monsterInFirm->soldier_monster_id = unitPtr->get_monster_soldier_id();		// total_reward is used for storing the soldier monster id temporarily
 	monsterInFirm->soldier_count   	 = 0;
 
 	monsterInFirm->mobile_unit_recno = generalUnitRecno; 	// unit recno of this monster when it is a mobile unit
@@ -458,11 +511,10 @@ int FirmMonster::mobilize_king()
 
 //--------- Begin of function FirmMonster::mobilize_general ---------//
 //
-// Mobilize monster generals. Soldiers need by the general is also mobilized.
+// Mobilize monster generals. Soldiers led by the general are also mobilized.
 //
 // <int> generalId 		 - id. of the general.
-// [int] mobilizeSoldier - whether also mobilize soldiers this general
-//									commands. (default: 1)
+// [int] mobilizeSoldier - whether also mobilize soldiers this general commands. (default: 1)
 //
 // Return: <int> the no. of monsters have been mobilized.
 //
@@ -546,7 +598,7 @@ int FirmMonster::mobilize_monster(int monsterId, int rankId, int combatLevel, in
 	int			xLoc=center_x, yLoc=center_y;
 	SpriteInfo* spriteInfo = sprite_res[unitInfo->sprite_id];
 
-	if( !world.locate_space( xLoc, yLoc, xLoc, yLoc, spriteInfo->loc_width, spriteInfo->loc_height, unitInfo->mobile_type ) )
+	if( !world.locate_space( &xLoc, &yLoc, xLoc, yLoc, spriteInfo->loc_width, spriteInfo->loc_height, unitInfo->mobile_type ) )
 		return 0;
 
 	//---------- add the unit now -----------//
@@ -758,10 +810,9 @@ int FirmMonster::total_combat_level()
 int FirmMonster::can_assign_monster(int unitRecno)
 {
 	Unit* unitPtr = unit_array[unitRecno];
-	int   monsterId = unitPtr->get_monster_id();
 
 	return strcmp( firm_res.get_build(firm_build_id)->build_code,	// can assign if the build code are the same
-			 monster_res[monsterId]->firm_build_code ) == 0;
+			 monster_res[unitPtr->get_monster_id()]->firm_build_code ) == 0;
 }
 //------ End of function FirmMonster::can_assign_monster ---------//
 

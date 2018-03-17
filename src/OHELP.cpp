@@ -279,9 +279,6 @@ void Help::rest_scr()
 //
 void Help::disp()
 {
-	char helpTitle[HelpInfo::HELP_TITLE_LEN+1] = {0};
-	char helpText[250] = {0};
-
 	//---- first check if we should disp the help now ------//
 
 	if( !should_disp() )
@@ -305,15 +302,8 @@ void Help::disp()
 			if( helpInfo->help_code[0] == help_code[0] &&
 				 strcmp( helpInfo->help_code, help_code )==0 )
 			{
-				int helpTitleLen = strlen(helpInfo->help_title)-5;
-				// Copy text without gettext markup _("").
-				strncpy(helpTitle, helpInfo->help_title+3, helpTitleLen);
-				helpTitle[helpTitleLen] = '\0';
-				// Copy text without gettext markup _("").
-				strncpy(helpText, helpInfo->help_text_ptr+3, helpInfo->help_text_len-7);
-				helpText[helpInfo->help_text_len-7] = '\0';
 				disp_help( help_x, help_y,
-							  _(helpTitle), _(helpText) );
+							  _(helpInfo->help_title), _(helpInfo->help_text_ptr) );
 				break;
 			}
 		}
@@ -346,16 +336,9 @@ void Help::disp()
 			if( spotX >= helpInfo->area_x1 && spotY >= helpInfo->area_y1 &&
 				 spotX <= helpInfo->area_x2 && spotY <= helpInfo->area_y2 )
 			{
-				int helpTitleLen = strlen(helpInfo->help_title)-5;
-				// Copy text without gettext markup _("").
-				strncpy(helpTitle, helpInfo->help_title+3, helpTitleLen);
-				helpTitle[helpTitleLen] = '\0';
-				// Copy text without gettext markup _("").
-				strncpy(helpText, helpInfo->help_text_ptr+3, helpInfo->help_text_len-7);
-				helpText[helpInfo->help_text_len-7] = '\0';
 				disp_help( (helpInfo->area_x1+helpInfo->area_x2)/2,
 							  (helpInfo->area_y1+helpInfo->area_y2)/2,
-							  _(helpTitle), _(helpText) );
+							  _(helpInfo->help_title), _(helpInfo->help_text_ptr) );
 				break;
 			}
 		}
@@ -531,31 +514,17 @@ void Help::set_unit_help(int unitId, int rankId, int x1, int y1, int x2, int y2)
 
 	static String str;
 
-	str = unit_res[unitId]->name;
+	str = _(unit_res[unitId]->name);
 
 	if( rankId==RANK_KING )
 	{
-		if( unitId==UNIT_MAYA )
-		{
-			str = _("Mayan King");
-		}
-		else
-		{
-			// TRANSLATORS: <Race> King
-			snprintf( str, MAX_STR_LEN+1, _("%s King"), unit_res[unitId]->name );
-		}
+		// TRANSLATORS: <Race> King
+		snprintf( str, MAX_STR_LEN+1, _("%s King"), _(unit_res[unitId]->name) );
 	}
 	else if( rankId==RANK_GENERAL )
 	{
-		if( unitId==UNIT_MAYA )
-		{
-			str = _("Mayan General");
-		}
-		else
-		{
-			// TRANSLATORS: <Race> General
-			snprintf( str, MAX_STR_LEN+1, _("%s General"), unit_res[unitId]->name );
-		}
+		// TRANSLATORS: <Race> General
+		snprintf( str, MAX_STR_LEN+1, _("%s General"), _(unit_res[unitId]->name) );
 	}
 
 	set_custom_help( x1, y1, x2, y2, str );
@@ -569,7 +538,7 @@ void Help::set_unit_help(int unitId, int rankId, int x1, int y1, int x2, int y2)
 // <char*> helpTitle  - the title of the help
 // [char*] helpDetail - the detailed text of the help
 //
-void Help::set_custom_help(int x1, int y1, int x2, int y2, char* helpTitle, char* helpDetail)
+void Help::set_custom_help(int x1, int y1, int x2, int y2, const char* helpTitle, const char* helpDetail)
 {
 	if( !mouse.in_area(x1, y1, x2, y2) )
 		return;

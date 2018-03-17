@@ -32,17 +32,23 @@
 #include <OIMGRES.h>
 #include <OBUTTON.h>
 #include <OBUTT3D.h>
-#include <OGFILE.h>
+#include <OSaveGameArray.h>
+#include <OSaveGameProvider.h>
 #include <OGAME.h>
 #include <OGAMESET.h>
 #include <OWORLD.h>
 #include <OFILETXT.h>
 #include <OTUTOR.h>
+#include <OBOX.h>
+#include <dbglog.h>
+
+#include <posix_string_compat.h>
+
 #include "gettext.h"
 
 //---------- define constant ------------//
 
-#define TUTOR_DB   		"TUT_LIST.TXT"
+#define TUTOR_DB        "TUT_LIST.RES"
 #define TUTOR_TEXT_RES  "TUT_TEXT.RES"
 #define TUTOR_INTRO_RES "TUT_INTR.RES"
 
@@ -63,6 +69,8 @@ enum { TUTOR_BUTTON_X1 = TUTOR_X2-66,
 static Button button_new_tutor, button_quit_tutor;
 static Button button_restart, button_prev, button_next;
 static Button3D button_sample;
+
+DBGLOG_DEFAULT_CHANNEL(Tutor);
 
 //------- Begin of function Tutor::Tutor -----------//
 
@@ -170,14 +178,17 @@ void Tutor::deinit()
 //
 void Tutor::load_tutor_info()
 {
+	TutorRec  *tutorRec;
+	TutorInfo *tutorInfo;
+
 	String str;
 
 	str = DIR_RES;
 	str += TUTOR_DB;
 
-	FileTxt fileTxt(str);
+	Database  dbTutor(str, 1);
 
-	tutor_count      = (short) fileTxt.get_num();
+	tutor_count      = (short) dbTutor.rec_count();
 	tutor_info_array = (TutorInfo*) mem_add( sizeof(TutorInfo)*tutor_count );
 
 	//------ read in tutor information array -------//
@@ -186,8 +197,11 @@ void Tutor::load_tutor_info()
 
 	for( int i=0 ; i<tutor_count ; i++ )
 	{
-		fileTxt.read_line( tutor_info_array[i].code, TutorInfo::CODE_LEN );
-		fileTxt.read_line( tutor_info_array[i].des, TutorInfo::DES_LEN );
+		tutorRec  = (TutorRec*) dbTutor.read(i+1);
+		tutorInfo = tutor_info_array+i;
+
+		misc.rtrim_fld( tutorInfo->code, tutorRec->code, tutorRec->CODE_LEN );
+		misc.rtrim_fld( tutorInfo->des , tutorRec->des , tutorRec->DES_LEN );
 	}
 
 	//--- exclude the Fryhtan and Seat of Power tutorials in the demo ---//
@@ -209,23 +223,18 @@ void Tutor::load(int tutorId)
 
 	//------- get the tutor msgs from the resource file -------//
 
-	String str;
+	int   dataSize;
+	File* filePtr = res_tutor_text.get_file( tutor[tutorId]->code, dataSize );
 
-	str = DIR_TUTORIAL;
-	str += tutor[tutorId]->code;
-	str += ".txt";
-
-	//------ Open the file and allocate buffer -----//
-
-	FileTxt fileTxt( str );
-
-	int   dataSize = fileTxt.file_size();
-
-	if( dataSize == 0 )       // if error getting the tutor resource
+	if( !filePtr )       // if error getting the tutor resource
 	{
 		err_here();
 		return;
 	}
+
+	//------ Open the file and allocate buffer -----//
+
+	FileTxt fileTxt( filePtr, dataSize );  // initialize fileTxt with an existing file stream
 
 	if( dataSize > tutor_text_buf_size )
 	{
@@ -270,17 +279,13 @@ void Tutor::load(int tutorId)
 
 		//------- read in the tutorial text -------//
 
-		char text[512] = {0};
-		readLen = fileTxt.read_paragraph(text, tutor_text_buf_size-totalReadLen);
-		// Copy text without gettext markup _("").
-		strncpy(textPtr, text+3, readLen-7);
-		textPtr[readLen-7] = '\0';
+		readLen = fileTxt.read_paragraph(textPtr, tutor_text_buf_size-totalReadLen);
 
 		tutorTextBlock->text_ptr = _(textPtr);
-		tutorTextBlock->text_len = strlen(tutorTextBlock->text_ptr);
+		tutorTextBlock->text_len = strlen(textPtr)+1;
 
 		textPtr      += readLen;
-		totalReadLen += readLen;
+		totalReadLen += tutorTextBlock->text_len;
 
 		err_when( totalReadLen>tutor_text_buf_size );
 
@@ -310,23 +315,18 @@ char* Tutor::get_intro(int tutorId)
 {
 	//------- get the tutor msgs from the resource file -------//
 
-	String str;
+	int   dataSize;
+	File* filePtr = res_tutor_intro.get_file( tutor[tutorId]->code, dataSize );
 
-	str = DIR_TUTORIAL;
-	str += tutor[tutorId]->code;
-	str += ".int";
-
-	//------ Open the file and allocate buffer -----//
-
-	FileTxt fileTxt( str );
-
-	int   dataSize = fileTxt.file_size();
-
-	if( dataSize == 0 )       // if error getting the tutor resource
+	if( !filePtr )       // if error getting the tutor resource
 	{
 		err_here();
 		return NULL;
 	}
+
+	//------ Open the file and allocate buffer -----//
+
+	FileTxt fileTxt( filePtr, dataSize );  // initialize fileTxt with an existing file stream
 
 	if( dataSize > tutor_intro_buf_size )
 	{
@@ -377,17 +377,26 @@ void Tutor::run(int tutorId, int inGameCall)
 		str += tutor[tutorId]->code;
 		str += ".TUT";
 
+		String errorMessage;
+		int rc = 0;
 		if( misc.is_file_exist(str) )
 		{
-			game_file.load_game("", str);
+			rc = SaveGameProvider::load_scenario(str, /*out*/ errorMessage);
+			ERR("Failed to load tutortial '%s'; retrying with default. Reason: %s", (const char*)str, (const char*)errorMessage);
 		}
-		else
+		if (rc <= 0)
 		{
 			str = DIR_TUTORIAL;
 			str += "STANDARD.TUT";
 
 			if( misc.is_file_exist(str) )
-				game_file.load_game("", str);
+				rc = SaveGameProvider::load_scenario(str, /*out*/ errorMessage);
+		}
+
+		if (rc <= 0)
+		{
+			box.msg(errorMessage);
+			return;
 		}
 
 		//------ fix firm_build_id problem -----//

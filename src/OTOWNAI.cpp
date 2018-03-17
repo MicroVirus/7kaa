@@ -125,11 +125,11 @@ void Town::process_ai()
 
 	if( info.game_date%30==town_recno%30 )
 	{
-		LOG_MSG("think_split_town");
-		think_split_town();
-		LOG_MSG(misc.get_random_seed() );
 		LOG_MSG("think_move_between_town");
 		think_move_between_town();
+		LOG_MSG(misc.get_random_seed() );
+		LOG_MSG("think_split_town");
+		think_split_town();
 		LOG_MSG(misc.get_random_seed() );
 	}
 
@@ -992,7 +992,7 @@ int Town::think_build_war_factory()
 
 //------- Begin of function Town::think_build_base -------//
 //
-// Think about building seats of powre.
+// Think about building seats of power.
 //
 int Town::think_build_base()
 {
@@ -1245,7 +1245,7 @@ int Town::ai_settle_new(int raceId)
 
 	int xLoc=loc_x1, yLoc=loc_y1;    // xLoc & yLoc are used for returning results
 
-	if( !world.locate_space( xLoc, yLoc, loc_x2, loc_y2, STD_TOWN_LOC_WIDTH+2,			// STD_TOWN_LOC_WIDTH+2 for space around the town
+	if( !world.locate_space( &xLoc, &yLoc, loc_x2, loc_y2, STD_TOWN_LOC_WIDTH+2,			// STD_TOWN_LOC_WIDTH+2 for space around the town
 									 STD_TOWN_LOC_HEIGHT+2, UNIT_LAND, region_id, 1 ) )
 	{
 		return 0;
@@ -1253,11 +1253,13 @@ int Town::ai_settle_new(int raceId)
 
 	//------- it must be within the effective town-to-town distance ---//
 
-	if( misc.points_distance( center_x, center_y, xLoc+(STD_TOWN_LOC_WIDTH-1)/2,
-		yLoc+(STD_TOWN_LOC_HEIGHT-1)/2 ) > EFFECTIVE_TOWN_TOWN_DISTANCE )
+	if( misc.points_distance( center_x, center_y, xLoc+1+(STD_TOWN_LOC_WIDTH-1)/2,
+		yLoc+1+(STD_TOWN_LOC_HEIGHT-1)/2 ) > EFFECTIVE_TOWN_TOWN_DISTANCE )
 	{
 		return 0;
 	}
+
+	// TODO: Should preferably check for a space that has an attached camp, and if can't find then immediately issue order to build a new camp.
 
 	//--- recruit a unit from the town and order it to settle a new town ---//
 

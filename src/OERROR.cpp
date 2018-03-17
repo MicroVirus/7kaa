@@ -26,8 +26,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef __WIN32__
-#include <windows.h>
+#ifndef NO_WINDOWS
+#include <windows.h> // OutputDebugString
 #endif
 
 #include <OSYS.h>
@@ -96,6 +96,11 @@ static void new_func_handler()
 //
 void Error::internal(char* errMsg,const char* fileName,int lineNum)
 {
+#if defined(_MSC_VER) && defined(_DEBUG)
+	// Let the debugger have a first shot at the error when in debug build, before clean-up happens.
+	__debugbreak();
+#endif
+
  	if( error_flag )	// prevent error message dead loop
 		return;
 
@@ -116,7 +121,7 @@ void Error::internal(char* errMsg,const char* fileName,int lineNum)
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifdef __WIN32__
+#ifndef NO_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
@@ -137,6 +142,11 @@ void Error::internal(char* errMsg,const char* fileName,int lineNum)
 //
 void Error::mem()
 {
+#if defined(_MSC_VER) && defined(_DEBUG)
+	// Let the debugger have a first shot at the error when in debug build, before clean-up happens.
+	__debugbreak();
+#endif
+
 	if( error_flag )	// prevent error message dead loop
 		return;
 
@@ -152,7 +162,7 @@ void Error::mem()
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifdef __WIN32__
+#ifndef NO_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
@@ -194,7 +204,7 @@ void Error::msg( const char *format, ... )
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifdef __WIN32__
+#ifndef NO_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
@@ -210,11 +220,16 @@ void Error::msg( const char *format, ... )
 
 //------- BEGIN OF FUNCTION Error::run --------//
 //
-// <char*> formated erorr message with % argument
+// <char*> formated error message with % argument
 // <....>  the argument list
 //
 void Error::run( const char *format, ... )
 {
+#if defined(_MSC_VER) && defined(_DEBUG)
+	// Let the debugger have a first shot at the error when in debug build, before clean-up happens.
+	__debugbreak();
+#endif
+
 	if( error_flag )	// prevent error message dead loop
 		return;
 
@@ -239,7 +254,7 @@ void Error::run( const char *format, ... )
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifdef __WIN32__
+#ifndef NO_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 

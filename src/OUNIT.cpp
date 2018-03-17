@@ -775,7 +775,7 @@ char* Unit::unit_name(int withTitle)
    }
    else
    {
-      str = unitInfo->name;
+      str = _(unitInfo->name);
 
       //--- for weapons, the rank_id is used to store the version of the weapon ---//
 
@@ -801,7 +801,7 @@ char* Unit::unit_name(int withTitle)
 //
 // Set the name id. of this unit.
 //
-void Unit::set_name(WORD newNameId)
+void Unit::set_name(uint16_t newNameId)
 {
    //------- free up the existing name id. ------//
 
@@ -857,9 +857,7 @@ int Unit::is_nation(int nationRecno)
 //
 int Unit::is_civilian()
 {
-	return race_id>0 && skill.combat_level<20 &&
-			 skill.skill_id != SKILL_LEADING &&
-			 unit_mode != UNIT_MODE_DEFEND_TOWN &&
+	return race_id>0 && skill.skill_id != SKILL_LEADING &&
 			 unit_mode != UNIT_MODE_REBEL;
 }
 //----------- End of function Unit::is_civilian ---------//
@@ -1098,6 +1096,8 @@ void Unit::update_loyalty()
 	if( unit_mode == UNIT_MODE_CONSTRUCT )		// constructor worker will not change their loyalty when they are in a building
 		return;
 
+// The following never really worked that well, since it created a dead give away due to the constant loyalty.
+#ifdef EASY_SPY_DETECTION
 	//----- if this unit is a spy, set its fake loyalty ------//
 
    if( spy_recno )      // a spy's loyalty is always >= 70
@@ -1108,6 +1108,7 @@ void Unit::update_loyalty()
       target_loyalty = loyalty;
       return;
    }
+#endif
 
 	//-------- if this is a general ---------//
 
@@ -1454,7 +1455,7 @@ int Unit::betray(int newNationRecno)
 
 	//--- if this unit is a general, change nation for the units he commands ---//
 
-	DWORD newTeamId = unit_array.cur_team_id++;
+	uint32_t newTeamId = unit_array.cur_team_id++;
 
 	if( rank_id==RANK_GENERAL )
 	{
@@ -2388,7 +2389,7 @@ void Unit::resign(int remoteAction)
 //
 // Return the region id. of this unit.
 //
-BYTE Unit::region_id()
+uint8_t Unit::region_id()
 {
    if( is_visible() )
    {

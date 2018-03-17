@@ -24,7 +24,7 @@
 #include <ALL.h>
 #include <version.h>
 
-#ifdef WIN32
+#ifndef NO_WINDOWS
 #include <initguid.h>
 #endif
 
@@ -44,7 +44,8 @@
 #include <OFONT.h>
 #include <OGAME.h>
 #include <OGAMESET.h>
-#include <OGFILE.h>
+#include <OSaveGameArray.h>
+#include <OGAMHALL.h>
 #include <OGODRES.h>
 #include <OHELP.h>
 #include <OHILLRES.h>
@@ -92,6 +93,9 @@
 #include <OREGION.h>
 #include <OWARPT.h>
 #include <multiplayer.h>
+#ifdef HAVE_LIBCURL
+#include <WebService.h>
+#endif
 #include <OERRCTRL.h>
 #include <OMUSIC.h>
 #include <OLOG.h>
@@ -134,6 +138,9 @@ Video             video;
 Audio             audio;
 Music             music;
 MultiPlayer       mp_obj;
+#ifdef HAVE_LIBCURL
+WebService        ws;
+#endif
 Sys               sys;
 SeekPath          seek_path;
 SeekPathReuse     seek_path_reuse;
@@ -223,8 +230,8 @@ GameSet           game_set;         // no constructor
 Battle            battle;
 Power             power;
 World             world;
-GameFileArray     game_file_array;
-GameFile          game_file;
+SaveGameArray     save_game_array;
+HallOfFame        hall_of_fame;
 // ###### begin Gilbert 23/10 #######//
 OptionMenu			option_menu;
 InGameMenu			in_game_menu;
@@ -282,7 +289,7 @@ static void extra_error_handler();
 # endif
 #endif
 
-#if (WIN32 && !USE_SDL)
+#if (!defined(NO_WINDOWS) && !USE_SDL)
 // Prototype main since the runtime does not do that for us
 int main(int, char**);
 
@@ -365,8 +372,8 @@ int main(int argc, char **argv)
 				sys.show_error_dialog(_("Expected argument after %s."), lobbyNameCmdLine);
 				return 1;
 			}
-			strncpy(config.player_name, argv[i+1], config.PLAYER_NAME_LEN);
-			config.player_name[config.PLAYER_NAME_LEN] = 0;
+			strncpy(config.player_name, argv[i+1], HUMAN_NAME_LEN);
+			config.player_name[HUMAN_NAME_LEN] = 0;
 			i++;
 		} else if (!strcmp(argv[i], demoCmdLine)) {
 			demoSelection = 1;
@@ -419,7 +426,7 @@ int main(int argc, char **argv)
 #endif // ENABLE_INTRO_VIDEO
 
 	if( !sys.init() )
-		return FALSE;
+		return 1;
 
 	err.set_extra_handler( extra_error_handler );   // set extra error handler, save the game when a error happens
 
@@ -448,7 +455,7 @@ int main(int argc, char **argv)
 
 	sys.deinit();
 
-	return 1;
+	return 0;
 }
 //---------- End of function main ----------//
 
@@ -460,7 +467,7 @@ static void extra_error_handler()
 	if( game.game_mode != GAME_SINGLE_PLAYER )
 		return;
 
-	game_file_array.save_new_game("ERROR.SAV");  // save a new game immediately without prompting menu
+	save_game_array.save_new_game("ERROR.SAV");  // save a new game immediately without prompting menu
 
 	box.msg( "Error encountered. The game has been saved to ERROR.SAV" );
 }

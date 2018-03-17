@@ -416,7 +416,7 @@ void FirmWar::disp_build_button(int y, int unitId, int buttonUp)
 	//-------- display unit name --------//
 
 	String str;
-	str = unitInfo->name;
+	str = _(unitInfo->name);
 
 	if( unitInfo->unit_class == UNIT_CLASS_WEAPON )		// add version no.
 	{
@@ -479,7 +479,7 @@ static void i_disp_build_button(ButtonCustom *button, int repaintBody)
 		//-------- display unit name --------//
 
 		String str;
-		str = unitInfo->name;
+		str = _(unitInfo->name);
 
 		if( unitInfo->unit_class == UNIT_CLASS_WEAPON )		// add version no.
 		{
@@ -669,7 +669,7 @@ void FirmWar::disp_war_info(int dispY1, int refreshFlag)
 
 		x += UNIT_LARGE_ICON_WIDTH+10;
 
-		String str(unitInfo->name);
+		String str(_(unitInfo->name));
 
 		if( unitInfo->unit_class == UNIT_CLASS_WEAPON )		// add version no.
 		{
@@ -799,7 +799,7 @@ void FirmWar::process_build()
 		int 			xLoc=loc_x1; // xLoc & yLoc are used for returning results
 		int 			yLoc=loc_y1;
 
-		if( !world.locate_space(xLoc, yLoc, loc_x2, loc_y2,
+		if( !world.locate_space(&xLoc, &yLoc, loc_x2, loc_y2,
 			 spriteInfo->loc_width, spriteInfo->loc_height, unitInfo->mobile_type) )
 		{
 			build_progress_days = (float)(totalBuildDays + 1);
@@ -837,3 +837,20 @@ void FirmWar::cancel_build_unit()
 	}
 }
 //----------- End of function FirmWar::cancel_build_unitpt -----------//
+
+//------- Begin of function FirmBase::change_nation ---------//
+//
+void FirmWar::change_nation(int newNationRecno)
+{
+	//--- empty the build queue ---//
+
+	// Note: this fixes a bug with a nation-changed war factory building a weapon that the nation doesn't have,
+	//       which leads to a crash (when selecting attack sprite) because nation_contribution (= weapon level), and from this cur_attack, is not set properly.
+	build_queue_count = 0;
+	if (build_unit_id) cancel_build_unit();
+
+	//-------- change the nation of this firm now ----------//
+
+	Firm::change_nation(newNationRecno);
+}
+//-------- End of function FirmBase::change_nation ---------//

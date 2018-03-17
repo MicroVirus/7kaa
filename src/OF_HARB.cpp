@@ -371,7 +371,7 @@ void FirmHarbor::detect_main_menu()
 
 	//------- detect the build button ---------//
 
-	if( button_build.detect() )
+	if( button_build.detect('B') )
 	{
 		harbor_menu_mode = HARBOR_MENU_BUILD;
 		disable_refresh = 1;    // static var for disp_info() only
@@ -381,7 +381,7 @@ void FirmHarbor::detect_main_menu()
 
 	//-------- detect the sail button ---------//
 
-	if( button_sail.detect() && browse_ship.recno() > 0 )
+	if( button_sail.detect('R') && browse_ship.recno() > 0 )
 		sail_ship( ship_recno_array[browse_ship.recno()-1], COMMAND_PLAYER );
 
 	//---------- detect cancel build button -----------//
@@ -654,7 +654,7 @@ void FirmHarbor::disp_build_button(int y, int unitId, int buttonUp)
 	//-------- display unit name --------//
 
 	String str;
-	str = unitInfo->name;
+	str = _(unitInfo->name);
 	font_bible.put( x+60, y+14, str );
 	disp_queue_button(y0+COUNT_BUTTON_OFFSET_Y, unitId, 1);
 }
@@ -704,7 +704,7 @@ static void i_disp_build_button(ButtonCustom *button, int repaintBody)
 		//-------- display unit name --------//
 
 		String str;
-		str = unitInfo->name;
+		str = _(unitInfo->name);
 
 		if( unitInfo->unit_class == UNIT_CLASS_WEAPON )		// add version no.
 		{
@@ -973,7 +973,7 @@ void FirmHarbor::sail_ship(int unitRecno, char remoteAction)
 	int 			xLoc=loc_x1; // xLoc & yLoc are used for returning results
 	int 			yLoc=loc_y1;
 
-	if(!world.locate_space(xLoc, yLoc, loc_x2, loc_y2, spriteInfo->loc_width, spriteInfo->loc_height, UNIT_SEA, sea_region_id))
+	if(!world.locate_space(&xLoc, &yLoc, loc_x2, loc_y2, spriteInfo->loc_width, spriteInfo->loc_height, UNIT_SEA, sea_region_id))
 		return;
 
 	unitPtr->init_sprite(xLoc, yLoc);
@@ -1273,7 +1273,7 @@ static void put_ship_rec(int recNo, int x, int y, int refreshFlag)
 
 	//---------- display unit name ----------//
 
-	font_san.put( x+32 , y, unitInfo->name, 1, x+119 );		// 1-use short words
+	font_san.put( x+32 , y, _(unitInfo->name), 1, x+119 );		// 1-use short words
 
 	//------- display unit hit points -------//
 

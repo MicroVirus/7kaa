@@ -117,7 +117,7 @@ public:
 
 	short center_x;
 	short center_y;
-	BYTE	region_id;
+	uint8_t	region_id;
 
 	short layout_id;           // town layout id.
 	short first_slot_id;       // the first slot id. of the layout
@@ -160,7 +160,7 @@ public:
 	char  train_queue_count;
 	short	train_unit_recno;			// race id. of the unit the town is currently training, 0-if currently not training any
 	int	train_unit_action_id;	// id. of the action to be assigned to this unit when it is finished training.
-	DWORD start_train_frame_no;
+	uint32_t start_train_frame_no;
 	short defend_target_recno; 	// used in defend mode, store recno of latest target atttacking this town
 	
 	enum {TOWN_TRAIN_BATCH_COUNT = 8}; // Number of units enqueued when holding shift - ensure this is less than MAX_TRAIN_QUEUE
@@ -206,7 +206,7 @@ public:
 	enum {SIZEOF_NONSAVED_ELEMENTS = sizeof(int)+sizeof(bool)};
 
 	//--------- town network ----------//
-	int		town_network_recno;						// The recno of the town network this town belongs to
+	int		town_network_recno;						// The recno of the town network this town belongs to. Note: this value can change between saving and loading.
 	bool	town_network_pulsed;					// Used for pulsing the town network to check which parts are still connected. Must always be set to false, and can only be true during a pulse-operation
 
 	//------ static class member var ------//
@@ -235,7 +235,7 @@ public:
 
 	int	can_recruit(int raceId);
 	int	can_train(int raceId);
-	int   can_migrate(int destTownRecno, int migrateNow=0, int raceId=0);		 // if not called by Town::migrate, don't set migrateNow to TRUE
+	bool   can_migrate(int destTownRecno, bool migrateNow=false, int raceId=0);		 // if not called by Town::migrate, don't set migrateNow to TRUE
 	void	move_pop(Town* destTown, int raceId, int hasJob);
 	int 	pick_random_race(int pickNonRecruitableAlso, int pickSpyFlag);
 	int 	camp_influence(int unitRecno);
@@ -250,7 +250,6 @@ public:
 
 	void  init_pop(int raceId, int addPop, int loyalty, int hasJob=0, int firstInit=0);
 	void  inc_pop(int raceId, int unitHasJob, int unitLoyalty);
-	void  inc_pop_overcrowded(int raceId, int unitHasJob, int unitLoyalty);
 	void  dec_pop(int raceId, int unitHasJob);
 
 	void  draw_selected();
@@ -363,7 +362,7 @@ public:
 	int	get_selected_race();
 
 	//-------------- multiplayer checking codes ---------------//
-	UCHAR crc8();
+	uint8_t crc8();
 	void	clear_ptr();
 
 	//-------------------------------//
@@ -382,10 +381,8 @@ private:
 	void  think_migrate();
 	int 	think_migrate_one(Town* targetTown, int raceId, int townDistance);
 	void  migrate(int raceId, int destTownZoneRecno, int newLoyalty);
-	// int 	can_migrate(int destTownRecno, int migrateNow=0, int raceId=0);
 	int	unjob_town_people(int raceId, int unjobOverseer, int killOverseer=0);
 
-	// void 	kill_town_people(int raceId);
 	int	think_layout_id();
 
 	void  draw_flag(int,int);
@@ -399,8 +396,6 @@ private:
 	void 	disp_debug_resistance(int refreshFlag);
 
 	void  disp_train_menu(int refreshFlag);
-	void	disp_train_button(int y, int skillId, int buttonUp);
-	void	disp_queue_button(int y, int skillId, int buttonUp);
 	void  detect_train_menu();
 
 	void  disp_auto_menu(int modeCollectTax);
@@ -408,9 +403,6 @@ private:
 
 	void  disp_spy_menu(int refreshFlag);
 	void  detect_spy_menu();
-
-	void  daily_update_loyalty();
-	void  calc_loyalty();
 
 	void  think_rebel();
 	int	think_surrender();

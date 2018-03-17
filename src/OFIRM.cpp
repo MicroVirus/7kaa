@@ -52,6 +52,7 @@
 #include <OFIRMDIE.h>
 // ###### end Gilbert 2/10 ######//
 #include <OUNITRES.h>
+#include <locale.h>
 #include "gettext.h"
 
 
@@ -479,17 +480,22 @@ char* Firm::firm_name()
 
 	if( !closest_town_name_id )
 	{
-		str = firm_res[firm_id]->name;
+		str = _(firm_res[firm_id]->name);
 	}
 	else
 	{
-		// TRANSLATORS: <Town> <Firm>
-		snprintf( str, MAX_STR_LEN+1, _("%s %s"), town_res.get_name(closest_town_name_id), firm_res[firm_id]->short_name );
-
-		if( firm_name_instance_id > 1 )		// don't display number for the first firm
+		if( firm_name_instance_id > 1 )
 		{
-			str += " ";
-			str += firm_name_instance_id;
+			// display number when there are multiple linked firms of the same type
+			// TRANSLATORS: <Town> <Short Firm Name> <Firm #>
+			// This is the name of the firm when there are multiple linked firms to a town.
+			snprintf( str, MAX_STR_LEN+1, pgettext ("FirmUI|Name", "%s %s %d"), town_res.get_name(closest_town_name_id), _(firm_res[firm_id]->short_name), firm_name_instance_id );
+		}
+		else
+		{
+			// TRANSLATORS: <Town> <Short Firm Name>
+			// This is the name of the firm.
+			snprintf( str, MAX_STR_LEN+1, pgettext ("FirmUI|Name", "%s %s"), town_res.get_name(closest_town_name_id), _(firm_res[firm_id]->short_name) );
 		}
 	}
 
@@ -805,7 +811,7 @@ int Firm::mobilize_builder(short recno)
 	int xLoc=loc_x1, yLoc=loc_y1;
 
 	if(!locate_space(remove_firm, xLoc, yLoc, loc_x2, loc_y2, spriteInfo->loc_width, spriteInfo->loc_height, UNIT_LAND, builder_region_id) &&
-		!world.locate_space(xLoc, yLoc, loc_x2, loc_y2, spriteInfo->loc_width, spriteInfo->loc_height, UNIT_LAND, builder_region_id))
+		!world.locate_space(&xLoc, &yLoc, loc_x2, loc_y2, spriteInfo->loc_width, spriteInfo->loc_height, UNIT_LAND, builder_region_id))
 	{
 		kill_builder(recno);
 		return 0;
@@ -1082,7 +1088,7 @@ int Firm::assign_settle(int raceId, int unitLoyalty, int isOverseer)
 
    int xLoc=loc_x1, yLoc=loc_y1;    // xLoc & yLoc are used for returning results
 
-	if( world.locate_space( xLoc, yLoc, loc_x2, loc_y2, STD_TOWN_LOC_WIDTH,
+	if( world.locate_space( &xLoc, &yLoc, loc_x2, loc_y2, STD_TOWN_LOC_WIDTH,
 									STD_TOWN_LOC_HEIGHT, UNIT_LAND, region_id, 1 ) )		// the town must be in the same region as this firm.
    {
       if( misc.points_distance( center_x, center_y, xLoc+(STD_TOWN_LOC_WIDTH-1)/2,
@@ -2650,6 +2656,7 @@ int Firm::resign_worker(int workerId)
 	{
 		Town* townPtr = town_array[workerPtr->town_recno];
 
+		err_when(workerPtr->race_id < 1);
 		townPtr->jobless_race_pop_array[workerPtr->race_id-1]++; // move into jobless population
 		townPtr->jobless_population++;
 

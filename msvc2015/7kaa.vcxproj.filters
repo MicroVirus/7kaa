@@ -48,12 +48,6 @@
     <ClInclude Include="..\include\dbglog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\DMOUSE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\dsound_audio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\file_input_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -87,12 +81,6 @@
     <ClInclude Include="..\include\mem_input_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\mouse_dinput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\mouse_none.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\mouse_sdl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -100,18 +88,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\multiplayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\network.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\network_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\network_none.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\network_sdlnet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\OANLINE.h">
@@ -570,22 +546,10 @@
     <ClInclude Include="..\include\surface_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\surface_ddraw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\surface_none.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\surface_sdl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\vga_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\vga_ddraw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\vga_none.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\vga_sdl.h">
@@ -600,9 +564,6 @@
     <ClInclude Include="..\include\wav_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\win32_compat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\OTownNetwork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -612,16 +573,34 @@
     <ClInclude Include="..\include\version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\OFrameRegulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\OVacateArea.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\c99_printf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\gettext-gnu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\OGAMHALL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\OSaveGameArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\OSaveGameInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\OSaveGameProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\WebService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\posix_string_compat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\storage_constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1079,9 +1058,6 @@
     <ClCompile Include="..\src\OGFILE3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\OGFILEA.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\OGODRES.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1155,15 +1131,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ONEWSENG.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ONEWSFRE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ONEWSGER.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ONEWSSPA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\OOPTMENU.cpp">
@@ -1593,6 +1560,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\enet\multiplayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSaveGameArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSaveGameInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OSaveGameProvider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\platform\windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
