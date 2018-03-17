@@ -10,7 +10,7 @@ free and open source license in 2009. See the file "COPYING" for the
 details of the license. We are indebted to Enlight for making the 7kfans
 project possible and giving a new chance to build a community for fans
 of the game.
-This specific fork of the project includes Visual Studio C++ 2010 project
+This specific fork of the project includes Visual Studio C++ 2015 project
 and solution files.
 
 Who should use this version of 7KAA?
@@ -41,7 +41,7 @@ What you will find in this archive
 ----------------------------------
 
 * The GPL source and data files.
-* Visual Studio C++ 2010 Project Files
+* Visual Studio C++ 2015 Project Files
 * OpenAL32 headers and library file (but not the DLL)
 
 You can also check out the official repository for more information.
@@ -52,7 +52,7 @@ Configuring your clone of this repository
 -----------------------------------------
 
 This branch of the 7kaa project runs parallel to the 7kaa master branch
-and includes project files for Microsoft Visual C++ 2010.
+and includes project files for Microsoft Visual C++ 2015.
 
 Most of the work is done, there are just a few more steps to be taken
 before you can compile and debug your own version of the source code
@@ -71,7 +71,7 @@ Setting up the libraries
 ------------------------
 
 Required dependencies
-* GCC 4.6+ or later (or other C++11 compliant compiler)
+* A C++11 compatible compiler (Visual Studio 2013+, GCC 4.6+).
 * SDL 2.0.2 or later (http://libsdl.org/)
 * enet 1.3.xx (http://enet.bespin.org/)
 * OpenAL-soft or equivalent driver (http://kcat.strangesoft.net/openal.html)
