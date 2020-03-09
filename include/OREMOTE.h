@@ -26,8 +26,7 @@
 
 #include <MPTYPES.h>
 #include <OREMOTEQ.h>
-
-#include <storage_constants.h>
+#include <ReplayFile.h>
 
 //---------- Define message id. ---------//
 
@@ -324,6 +323,8 @@ public:
 			 RECEIVE_QUEUE_BACKUP = (MAX_PROCESS_FRAME_DELAY+1)*2,
 		  };
 
+	enum { MODE_DISABLED = 0, MODE_MP_ENABLED, MODE_REPLAY, MODE_REPLAY_END };
+
 public:
 	char				is_host;
 	char				handle_vga_lock;
@@ -377,7 +378,7 @@ public:
 	//-------------------------------//
 	short				nation_processing;		// used in process_receive_queue
 
-	char				save_file_name[MAX_PATH+1];
+	char				save_file_name[FilePath::MAX_FILE_PATH];
 
 	char				*common_msg_buf;
 	// ###### patch begin Gilbert 22/1 #######//
@@ -388,15 +389,21 @@ public:
 	// --------- alternating send frame --------//
 	int				alternating_send_rate;	// 1=every frame, 2=send one frame per two frames...
 
+	ReplayFile			replay;
+
 public:
 	Remote();
 	~Remote();
 
 	void			init(MultiPlayer *mp);
+	int 			init_replay_load(char *full_path, NewNationPara *mpGame, int *playerCount);
+	void			init_replay_save(NewNationPara *mpGame, int playerCount);
 	void			deinit();
 
 	void			init_start_mp();
 	int				is_enable();
+	int			is_replay();
+	int			is_replay_end();
 	// int			can_start_game();
 	int				number_of_opponent();
 	PID_TYPE    	self_player_id();

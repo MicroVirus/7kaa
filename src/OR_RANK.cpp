@@ -67,6 +67,11 @@ static int   nation_filter(int recNo=0);
 static void  disp_score();
 static void	 disp_goal();
 static void	 disp_play_time(int y1);
+static void put_heading(char justify, int x1, int y1, int x2, int y2, const char *textPtr);
+
+#define J_L Font::LEFT_JUSTIFY
+#define J_C Font::CENTER_JUSTIFY
+#define J_R Font::RIGHT_JUSTIFY
 
 //--------- Begin of function Info::disp_rank ---------//
 //
@@ -79,15 +84,12 @@ void Info::disp_rank(int refreshFlag)
 
 	vga_back.d3_panel_up(NATION_BROWSE_X1, NATION_BROWSE_Y1, NATION_BROWSE_X2, NATION_BROWSE_Y1+32 );
 
-	font_san.put( x	 , y+7, _("Kingdom") );
-	font_san.put( x+180, y+7, _("Population") );
-	font_san.put( x+264, y+7, _("Military") );
-	font_san.put( x+332, y+7, _("Economy") );
-	font_san.put( x+406, y+7, _("Reputation") );
-	// TRANSLATORS: Part of "Fryhtan Battling"
-	font_san.put( x+484, y  , _("Fryhtan") );
-	// TRANSLATORS: Part of "Fryhtan Battling"
-	font_san.put( x+484, y+13, _("Battling") );
+	put_heading( J_L, x    , y, x+180, y+29, _("Kingdom") );
+	put_heading( J_C, x+180, y, x+264, y+29, _("Population") );
+	put_heading( J_L, x+264, y, x+332, y+29, _("Military") );
+	put_heading( J_L, x+332, y, x+406, y+29, _("Economy") );
+	put_heading( J_L, x+406, y, x+484, y+29, _("Reputation") );
+	put_heading( J_L, x+484, y, NATION_BROWSE_X2-20, y+29, _("Fryhtan Battling") );
 
 	if( refreshFlag == INFO_REPAINT )
 	{
@@ -169,13 +171,16 @@ static void disp_score()
 	int	 finalScore = totalScore * difficultyRating / 100;
 	String str;
 
-	// TRANSLATORS: Final Score:  <Number> X
-	snprintf( str, MAX_STR_LEN+1, _("Final Score:  %s X "), misc.format(totalScore) );
+	str  = _("Final Score");
+	str += ":  ";
+	str += misc.format(totalScore);
+	str += " X ";
 
 	int x2 = font_san.put( x, y+12, str ) + 5;
 
-	// TRANSLATORS: <Number> (Difficulty Rating)
-	snprintf( str, MAX_STR_LEN+1, _("%s (Difficulty Rating)"), misc.format(difficultyRating) );
+	str  = misc.format(difficultyRating);
+	str += " ";
+	str += _("(Difficulty Rating)");
 
 	font_san.center_put( x2, y+1, x2+156, y+15, str );
 	vga_back.bar( x2   , y+16, x2+156, y+17, V_BLACK );
@@ -185,13 +190,19 @@ static void disp_score()
 
 	if( nation_array[viewNationRecno]->cheat_enabled_flag )
 	{
-		str = _("X  0 (Cheated)  =  0");
+		str  = "X  0 ";
+		str += _("(Cheated)");
+		str += "  ";
+
+		finalScore = 0;
 	}
 	else
 	{
-		str = "=  ";
-		str += finalScore;
+		str = "";
 	}
+
+	str += "=  ";
+	str += finalScore;
 
 	font_san.put( x2+170, y+12, str);
 
@@ -455,10 +466,22 @@ void Info::set_rank_data(int onlyHasContact)
 //----------- End of static function Info::set_rank_data -----------//
 
 
+const char *rank_num_th[MAX_NATION] =
+{
+	// TRANSLATORS: Ordinal number for ranking players
+	N_("1st"),
+	N_("2nd"),
+	N_("3rd"),
+	N_("4th"),
+	N_("5th"),
+	N_("6th"),
+	N_("7th"),
+};
 //-------- Begin of function Info::get_rank_pos_str --------//
 //
 char* Info::get_rank_pos_str(int rankType, int nationRecno)
 {
+	static String rank_pos_msg;
 	Nation* viewingNation = NULL; 
 	int curNationRankData = nation_rank_data_array[rankType-1][nationRecno-1];
 	int rankPos=1;
@@ -478,7 +501,8 @@ char* Info::get_rank_pos_str(int rankType, int nationRecno)
 			rankPos++;
 	}
 
-	return misc.num_th(rankPos);
+	rank_pos_msg = _(rank_num_th[rankPos-1]);
+	return rank_pos_msg;
 }
 //----------- End of function Info::get_rank_pos_str -----------//
 
@@ -537,3 +561,18 @@ int Info::get_total_score(int nationRecno)
 	return totalScore;
 }
 //----------- End of function Info::get_total_score -----------//
+
+
+//-------- Begin of static function put_heading --------//
+//
+static void put_heading(char justify, int x1, int y1, int x2, int y2, const char *textPtr)
+{
+	int dispLines=0;
+	int totalLines=0;
+	font_san.count_line(x1,y1,x2,y2,textPtr,0,dispLines,totalLines);
+	if( dispLines > 1 )
+		font_san.put_paragraph(x1,y1,x2,y2,textPtr,-1,1,1,justify);
+	else if( y1+7<y2 )
+		font_san.put_paragraph(x1,y1+7,x2,y2,textPtr,-1,1,1,justify);
+}
+//----------- End of static function put_heading -----------//

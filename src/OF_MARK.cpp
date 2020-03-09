@@ -42,6 +42,7 @@
 #include <OF_MARK.h>
 #include <OREMOTE.h>
 #include <OSE.h>
+#include <OMOUSE.h>
 #include "gettext.h"
 
 //------- define static vars -------//
@@ -303,7 +304,7 @@ void FirmMarket::detect_info()
 
 	//----- detect hire caravan button -------//
 
-	if( button_hire_caravan.detect('R') )
+	if( button_hire_caravan.detect(GETKEY(KEYEVENT_FIRM_PATROL)) )
 		hire_caravan(COMMAND_PLAYER);
 }
 //----------- End of function FirmMarket::detect_info -----------//
@@ -404,10 +405,7 @@ void FirmMarket::put_market_info(int dispY1, int refreshFlag)
 		if( refreshFlag == INFO_REPAINT )
 		{
 			vga_util.d3_panel_up( INFO_X1, dispY1, INFO_X2, dispY1+51 );
-			// TRANSLATORS: Part of "You're not permitted to trade with this market."
-			font_san.center_put( INFO_X1, dispY1+3 , INFO_X2, dispY1+25, _("You're not permitted to") );
-			// TRANSLATORS: Part of "You're not permitted to trade with this market."
-			font_san.center_put( INFO_X1, dispY1+23, INFO_X2, dispY1+51, _("trade with this market.") );
+			font_san.put_paragraph( INFO_X1, dispY1+8, INFO_X2, dispY1+51, _("You're not permitted to trade with this market."), 4, 1, 1, Font::CENTER_JUSTIFY );
 		}
 
 		return;
@@ -433,8 +431,7 @@ void FirmMarket::put_market_info(int dispY1, int refreshFlag)
 		}
 		else if( marketGoods->product_raw_id )
 		{
-			// TRANSLATORS: <Clay/Copper/Iron> Products
-			snprintf( str, MAX_STR_LEN+1, _("%s Products"), _(raw_res[marketGoods->product_raw_id]->name) );
+			str = raw_res.product_name(marketGoods->product_raw_id);
 			bitmapPtr = raw_res.small_product_icon(marketGoods->product_raw_id);
 		}
 		else

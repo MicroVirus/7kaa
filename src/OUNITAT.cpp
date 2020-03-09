@@ -95,18 +95,18 @@ int Unit::update_attack_path_dist()
 //	The function can be called in by class Bullet since parent and target
 //	are specified.
 //
-// [Unit*]	parentUnit is the unit attacking
-//	[Unit*]	taregtUnit is the unit being attacked
-// <int>		attackDamage is the damage done to the target Unit
+// <Unit*>  parentUnit is the unit attacking
+// <Unit*>  targetUnit is the unit being attacked
+// <int>    attackDamage is the damage done to the target Unit
+// <short>  parentNationRecno - the nation that ordered the hit
 //
 // ****************************** Warning ***********************************
 // don't use any member variables of this unit. This unit may not be involved
 // in the attack event
 // **************************************************************************
 //
-void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
+void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage, short parentNationRecno)
 {
-	short	parentNationRecno = (parentUnit) ? parentUnit->nation_recno : 0;
 	short	targetNationRecno = targetUnit->nation_recno;
 
 	//------------------------------------------------------------//
@@ -182,7 +182,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 					targetNationPtr->own_civilian_killed++;
 				}
 
-				if(parentUnit && parentNationRecno )
+				if( parentNationPtr )
 				{
 					parentNationPtr->civilian_killed(targetUnit->race_id, 1);
 					parentNationPtr->enemy_civilian_killed++;
@@ -196,7 +196,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 					targetNationPtr->own_civilian_killed++;
 				}
 
-				if(parentUnit && parentNationRecno )
+				if( parentNationPtr )
 				{
 					parentNationPtr->civilian_killed(targetUnit->race_id, 0);
 					parentNationPtr->enemy_civilian_killed++;
@@ -207,7 +207,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 				if( targetNationRecno )
 					targetNationPtr->own_soldier_killed++;
 
-				if(parentUnit && parentNationRecno )
+				if( parentNationPtr )
 					parentNationPtr->enemy_soldier_killed++;
 			}
 		}
@@ -219,7 +219,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 			switch( unit_res[targetUnit->unit_id]->unit_class )
 			{
 				case UNIT_CLASS_WEAPON:
-					if(parentUnit && parentNationRecno )
+					if( parentNationPtr )
 						parentNationPtr->enemy_weapon_destroyed++;
 
 					if( targetNationRecno )
@@ -228,7 +228,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 
 
 				case UNIT_CLASS_SHIP:
-					if(parentUnit && parentNationRecno )
+					if( parentNationPtr )
 						parentNationPtr->enemy_ship_destroyed++;
 
 					if( targetNationRecno )
@@ -245,7 +245,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 				if( targetNationRecno )
 					targetNationPtr->civilian_killed(0, -1);
 
-				if( parentUnit && parentNationRecno )
+				if( parentNationPtr )
 					parentNationPtr->civilian_killed(0, 3);
 			}
 		}
@@ -273,7 +273,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 
 	//------- two nations at war ---------//
 
-	if( parentNationRecno && targetNationRecno )
+	if( parentNationPtr && targetNationRecno )
 	{
 		parentNationPtr->set_at_war_today();
 		targetNationPtr->set_at_war_today(parentUnit->sprite_recno);
@@ -281,7 +281,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 
 	//-------- increase battling fryhtan score --------//
 
-	if( targetUnitClass==UNIT_CLASS_MONSTER && parentNationRecno )
+	if( parentNationPtr && targetUnitClass==UNIT_CLASS_MONSTER )
 	{
 		parentNationPtr->kill_monster_score += (float) 0.1;
 	}
@@ -320,7 +320,7 @@ void Unit::hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage)
 
 	else if( targetUnitClass == UNIT_CLASS_MONSTER )
 	{
-		if( parentNationRecno )
+		if( parentNationPtr )
 			parentNationPtr->change_reputation(REPUTATION_INCREASE_PER_ATTACK_MONSTER);
 	}
 
@@ -509,23 +509,24 @@ void Unit::unit_auto_guarding(Unit *attackUnit)
 //			In range attack, the unit calling this function may not be the
 //			attacking unit.
 //
-// <Unit*> parentUnit   - the attacking unit
-// <int>	  target?Loc   - the target building location
+// <Unit*> attackUnit   - the attacking unit
+// <int>   target?Loc   - the target building location
 // <int>   attackDamage - the actual damage made
+// <short> attackNationRecno - the nation that ordered the hit
 //
 // ****************************** Warning ***********************************
 // don't use any member variables of this unit. This unit may not be involved
 // in the attack event
 // **************************************************************************
 //
-void Unit::hit_building(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage)
+void Unit::hit_building(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno)
 {
 	Location* locPtr = world.get_loc(targetXLoc, targetYLoc);
 
 	if(locPtr->is_firm())
-		hit_firm( attackUnit, targetXLoc, targetYLoc, attackDamage);
+		hit_firm(attackUnit, targetXLoc, targetYLoc, attackDamage, attackNationRecno);
 	else if( locPtr->is_town() )
-		hit_town( attackUnit, targetXLoc, targetYLoc, attackDamage);
+		hit_town(attackUnit, targetXLoc, targetYLoc, attackDamage, attackNationRecno);
 }
 //---------- End of function Unit::hit_building ----------//
 
@@ -539,15 +540,16 @@ void Unit::hit_building(Unit* attackUnit, int targetXLoc, int targetYLoc, float 
 //			attacking unit.
 //
 // <Unit*> attackUnit   - the attacking unit
-// <int>	  target?Loc   - the target building location
+// <int>   target?Loc   - the target building location
 // <int>   attackDamage - the actual damage made
+// <short> attackNationRecno - the nation that ordered the hit
 //
 // ****************************** Warning ***********************************
 // don't use any member variables of this unit. This unit may not be involved
 // in the attack event
 // **************************************************************************
 //
-void Unit::hit_firm(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage)
+void Unit::hit_firm(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno)
 {
 	Location* locPtr = world.get_loc(targetXLoc, targetYLoc);
 	if(!locPtr->is_firm())
@@ -564,32 +566,32 @@ void Unit::hit_firm(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 	// check for SPRITE_DIE to skip the case by EXPLOSIVE_CART
 	//------------------------------------------------------------------------------//
 	if( attackUnit!=NULL && attackUnit->cur_action!=SPRITE_DIE &&
-		 targetFirm->nation_recno != attackUnit->nation_recno )		// the target and the attacker's nations are different (it's possible that when a unit who has just changed nation has its bullet hitting its own nation)
+		 targetFirm->nation_recno != attackNationRecno )		// the target and the attacker's nations are different (it's possible that when a unit who has just changed nation has its bullet hitting its own nation)
 	{
-		if( attackUnit->nation_recno && targetFirm->nation_recno )
+		if( attackNationRecno && targetFirm->nation_recno )
 		{
 			//### trevor 29/9 ###//
-			nation_array[attackUnit->nation_recno]->set_at_war_today();
+			nation_array[attackNationRecno]->set_at_war_today();
 			nation_array[targetFirm->nation_recno]->set_at_war_today(attackUnit->sprite_recno);
 			//### trevor 29/9 ###//
 		}
 
 		if( targetFirm->nation_recno )
-			nation_array[targetFirm->nation_recno]->being_attacked(attackUnit->nation_recno);
+			nation_array[targetFirm->nation_recno]->being_attacked(attackNationRecno);
 
 		//------------ auto defense -----------------//
 		if(attackUnit->is_visible())
 			targetFirm->auto_defense(attackUnit->sprite_recno);
 
-		if(attackUnit->nation_recno!=targetFirm->nation_recno)
+		if( attackNationRecno != targetFirm->nation_recno )
 			attackUnit->gain_experience(); // gain experience to increase combat level
 
 		targetFirm->being_attacked(attackUnit->sprite_recno);
 
 		//------ increase battling fryhtan score -------//
 
-		if( targetFirm->firm_id == FIRM_MONSTER && attackUnit->nation_recno )
-			nation_array[attackUnit->nation_recno]->kill_monster_score += (float) 0.01;
+		if( attackNationRecno && targetFirm->firm_id == FIRM_MONSTER )
+			nation_array[attackNationRecno]->kill_monster_score += (float) 0.01;
 	}
 
 	//---------- add indicator on the map ----------//
@@ -613,15 +615,14 @@ void Unit::hit_firm(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 			'F', targetFirm->firm_id, "DIE" );
 
 		if( targetFirm->nation_recno == nation_array.player_recno )
-			news_array.firm_destroyed(targetFirm->firm_recno, attackUnit);
+			news_array.firm_destroyed(targetFirm->firm_recno, attackUnit, attackNationRecno);
 
 		if( targetFirm->nation_recno )
 		{
-			if( attackUnit->nation_recno )
-				nation_array[attackUnit->nation_recno]->enemy_firm_destroyed++;
+			if( attackNationRecno )
+				nation_array[attackNationRecno]->enemy_firm_destroyed++;
 
-			if( targetFirm->nation_recno )
-				nation_array[targetFirm->nation_recno]->own_firm_destroyed++;
+			nation_array[targetFirm->nation_recno]->own_firm_destroyed++;
 		}
 
 		else if( targetFirm->firm_id == FIRM_MONSTER )
@@ -644,15 +645,16 @@ void Unit::hit_firm(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 //			attacking unit.
 //
 // <Unit*> attackUnit   - the attacking unit
-// <int>	  target?Loc   - the target building location
+// <int>   target?Loc   - the target building location
 // <int>   attackDamage - the actual damage made
+// <short> attackNationRecno - the nation that ordered the hit
 //
 // ****************************** Warning ***********************************
 // don't use any member variables of this unit. This unit may not be involved
 // in the attack event
 // **************************************************************************
 //
-void Unit::hit_town(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage)
+void Unit::hit_town(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno)
 {
 	Location *locPtr = world.get_loc(targetXLoc, targetYLoc);
 
@@ -681,23 +683,23 @@ void Unit::hit_town(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 	// check for SPRITE_DIE to skip the case by EXPLOSIVE_CART
 	//------------------------------------------------------------------------------//
 	if( attackUnit!=NULL && attackUnit->cur_action!=SPRITE_DIE &&
-		 targetTown->nation_recno != attackUnit->nation_recno )		// the target and the attacker's nations are different (it's possible that when a unit who has just changed nation has its bullet hitting its own nation)
+		 targetTown->nation_recno != attackNationRecno )		// the target and the attacker's nations are different (it's possible that when a unit who has just changed nation has its bullet hitting its own nation)
 	{
 		int townNationRecno = targetTown->nation_recno;
 
 		//------- change to hostile relation -------//
 
-		if( attackUnit->nation_recno && targetTown->nation_recno )
+		if( attackNationRecno && targetTown->nation_recno )
 		{
 			//### trevor 29/9 ###//
-			nation_array[attackUnit->nation_recno]->set_at_war_today();
+			nation_array[attackNationRecno]->set_at_war_today();
 			nation_array[targetTown->nation_recno]->set_at_war_today(attackUnit->sprite_recno);
 			//### trevor 29/9 ###//
 		}
 
 		if( targetTown->nation_recno)
 		{
-			nation_array[targetTown->nation_recno]->being_attacked(attackUnit->nation_recno);
+			nation_array[targetTown->nation_recno]->being_attacked(attackNationRecno);
 		}
 
 		news_array.disable();		// don't add the town abandon news that might be called by Town::dec_pop() as the town is actually destroyed not abandoned
@@ -711,12 +713,12 @@ void Unit::hit_town(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 		if( town_array.is_deleted(targetTownRecno) &&
 			 townNationRecno == nation_array.player_recno )
 		{
-			news_array.town_destroyed(targetTownNameId, targetTownXLoc, targetTownYLoc, attackUnit);
+			news_array.town_destroyed(targetTownNameId, targetTownXLoc, targetTownYLoc, attackUnit, attackNationRecno);
 		}
 
 		//---------- gain experience --------//
 
-		if(attackUnit->nation_recno!=targetTown->nation_recno)
+		if( attackNationRecno != targetTown->nation_recno )
 			attackUnit->gain_experience(); // gain experience to increase combat level
 
 		//------------ auto defense -----------------//
@@ -733,15 +735,16 @@ void Unit::hit_town(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 //--------- Begin of function Unit::hit_wall -----------//
 //
 // <Unit*> attackUnit   - the attacking unit
-// <int>	  target?Loc   - the targeted wall location
+// <int>   target?Loc   - the targeted wall location
 // <int>   attackDamage - the actual damage made
+// <short> attackNationRecno - the nation that ordered the hit
 //
 // ****************************** Warning ***********************************
 // don't use any member variables of this unit. This unit may not be involved
 // in the attack event
 // **************************************************************************
 //
-void Unit::hit_wall(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage)
+void Unit::hit_wall(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno)
 {
 	Location *locPtr = world.get_loc(targetXLoc, targetYLoc);
 	err_when(!locPtr->is_wall());
@@ -749,7 +752,7 @@ void Unit::hit_wall(Unit* attackUnit, int targetXLoc, int targetYLoc, float atta
 	//######## begin trevor 25/6 #########//
 /*
 	if(attackUnit!=NULL)
-		attackUnit->change_relation(attackUnit->nation_recno, locPtr->wall_nation_recno(), NATION_HOSTILE);
+		attackUnit->change_relation(attackNationRecno, locPtr->wall_nation_recno(), NATION_HOSTILE);
 */
 	//######## end trevor 25/6 #########//
 
@@ -817,38 +820,10 @@ float Unit::actual_damage()
 	//
 	//------------------------------------------------------------------------//
 
-	if( leader_unit_recno )
+	if( is_leader_in_range() )
 	{
-		if( unit_array.is_deleted(leader_unit_recno) )
-		{
-			leader_unit_recno = 0;
-		}
-		else
-		{
-			Unit* leaderUnit = unit_array[leader_unit_recno];
-			int	leaderXLoc, leaderYLoc;
-
-			if( leaderUnit->is_visible() )
-			{
-				leaderXLoc = cur_x_loc();
-				leaderYLoc = cur_y_loc();
-			}
-			else if( leaderUnit->unit_mode == UNIT_MODE_OVERSEE )
-			{
-				Firm* firmPtr = firm_array[leaderUnit->unit_mode_para];
-
-				leaderXLoc = firmPtr->center_x;
-				leaderYLoc = firmPtr->center_y;
-			}
-			else
-				leaderXLoc = -1;
-
-			if( leaderXLoc >= 0 &&
-				 misc.points_distance(cur_x_loc(), cur_y_loc(), leaderXLoc, leaderYLoc) <= EFFECTIVE_LEADING_DISTANCE )
-			{
-				attackDamage += attackDamage * leaderUnit->skill.skill_level / 100;
-			}
-		}
+		Unit *leaderUnit = unit_array[leader_unit_recno];
+		attackDamage += attackDamage * leaderUnit->skill.skill_level / 100;
 	}
 
 	return (float) attackDamage / ATTACK_SLOW_DOWN;		// lessen all attacking damages, thus slowing down all battles.

@@ -32,6 +32,7 @@
 #include <OF_MONS.h>
 #include <ONATION.h>
 #include <OGAME.h>
+#include <ConfigAdv.h>
 
 #ifdef DEBUG
 #include <OFONT.h>
@@ -43,6 +44,9 @@ static unsigned long	last_town_profile_time = 0L;
 static unsigned long	town_profile_time = 0L;
 //#### end alex 20/9 ####//
 #endif
+
+static char random_race();
+
 
 //--------- Begin of function TownArray::TownArray ----------//
 
@@ -278,7 +282,7 @@ void TownArray::think_new_independent_town()
 
 	//--- if the total population of all nations combined > 1000, then no new independent town will emerge ---//
 
-	if( allTotalPop > 1000 )
+	if( allTotalPop > config_adv.town_ai_emerge_town_pop_limit )
 		return;
 
 	//--- add 1 to 2 wanderer per month per race ---//
@@ -290,7 +294,7 @@ void TownArray::think_new_independent_town()
 
 	//----- check if there are enough wanderers to set up a new town ---//
 
-	int raceId = misc.random(MAX_RACE)+1;
+	int raceId = random_race();
 
 	for( i=0 ; i<MAX_RACE ; i++ )
 	{
@@ -340,7 +344,7 @@ void TownArray::think_new_independent_town()
 
 		//---- next race to be added to the independent town ----//
 
-		raceId = misc.random(MAX_RACE)+1;
+		raceId = random_race();
 
 		for( i=0 ; i<MAX_RACE ; i++ )
 		{
@@ -807,3 +811,14 @@ Town* TownArray::operator[](int recNo)
 
 #endif
 
+
+//-------- Begin of static function random_race --------//
+//
+// Uses misc.random() for random race
+//
+static char random_race()
+{
+	int num = misc.random(config_adv.race_random_list_max);
+	return config_adv.race_random_list[num];
+}
+//--------- End of static function random_race ---------//

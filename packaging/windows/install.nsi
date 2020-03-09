@@ -1,16 +1,21 @@
-; install.nsi (v0.1)
+; install.nsi
 ; Written by Thomas Atkinson 12/4/2012
 ; Licensed under the gpl
+;
+; Updated by Jesse Allen for 2.14.xx and 2.15.xx
+;
 ; Requires NSIS to compile
 ;
-; Installs 7kaa in a directory the user selects and creates an uninstaller
+; Install 7kaa in a directory, copy this into the directory, and use NSIS to
+; create the installer. See build.sh for a quick rundown on how to use "make
+; install". A few other files might need to be brought in from elsewhere.
 
 ;--------------------------------
 ; Set current working directory
 
 ; You can achieve this with /NOCD, but this might get rolled into Makefile
 ; and this makes more sense.
-!cd ..\..
+;!cd ..\..\dest
 
 ;--------------------------------
 ;Include Modern UI
@@ -84,7 +89,7 @@ SetCompressor /SOLID lzma
 ; because this will make your installer start faster.
 
 !insertmacro MUI_RESERVEFILE_LANGDLL
-ReserveFile "${NSISDIR}\Plugins\*.dll"
+;ReserveFile "${NSISDIR}\Plugins\*.dll"
 
 ;--------------------------------
 ; The stuff to install
@@ -99,19 +104,20 @@ Section "7kaa (required)" 7kaareq
   Rename "$INSTDIR\README" "$INSTDIR\README.txt"
   File ".\COPYING"
   Rename "$INSTDIR\COPYING" "$INSTDIR\COPYING.txt"
-  File ".\doc\7kaa-hotkeys-2.14.5.png"
-  File /r ".\data\encyc"
-  File /r ".\data\encyc2"
-  File /r ".\data\image"
-  File /r ".\data\resource"
-  File /r ".\data\scenari2"
-  File /r ".\data\scenario"
-  File /r ".\data\sound"
-  File /r ".\data\sprite"
-  File /r ".\data\tutorial"
-  File .\src\7kaa.exe
+  File ".\7kaa-manual.pdf"
+  File /r ".\ENCYC"
+  File /r ".\ENCYC2"
+  File /r ".\IMAGE"
+  File /r ".\locale"
+  File /r ".\RESOURCE"
+  File /r ".\SCENARI2"
+  File /r ".\SCENARIO"
+  File /r ".\SOUND"
+  File /r ".\SPRITE"
+  File /r ".\TUTORIAL"
+  File .\7kaa.exe
   File ".\SDL2.dll"
-  File ".\libcurl.dll"
+  File ".\libcurl-4.dll"
   
   ;Reset Install path
   ;SetOutPath "$INSTDIR"
@@ -134,7 +140,7 @@ Section "Music" music
   SetOutPath "$INSTDIR"
   File ".\README-music.txt"
   File ".\COPYING-music.txt"
-  File /r ".\data\music"
+  File /r ".\MUSIC"
 
 SectionEnd
 
@@ -154,7 +160,7 @@ Section "Start Menu Shortcuts" startshort
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Seven Kingdoms AA.lnk" "$INSTDIR\7kaa.exe"
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Hotkeys.lnk" "$INSTDIR\7kaa-hotkeys-2.14.5.png"
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Manual.lnk" "$INSTDIR\7kaa-manual.pdf"
   
   !insertmacro MUI_STARTMENU_WRITE_END
   
@@ -192,30 +198,33 @@ Section "Uninstall"
   DeleteRegKey HKCU "SOFTWARE\7kaa"
 
   ; Remove the program files
-  RMDir /r "$INSTDIR\encyc"
-  RMDir /r "$INSTDIR\encyc2"
-  RMDir /r "$INSTDIR\image"
-  RMDir /r "$INSTDIR\resource"
-  RMDir /r "$INSTDIR\scenari2"
-  RMDir /r "$INSTDIR\scenario"
-  RMDir /r "$INSTDIR\sound"
-  RMDir /r "$INSTDIR\sprite"
-  RMDir /r "$INSTDIR\tutorial"
-  RMDir /r "$INSTDIR\music"
+  RMDir /r "$INSTDIR\ENCYC"
+  RMDir /r "$INSTDIR\ENCYC2"
+  RMDir /r "$INSTDIR\IMAGE"
+  RMDir /r "$INSTDIR\locale"
+  RMDir /r "$INSTDIR\RESOURCE"
+  RMDir /r "$INSTDIR\SCENARI2"
+  RMDir /r "$INSTDIR\SCENARIO"
+  RMDir /r "$INSTDIR\SOUND"
+  RMDir /r "$INSTDIR\SPRITE"
+  RMDir /r "$INSTDIR\TUTORIAL"
+  RMDir /r "$INSTDIR\MUSIC"
   Delete "$INSTDIR\7kaa.exe"
   Delete "$INSTDIR\COPYING.txt"
   Delete "$INSTDIR\README.txt"
-  Delete "$INSTDIR\7kaa-hotkeys-2.14.5.png"
+  Delete "$INSTDIR\7kaa-manual.pdf"
   Delete "$INSTDIR\COPYING-music.txt"
   Delete "$INSTDIR\README-music.txt"
   Delete "$INSTDIR\OpenAL32.dll"
   Delete "$INSTDIR\SDL2.dll"
-  Delete "$INSTDIR\libcurl.dll"
+  Delete "$INSTDIR\libcurl-4.dll"
   Delete "$INSTDIR\Uninstall.exe"
 
   ; Remove shortcuts
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Seven Kingdoms AA.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\Manual.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\Hotkeys.lnk"
 
   ; Remove directories if empty
   RMDir "$SMPROGRAMS\$StartMenuFolder"

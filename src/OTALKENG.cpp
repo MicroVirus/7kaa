@@ -42,6 +42,16 @@ static short  viewing_nation_recno;
 static char   should_disp_reply;
 static char   disp_second_line;
 
+//-------- macros --------//
+// used in printf commands in pairs for "%'s Kingdom%s"
+#define NATION_PARA1 para1_nation_name()
+#define COLOR_PARA1 nation_color_code_str(talk_para1)
+
+#define FROM_NATION from_nation_name()
+#define FROM_COLOR nation_color_code_str2(from_nation_recno)
+
+#define TO_NATION to_nation_name()
+#define TO_COLOR nation_color_code_str2(to_nation_recno)
 
 //------- Begin of function TalkMsg::msg_str --------//
 //
@@ -181,36 +191,36 @@ void TalkMsg::propose_treaty(short treatyType)
 		{
 			if( treatyType == TALK_PROPOSE_TRADE_TREATY )
 			{
-				// TRANSLATORS: You propose a trade treaty to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You propose a trade treaty to %s."), to_nation_name());
+				// TRANSLATORS: You propose a trade treaty to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You propose a trade treaty to %s's Kingdom%s."), TO_NATION, TO_COLOR);
 			}
 			else if( treatyType == TALK_PROPOSE_FRIENDLY_TREATY )
 			{
-				// TRANSLATORS: You propose a friendly treaty to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You propose a friendly treaty to %s."), to_nation_name());
+				// TRANSLATORS: You propose a friendly treaty to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You propose a friendly treaty to %s's Kingdom%s."), TO_NATION, TO_COLOR);
 			}
 			else if( treatyType == TALK_PROPOSE_ALLIANCE_TREATY )
 			{
-				// TRANSLATORS: You propose an alliance treaty to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You propose an alliance treaty to %s."), to_nation_name());
+				// TRANSLATORS: You propose an alliance treaty to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You propose an alliance treaty to %s's Kingdom%s."), TO_NATION, TO_COLOR);
 			}
 		}
 		else
 		{
 			if( treatyType == TALK_PROPOSE_TRADE_TREATY )
 			{
-				// TRANSLATORS: <King's Kingdom> proposes a trade treaty to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s proposes a trade treaty to you."), from_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> proposes a trade treaty to you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s proposes a trade treaty to you."), FROM_NATION, FROM_COLOR);
 			}
 			else if( treatyType == TALK_PROPOSE_FRIENDLY_TREATY )
 			{
-				// TRANSLATORS: <King's Kingdom> proposes a friendly treaty to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s proposes a friendly treaty to you."), from_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> proposes a friendly treaty to you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s proposes a friendly treaty to you."), FROM_NATION, FROM_COLOR);
 			}
 			else if( treatyType == TALK_PROPOSE_ALLIANCE_TREATY )
 			{
-				// TRANSLATORS: <King's Kingdom> proposes an alliance treaty to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s proposes an alliance treaty to you."), from_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> proposes an alliance treaty to you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s proposes an alliance treaty to you."), FROM_NATION, FROM_COLOR);
 			}
 		}
 	}
@@ -222,36 +232,36 @@ void TalkMsg::propose_treaty(short treatyType)
 			{
 				if( treatyType == TALK_PROPOSE_TRADE_TREATY )
 				{
-					// TRANSLATORS: <King's Kingdom> accepts your proposed trade treaty.
-					snprintf(str, MAX_STR_LEN+1, _("%s accepts your proposed trade treaty."), to_nation_name());
+					// TRANSLATORS: <King>'s Kingdom<Color> accepts your proposed trade treaty.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s accepts your proposed trade treaty."), TO_NATION, TO_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_FRIENDLY_TREATY )
 				{
-					// TRANSLATORS: <King's Kingdom> accepts your proposed friendly treaty.
-					snprintf(str, MAX_STR_LEN+1, _("%s accepts your proposed friendly treaty."), to_nation_name());
+					// TRANSLATORS: <King>'s Kingdom<Color> accepts your proposed friendly treaty.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s accepts your proposed friendly treaty."), TO_NATION, TO_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_ALLIANCE_TREATY )
 				{
-					// TRANSLATORS: <King's Kingdom> accepts your proposed alliance treaty.
-					snprintf(str, MAX_STR_LEN+1, _("%s accepts your proposed alliance treaty."), to_nation_name());
+					// TRANSLATORS: <King>'s Kingdom<Color> accepts your proposed alliance treaty.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s accepts your proposed alliance treaty."), TO_NATION, TO_COLOR);
 				}
 			}
 			else
 			{
 				if( treatyType == TALK_PROPOSE_TRADE_TREATY )
 				{
-					// TRANSLATORS: <King's Kingdom> rejects your proposed trade treaty.
-					snprintf(str, MAX_STR_LEN+1, _("%s rejects your proposed trade treaty."), to_nation_name());
+					// TRANSLATORS: <King>'s Kingdom<Color> rejects your proposed trade treaty.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s rejects your proposed trade treaty."), TO_NATION, TO_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_FRIENDLY_TREATY )
 				{
-					// TRANSLATORS: <King's Kingdom> rejects your proposed friendly treaty.
-					snprintf(str, MAX_STR_LEN+1, _("%s rejects your proposed friendly treaty."), to_nation_name());
+					// TRANSLATORS: <King>'s Kingdom<Color> rejects your proposed friendly treaty.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s rejects your proposed friendly treaty."), TO_NATION, TO_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_ALLIANCE_TREATY )
 				{
-					// TRANSLATORS: <King's Kingdom> rejects your proposed alliance treaty.
-					snprintf(str, MAX_STR_LEN+1, _("%s rejects your proposed alliance treaty."), to_nation_name());
+					// TRANSLATORS: <King>'s Kingdom<Color> rejects your proposed alliance treaty.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s rejects your proposed alliance treaty."), TO_NATION, TO_COLOR);
 				}
 			}
 		}
@@ -261,36 +271,36 @@ void TalkMsg::propose_treaty(short treatyType)
 			{
 				if( treatyType == TALK_PROPOSE_TRADE_TREATY )
 				{
-					// TRANSLATORS: You accept the trade treaty proposed by <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You accept the trade treaty proposed by %s."), from_nation_name());
+					// TRANSLATORS: You accept the trade treaty proposed by <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You accept the trade treaty proposed by %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_FRIENDLY_TREATY )
 				{
-					// TRANSLATORS: You accept the friendly treaty proposed by <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You accept the friendly treaty proposed by %s."), from_nation_name());
+					// TRANSLATORS: You accept the friendly treaty proposed by <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You accept the friendly treaty proposed by %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_ALLIANCE_TREATY )
 				{
-					// TRANSLATORS: You accept the alliance treaty proposed by <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You accept the alliance treaty proposed by %s."), from_nation_name());
+					// TRANSLATORS: You accept the alliance treaty proposed by <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You accept the alliance treaty proposed by %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 				}
 			}
 			else
 			{
 				if( treatyType == TALK_PROPOSE_TRADE_TREATY )
 				{
-					// TRANSLATORS: You reject the trade treaty proposed by <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You reject the trade treaty proposed by %s."), from_nation_name());
+					// TRANSLATORS: You reject the trade treaty proposed by <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You reject the trade treaty proposed by %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_FRIENDLY_TREATY )
 				{
-					// TRANSLATORS: You reject the friendly treaty proposed by <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You reject the friendly treaty proposed by %s."), from_nation_name());
+					// TRANSLATORS: You reject the friendly treaty proposed by <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You reject the friendly treaty proposed by %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 				}
 				else if( treatyType == TALK_PROPOSE_ALLIANCE_TREATY )
 				{
-					// TRANSLATORS: You reject the alliance treaty proposed by <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You reject the alliance treaty proposed by %s."), from_nation_name());
+					// TRANSLATORS: You reject the alliance treaty proposed by <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You reject the alliance treaty proposed by %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 				}
 			}
 		}
@@ -317,36 +327,36 @@ void TalkMsg::end_treaty(short treatyType)
 	{
 		if( treatyType == TALK_END_TRADE_TREATY )
 		{
-			// TRANSLATORS: You terminate your trade treaty with <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You terminate your trade treaty with %s."), to_nation_name());
+			// TRANSLATORS: You terminate your trade treaty with <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You terminate your trade treaty with %s's Kingdom%s."), TO_NATION, TO_COLOR);
 		}
 		else if( treatyType == TALK_END_FRIENDLY_TREATY )
 		{
-			// TRANSLATORS: You terminate your friendly treaty with <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You terminate your friendly treaty with %s."), to_nation_name());
+			// TRANSLATORS: You terminate your friendly treaty with <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You terminate your friendly treaty with %s's Kingdom%s."), TO_NATION, TO_COLOR);
 		}
 		else if( treatyType == TALK_END_ALLIANCE_TREATY )
 		{
-			// TRANSLATORS: You terminate your alliance treaty with <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You terminate your alliance treaty with %s."), to_nation_name());
+			// TRANSLATORS: You terminate your alliance treaty with <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You terminate your alliance treaty with %s's Kingdom%s."), TO_NATION, TO_COLOR);
 		}
 	}
 	else
 	{
 		if( treatyType == TALK_END_TRADE_TREATY )
 		{
-			// TRANSLATORS: <King's Kingdom> terminates its trade treaty with you.
-			snprintf(str, MAX_STR_LEN+1, _("%s terminates its trade treaty with you."), from_nation_name());
+			// TRANSLATORS: <King>'s Kingdom<Color> terminates its trade treaty with you.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s terminates its trade treaty with you."), FROM_NATION, FROM_COLOR);
 		}
 		else if( treatyType == TALK_END_FRIENDLY_TREATY )
 		{
-			// TRANSLATORS: <King's Kingdom> terminates its friendly treaty with you.
-			snprintf(str, MAX_STR_LEN+1, _("%s terminates its friendly treaty with you."), from_nation_name());
+			// TRANSLATORS: <King>'s Kingdom<Color> terminates its friendly treaty with you.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s terminates its friendly treaty with you."), FROM_NATION, FROM_COLOR);
 		}
 		else if( treatyType == TALK_END_ALLIANCE_TREATY )
 		{
-			// TRANSLATORS: <King's Kingdom> terminates its alliance treaty with you.
-			snprintf(str, MAX_STR_LEN+1, _("%s terminates its alliance treaty with you."), from_nation_name());
+			// TRANSLATORS: <King>'s Kingdom<Color> terminates its alliance treaty with you.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s terminates its alliance treaty with you."), FROM_NATION, FROM_COLOR);
 		}
 	}
 }
@@ -375,13 +385,13 @@ void TalkMsg::request_cease_war()
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You request a cease-fire with <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You request a cease-fire with %s."), to_nation_name());
+			// TRANSLATORS: You request a cease-fire with <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You request a cease-fire with %s's Kingdom%s."), TO_NATION, TO_COLOR);
 		}
 		else
 		{
-			// TRANSLATORS: <King's Kingdom> requests a cease-fire.
-			snprintf(str, MAX_STR_LEN+1, _("%s requests a cease-fire."), from_nation_name());
+			// TRANSLATORS: <King>'s Kingdom<Color> requests a cease-fire.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s requests a cease-fire."), FROM_NATION, FROM_COLOR);
 		}
 	}
 	else
@@ -389,20 +399,20 @@ void TalkMsg::request_cease_war()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King's Kingdom> agrees to a cease-fire.
-				snprintf(str, MAX_STR_LEN+1, _("%s agrees to a cease-fire."), to_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> agrees to a cease-fire.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s agrees to a cease-fire."), TO_NATION, TO_COLOR);
 			else
-				// TRANSLATORS: <King's Kingdom> refuses a cease-fire.
-				snprintf(str, MAX_STR_LEN+1, _("%s refuses a cease-fire."), to_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> refuses a cease-fire.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s refuses a cease-fire."), TO_NATION, TO_COLOR);
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You agree to a cease-fire with <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You agree to a cease-fire with %s."), from_nation_name());
+				// TRANSLATORS: You agree to a cease-fire with <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You agree to a cease-fire with %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 			else
-				// TRANSLATORS: You refuse a cease-fire with <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse a cease-fire with %s."), from_nation_name());
+				// TRANSLATORS: You refuse a cease-fire with <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You refuse a cease-fire with %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 		}
 	}
 }
@@ -431,13 +441,13 @@ void TalkMsg::request_declare_war()
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You request <King 1's Kingdom> to declare war on <King 2's Kingdom><Kingdom color>.
-			snprintf(str, MAX_STR_LEN+1, _("You request %s to declare war on %s%s."), to_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+			// TRANSLATORS: You request <King 1>'s Kingdom<Color> to declare war on <King 2>'s Kingdom<Kingdom color>.
+			snprintf(str, MAX_STR_LEN+1, _("You request %s's Kingdom%s to declare war on %s's Kingdom%s."), TO_NATION, TO_COLOR, NATION_PARA1, COLOR_PARA1);
 		}
 		else
 		{
-			// TRANSLATORS: <King 1's Kingdom> requests that you declare war on <King 2's Kingdom><Kingdom color>.
-			snprintf(str, MAX_STR_LEN+1, _("%s requests that you declare war on %s%s."), from_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+			// TRANSLATORS: <King 1>'s Kingdom<Color> requests that you declare war on <King 2>'s Kingdom<Kingdom color>.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s requests that you declare war on %s's Kingdom%s."), FROM_NATION, FROM_COLOR, NATION_PARA1, COLOR_PARA1);
 		}
 	}
 	else
@@ -445,20 +455,20 @@ void TalkMsg::request_declare_war()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King 1's Kingdom> agrees to declare war on <King 2's Kingdom><Kingdom color>.
-				snprintf(str, MAX_STR_LEN+1, _("%s agrees to declare war on %s%s."), to_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+				// TRANSLATORS: <King 1>'s Kingdom<Color> agrees to declare war on <King 2>'s Kingdom<Kingdom color>.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s agrees to declare war on %s's Kingdom%s."), TO_NATION, TO_COLOR, NATION_PARA1, COLOR_PARA1);
 			else
-				// TRANSLATORS: <King 1's Kingdom> refuses to declare war on <King 2's Kingdom><Kingdom color>.
-				snprintf(str, MAX_STR_LEN+1, _("%s refuses to declare war on %s%s."), to_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+				// TRANSLATORS: <King 1>'s Kingdom<Color> refuses to declare war on <King 2>'s Kingdom<Kingdom color>.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s refuses to declare war on %s's Kingdom%s."), TO_NATION, TO_COLOR, NATION_PARA1, COLOR_PARA1);
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You agree to declare war on <King's Kingdom><Kingdom color>.
-				snprintf(str, MAX_STR_LEN+1, _("You agree to declare war on %s%s."), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+				// TRANSLATORS: You agree to declare war on <King>'s Kingdom<Kingdom color>.
+				snprintf(str, MAX_STR_LEN+1, _("You agree to declare war on %s's Kingdom%s."), NATION_PARA1, COLOR_PARA1);
 			else
-				// TRANSLATORS: You refuse to declare war on <King's Kingdom><Kingdom color>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse to declare war on %s%s."), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+				// TRANSLATORS: You refuse to declare war on <King>'s Kingdom<Kingdom color>.
+				snprintf(str, MAX_STR_LEN+1, _("You refuse to declare war on %s's Kingdom%s."), NATION_PARA1, COLOR_PARA1);
 		}
 	}
 }
@@ -480,8 +490,8 @@ void TalkMsg::request_buy_food()
 
 	if( disp_second_line )
 	{
-		// TRANSLATORS: <King's Kingdom> offers <Amount> for 10 units of food.
-		snprintf(str, MAX_STR_LEN+1, _("%s offers %s for 10 units of food."), from_nation_name(), misc.format(talk_para2,2));
+		// TRANSLATORS: <King>'s Kingdom<Color> offers <Amount> for 10 units of food.
+		snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s offers %s for 10 units of food."), FROM_NATION, FROM_COLOR, misc.format(talk_para2,2));
 
 		return;
 	}
@@ -508,13 +518,13 @@ void TalkMsg::request_buy_food()
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You request to purchase <Number> units of food from <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You request to purchase %s units of food from %s."), misc.format(talk_para1), to_nation_name());
+			// TRANSLATORS: You request to purchase <Number> units of food from <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You request to purchase %s units of food from %s's Kingdom%s."), misc.format(talk_para1), TO_NATION, TO_COLOR);
 		}
 		else
 		{
-			// TRANSLATORS: <King's Kingdom> requests to purchase <Number> units of food from you.
-			snprintf(str, MAX_STR_LEN+1, _("%s requests to purchase %s units of food from you."), from_nation_name(), misc.format(talk_para1));
+			// TRANSLATORS: <King>'s Kingdom<Color> requests to purchase <Number> units of food from you.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s requests to purchase %s units of food from you."), FROM_NATION, FROM_COLOR, misc.format(talk_para1));
 		}
 	}
 	else
@@ -522,20 +532,20 @@ void TalkMsg::request_buy_food()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King's Kingdom> agrees to sell <Number> units of food to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s agrees to sell %s units of food to you."), to_nation_name(), misc.format(talk_para1));
+				// TRANSLATORS: <King>'s Kingdom<Color> agrees to sell <Number> units of food to you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s agrees to sell %s units of food to you."), TO_NATION, TO_COLOR, misc.format(talk_para1));
 			else
-				// TRANSLATORS: <King's Kingdom> refuses to sell <Number> units of food to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s refuses to sell %s units of food to you."), to_nation_name(), misc.format(talk_para1));
+				// TRANSLATORS: <King>'s Kingdom<Color> refuses to sell <Number> units of food to you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s refuses to sell %s units of food to you."), TO_NATION, TO_COLOR, misc.format(talk_para1));
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You agree to sell <Number> units of food to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You agree to sell %s units of food to %s."), misc.format(talk_para1), from_nation_name());
+				// TRANSLATORS: You agree to sell <Number> units of food to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You agree to sell %s units of food to %s's Kingdom%s."), misc.format(talk_para1), FROM_NATION, FROM_COLOR);
 			else
-				// TRANSLATORS: You refuse to sell <Number> units of food to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse to sell %s units of food to %s."), misc.format(talk_para1), from_nation_name());
+				// TRANSLATORS: You refuse to sell <Number> units of food to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You refuse to sell %s units of food to %s's Kingdom%s."), misc.format(talk_para1), FROM_NATION, FROM_COLOR);
 		}
 	}
 }
@@ -556,13 +566,13 @@ void TalkMsg::declare_war()
 
 	if( viewing_nation_recno == from_nation_recno )
 	{
-		// TRANSLATORS: You declare war on <King's Kingdom>.
-		snprintf(str, MAX_STR_LEN+1, _("You declare war on %s."), to_nation_name());
+		// TRANSLATORS: You declare war on <King>'s Kingdom<Color>.
+		snprintf(str, MAX_STR_LEN+1, _("You declare war on %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 	}
 	else
 	{
-		// TRANSLATORS: <King's Kingdom> declares war on you.
-		snprintf(str, MAX_STR_LEN+1, _("%s declares war on you."), from_nation_name());
+		// TRANSLATORS: <King>'s Kingdom<Color> declares war on you.
+		snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s declares war on you."), FROM_NATION, FROM_COLOR);
 	}
 }
 //------- End of function TalkMsg::declare_war ------//
@@ -601,26 +611,26 @@ void TalkMsg::give_tribute(const char* tributeStr)
 		{
 			if( isAid )
 			{
-				// TRANSLATORS: You offer <King's Kingdom> <Amount> in aid.
-				snprintf(str, MAX_STR_LEN+1, _("You offer %s %s in aid."), to_nation_name(), misc.format(talk_para1, 2));
+				// TRANSLATORS: You offer <King>'s Kingdom<Color> <Amount> in aid.
+				snprintf(str, MAX_STR_LEN+1, _("You offer %s's Kingdom%s %s in aid."), TO_NATION, TO_COLOR, misc.format(talk_para1, 2));
 			}
 			else
 			{
-				// TRANSLATORS: You offer <King's Kingdom> <Amount> in tribute.
-				snprintf(str, MAX_STR_LEN+1, _("You offer %s %s in tribute."), to_nation_name(), misc.format(talk_para1, 2));
+				// TRANSLATORS: You offer <King>'s Kingdom<Color> <Amount> in tribute.
+				snprintf(str, MAX_STR_LEN+1, _("You offer %s's Kingdom%s %s in tribute."), TO_NATION, TO_COLOR, misc.format(talk_para1, 2));
 			}
 		}
 		else
 		{
 			if( isAid )
 			{
-				// TRANSLATORS: <King's Kingdom> offers you <Amount> in aid.
-				snprintf(str, MAX_STR_LEN+1, _("%s offers you %s in aid."), from_nation_name(), misc.format(talk_para1, 2));
+				// TRANSLATORS: <King>'s Kingdom<Color> offers you <Amount> in aid.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s offers you %s in aid."), FROM_NATION, FROM_COLOR, misc.format(talk_para1, 2));
 			}
 			else
 			{
-				// TRANSLATORS: <King's Kingdom> offers you <Amount> in tribute.
-				snprintf(str, MAX_STR_LEN+1, _("%s offers you %s in tribute."), from_nation_name(), misc.format(talk_para1, 2));
+				// TRANSLATORS: <King>'s Kingdom<Color> offers you <Amount> in tribute.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s offers you %s in tribute."), FROM_NATION, FROM_COLOR, misc.format(talk_para1, 2));
 			}
 		}
 	}
@@ -632,26 +642,26 @@ void TalkMsg::give_tribute(const char* tributeStr)
 			{
 				if( isAid )
 				{
-					// TRANSLATORS: <King's Kingdom> accepts your aid of <Amount>.
-					snprintf(str, MAX_STR_LEN+1, _("%s accepts your aid of %s."), to_nation_name(), misc.format(talk_para1, 2));
+					// TRANSLATORS: <King>'s Kingdom<Color> accepts your aid of <Amount>.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s accepts your aid of %s."), TO_NATION, TO_COLOR, misc.format(talk_para1, 2));
 				}
 				else
 				{
-					// TRANSLATORS: <King's Kingdom> accepts your tribute of <Amount>.
-					snprintf(str, MAX_STR_LEN+1, _("%s accepts your tribute of %s."), to_nation_name(), misc.format(talk_para1, 2));
+					// TRANSLATORS: <King>'s Kingdom<Color> accepts your tribute of <Amount>.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s accepts your tribute of %s."), TO_NATION, TO_COLOR, misc.format(talk_para1, 2));
 				}
 			}
 			else
 			{
 				if( isAid )
 				{
-					// TRANSLATORS: <King's Kingdom> rejects your aid of <Amount>.
-					snprintf(str, MAX_STR_LEN+1, _("%s rejects your aid of %s."), to_nation_name(), misc.format(talk_para1, 2));
+					// TRANSLATORS: <King>'s Kingdom<Color> rejects your aid of <Amount>.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s rejects your aid of %s."), TO_NATION, TO_COLOR, misc.format(talk_para1, 2));
 				}
 				else
 				{
-					// TRANSLATORS: <King's Kingdom> rejects your tribute of <Amount>.
-					snprintf(str, MAX_STR_LEN+1, _("%s rejects your tribute of %s."), to_nation_name(), misc.format(talk_para1, 2));
+					// TRANSLATORS: <King>'s Kingdom<Color> rejects your tribute of <Amount>.
+					snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s rejects your tribute of %s."), TO_NATION, TO_COLOR, misc.format(talk_para1, 2));
 				}
 			}
 		}
@@ -661,26 +671,26 @@ void TalkMsg::give_tribute(const char* tributeStr)
 			{
 				if( isAid )
 				{
-					// TRANSLATORS: You accept the <Amount> in aid from <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You accept the %s in aid from %s."), misc.format(talk_para1, 2), from_nation_name());
+					// TRANSLATORS: You accept the <Amount> in aid from <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You accept the %s's Kingdom%s in aid from %s."), misc.format(talk_para1, 2), FROM_NATION, FROM_COLOR);
 				}
 				else
 				{
-					// TRANSLATORS: You accept the <Amount> in tribute from <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You accept the %s in tribute from %s."), misc.format(talk_para1, 2), from_nation_name());
+					// TRANSLATORS: You accept the <Amount> in tribute from <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You accept the %s's Kingdom%s in tribute from %s."), misc.format(talk_para1, 2), FROM_NATION, FROM_COLOR);
 				}
 			}
 			else
 			{
 				if( isAid )
 				{
-					// TRANSLATORS: You reject the <Amount> in aid from <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You reject the %s in aid from %s."), misc.format(talk_para1, 2), from_nation_name());
+					// TRANSLATORS: You reject the <Amount> in aid from <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You reject the %s's Kingdom%s in aid from %s."), misc.format(talk_para1, 2), FROM_NATION, FROM_COLOR);
 				}
 				else
 				{
-					// TRANSLATORS: You reject the <Amount> in tribute from <King's Kingdom>.
-					snprintf(str, MAX_STR_LEN+1, _("You reject the %s in tribute from %s."), misc.format(talk_para1, 2), from_nation_name());
+					// TRANSLATORS: You reject the <Amount> in tribute from <King>'s Kingdom<Color>.
+					snprintf(str, MAX_STR_LEN+1, _("You reject the %s's Kingdom%s in tribute from %s."), misc.format(talk_para1, 2), FROM_NATION, FROM_COLOR);
 				}
 			}
 		}
@@ -720,20 +730,20 @@ void TalkMsg::demand_tribute(int isAid)
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( isAid )
-				// TRANSLATORS: You request <Amount> in aid from <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You request %s in aid from %s."), misc.format(talk_para1,2), to_nation_name());
+				// TRANSLATORS: You request <Amount> in aid from <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You request %s in aid from %s's Kingdom%s."), misc.format(talk_para1,2), TO_NATION, TO_COLOR);
 			else
-				// TRANSLATORS: You demand <Amount> in tribute from <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You demand %s in tribute from %s."), misc.format(talk_para1,2), to_nation_name());
+				// TRANSLATORS: You demand <Amount> in tribute from <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You demand %s in tribute from %s's Kingdom%s."), misc.format(talk_para1,2), TO_NATION, TO_COLOR);
 		}
 		else
 		{
 			if( isAid )
-				// TRANSLATORS: <King's Kingdom> requests <Amount> in aid from you.
-				snprintf(str, MAX_STR_LEN+1, _("%s requests %s in aid from you."), from_nation_name(), misc.format(talk_para1,2));
+				// TRANSLATORS: <King>'s Kingdom<Color> requests <Amount> in aid from you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s requests %s in aid from you."), FROM_NATION, FROM_COLOR, misc.format(talk_para1,2));
 			else
-				// TRANSLATORS: <King's Kingdom> demands <Amount> in tribute from you.
-				snprintf(str, MAX_STR_LEN+1, _("%s demands %s in tribute from you."), from_nation_name(), misc.format(talk_para1,2));
+				// TRANSLATORS: <King>'s Kingdom<Color> demands <Amount> in tribute from you.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s demands %s in tribute from you."), FROM_NATION, FROM_COLOR, misc.format(talk_para1,2));
 		}
 	}
 	else
@@ -744,21 +754,21 @@ void TalkMsg::demand_tribute(int isAid)
 				snprintf(str,
 					 MAX_STR_LEN+1,
 					 isAid ?
-					 // TRANSLATORS: <King's Kingdom> agrees to give you <Amount> in aid.
-						_("%s agrees to give you %s in aid.") :
-					 // TRANSLATORS: <King's Kingdom> agrees to pay you <Amount> in tribute.
-						_("%s agrees to pay you %s in tribute."),
-					 to_nation_name(),
+					 // TRANSLATORS: <King>'s Kingdom<Color> agrees to give you <Amount> in aid.
+						_("%s's Kingdom%s agrees to give you %s in aid.") :
+					 // TRANSLATORS: <King>'s Kingdom<Color> agrees to pay you <Amount> in tribute.
+						_("%s's Kingdom%s agrees to pay you %s in tribute."),
+					 TO_NATION, TO_COLOR,
 					 misc.format(talk_para1,2));
 			else
 				snprintf(str,
 					 MAX_STR_LEN+1,
 					 isAid ?
-					 // TRANSLATORS: <King's Kingdom> refuses to give you <Amount> in aid.
-						_("%s refuses to give you %s in aid.") :
-					 // TRANSLATORS: <King's Kingdom> refuses to pay you <Amount> in tribute.
-						_("%s refuses to pay you %s in tribute."),
-					 to_nation_name(),
+					 // TRANSLATORS: <King>'s Kingdom<Color> refuses to give you <Amount> in aid.
+						_("%s's Kingdom%s refuses to give you %s in aid.") :
+					 // TRANSLATORS: <King>'s Kingdom<Color> refuses to pay you <Amount> in tribute.
+						_("%s's Kingdom%s refuses to pay you %s in tribute."),
+					 TO_NATION, TO_COLOR,
 					 misc.format(talk_para1,2));
 		}
 		else
@@ -767,21 +777,21 @@ void TalkMsg::demand_tribute(int isAid)
 				snprintf(str,
 					 MAX_STR_LEN+1,
 					 isAid ?
-					 // TRANSLATORS: You agree to give <King's Kingdom> <Amount> in aid.
-						_("You agree to give %s %s in aid.") :
-					 // TRANSLATORS: You agree to pay <King's Kingdom> <Amount> in tribute.
-						_("You agree to pay %s %s in tribute."),
-					 from_nation_name(),
+					 // TRANSLATORS: You agree to give <King>'s Kingdom<Color> <Amount> in aid.
+						_("You agree to give %s's Kingdom%s %s in aid.") :
+					 // TRANSLATORS: You agree to pay <King>'s Kingdom<Color> <Amount> in tribute.
+						_("You agree to pay %s's Kingdom%s %s in tribute."),
+					 FROM_NATION, FROM_COLOR,
 					 misc.format(talk_para1,2));
 			else
 				snprintf(str,
 					 MAX_STR_LEN+1,
 					 isAid ?
-					 // TRANSLATORS: You refuse to give <King's Kingdom> <Amount> in aid.
-						_("You refuse to give %s %s in aid.") :
-					 // TRANSLATORS: You refuse to pay <King's Kingdom> <Amount> in tribute.
-						_("You refuse to pay %s %s in tribute."),
-					 from_nation_name(),
+					 // TRANSLATORS: You refuse to give <King>'s Kingdom<Color> <Amount> in aid.
+						_("You refuse to give %s's Kingdom%s %s in aid.") :
+					 // TRANSLATORS: You refuse to pay <King>'s Kingdom<Color> <Amount> in tribute.
+						_("You refuse to pay %s's Kingdom%s %s in tribute."),
+					 FROM_NATION, FROM_COLOR,
 					 misc.format(talk_para1,2));
 		}
 	}
@@ -789,6 +799,78 @@ void TalkMsg::demand_tribute(int isAid)
 //------- End of function TalkMsg::demand_tribute ------//
 
 
+const char *give_tech_you_offer[] =
+{
+	// TRANSLATORS: You offer <Tech><Level> technology to <King>'s Kingdom<Color>.
+	N_("You offer Catapult%s technology to %s's Kingdom%s."),
+	N_("You offer Porcupine%s technology to %s's Kingdom%s."),
+	N_("You offer Ballista%s technology to %s's Kingdom%s."),
+	N_("You offer Cannon%s technology to %s's Kingdom%s."),
+	N_("You offer Spitfire%s technology to %s's Kingdom%s."),
+	N_("You offer Caravel%s technology to %s's Kingdom%s."),
+	N_("You offer Galleon%s technology to %s's Kingdom%s."),
+	N_("You offer Unicorn%s technology to %s's Kingdom%s."),
+};
+const char *give_tech_kingdom_offers[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> offers <Tech><Level> technology to you.
+	N_("%s's Kingdom%s offers Catapult%s technology to you."),
+	N_("%s's Kingdom%s offers Porcupine%s technology to you."),
+	N_("%s's Kingdom%s offers Ballista%s technology to you."),
+	N_("%s's Kingdom%s offers Cannon%s technology to you."),
+	N_("%s's Kingdom%s offers Spitfire%s technology to you."),
+	N_("%s's Kingdom%s offers Caravel%s technology to you."),
+	N_("%s's Kingdom%s offers Galleon%s technology to you."),
+	N_("%s's Kingdom%s offers Unicorn%s technology to you."),
+};
+const char *give_tech_accepts_your_offer[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> accepts your gift of <Tech> technology.
+	N_("%s's Kingdom%s accepts your gift of Catapult%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Porcupine%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Ballista%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Cannon%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Spitfire%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Caravel%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Galleon%s technology."),
+	N_("%s's Kingdom%s accepts your gift of Unicorn%s technology."),
+};
+const char *give_tech_rejects_your_offer[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> rejects your gift of <Tech><Level> technology.
+	N_("%s's Kingdom%s rejects your gift of Catapult%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Porcupine%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Ballista%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Cannon%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Spitfire%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Caravel%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Galleon%s technology."),
+	N_("%s's Kingdom%s rejects your gift of Unicorn%s technology."),
+};
+const char *give_tech_you_accept[] =
+{
+	// TRANSLATORS: You accept the gift of <Tech><Level> technology from <King>'s Kingdom<Color>.
+	N_("You accept the gift of Catapult%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Porcupine%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Ballista%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Cannon%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Spitfire%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Caravel%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Galleon%s technology from %s's Kingdom%s."),
+	N_("You accept the gift of Unicorn%s technology from %s's Kingdom%s."),
+};
+const char *give_tech_you_reject[] =
+{
+	// TRANSLATORS: You reject the gift of <Tech><Level> technology from <King>'s Kingdom<Color>.
+	N_("You reject the gift of Catapult%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Porcupine%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Ballista%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Cannon%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Spitfire%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Caravel%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Galleon%s technology from %s's Kingdom%s."),
+	N_("You reject the gift of Unicorn%s technology from %s's Kingdom%s."),
+};
 //----- Begin of function TalkMsg::give_tech ------//
 //
 // talk_para1 - id. of the tech given.
@@ -812,7 +894,7 @@ void TalkMsg::give_tech()
 	//
 	//---------------------------------------------//
 
-	String tech(tech_res[talk_para1]->tech_des());
+	String tech;
 
 	if( talk_para2 )		// Ships do not have different versions
 	{
@@ -820,19 +902,15 @@ void TalkMsg::give_tech()
 		tech += misc.roman_number(talk_para2);
 	}
 
-	const char *techStr = tech;
-
 	if( reply_type == REPLY_WAITING || !should_disp_reply )
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You offer <Tech> technology to <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You offer %s technology to %s."), techStr, to_nation_name());
+			snprintf(str, MAX_STR_LEN+1, _(give_tech_you_offer[talk_para1-1]), tech.str_buf, TO_NATION, TO_COLOR);
 		}
 		else
 		{
-			// TRANSLATORS: <King's Kingdom> offers <Tech> technology to you.
-			snprintf(str, MAX_STR_LEN+1, _("%s offers %s technology to you."), from_nation_name(), techStr);
+			snprintf(str, MAX_STR_LEN+1, _(give_tech_kingdom_offers[talk_para1-1]), FROM_NATION, FROM_COLOR, tech.str_buf);
 		}
 	}
 	else
@@ -840,27 +918,118 @@ void TalkMsg::give_tech()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King's Kingdom> accepts your gift of <Tech> technology.
-				snprintf(str, MAX_STR_LEN+1, _("%s accepts your gift of %s technology."), to_nation_name(), techStr);
+				snprintf(str, MAX_STR_LEN+1, _(give_tech_accepts_your_offer[talk_para1-1]), TO_NATION, TO_COLOR, tech.str_buf);
 			else
-				// TRANSLATORS: <King's Kingdom> rejects your gift of <Tech> technology.
-				snprintf(str, MAX_STR_LEN+1, _("%s rejects your gift of %s technology."), to_nation_name(), techStr);
+				snprintf(str, MAX_STR_LEN+1, _(give_tech_rejects_your_offer[talk_para1-1]), TO_NATION, TO_COLOR, tech.str_buf);
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You accept the gift of <Tech> technology from <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You accept the gift of %s technology from %s."), techStr, from_nation_name());
+				snprintf(str, MAX_STR_LEN+1, _(give_tech_you_accept[talk_para1-1]), tech.str_buf, FROM_NATION, FROM_COLOR);
 			else
-				// TRANSLATORS: You reject the gift of <Tech> technology from <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You reject the gift of %s technology from %s."), techStr, from_nation_name());
+				snprintf(str, MAX_STR_LEN+1, _(give_tech_you_reject[talk_para1-1]), tech.str_buf, FROM_NATION, FROM_COLOR);
 		}
 	}
-
 }
 //------- End of function TalkMsg::give_tech ------//
 
 
+const char *demand_tech_you_request[] =
+{
+	// TRANSLATORS: You request the latest <Tech> technology from <King>'s Kingdom<Color>.
+	N_("You request the latest Catapult technology from %s's Kingdom%s."),
+	N_("You request the latest Porcupine technology from %s's Kingdom%s."),
+	N_("You request the latest Ballista technology from %s's Kingdom%s."),
+	N_("You request the latest Cannon technology from %s's Kingdom%s."),
+	N_("You request the latest Spitfire technology from %s's Kingdom%s."),
+	N_("You request the latest Caravel technology from %s's Kingdom%s."),
+	N_("You request the latest Galleon technology from %s's Kingdom%s."),
+	N_("You request the latest Unicorn technology from %s's Kingdom%s."),
+};
+const char *demand_tech_you_demand[] =
+{
+	// TRANSLATORS: You demand the latest <Tech> technology from <King>'s Kingdom<Color>.
+	N_("You demand the latest Catapult technology from %s's Kingdom%s."),
+	N_("You demand the latest Porcupine technology from %s's Kingdom%s."),
+	N_("You demand the latest Ballista technology from %s's Kingdom%s."),
+	N_("You demand the latest Cannon technology from %s's Kingdom%s."),
+	N_("You demand the latest Spitfire technology from %s's Kingdom%s."),
+	N_("You demand the latest Caravel technology from %s's Kingdom%s."),
+	N_("You demand the latest Galleon technology from %s's Kingdom%s."),
+	N_("You demand the latest Unicorn technology from %s's Kingdom%s."),
+};
+const char *demand_tech_kingdom_requests[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> requests the latest <Tech> technology from you.
+	N_("%s's Kingdom%s requests the latest Catapult technology from you."),
+	N_("%s's Kingdom%s requests the latest Porcupine technology from you."),
+	N_("%s's Kingdom%s requests the latest Ballista technology from you."),
+	N_("%s's Kingdom%s requests the latest Cannon technology from you."),
+	N_("%s's Kingdom%s requests the latest Spitfire technology from you."),
+	N_("%s's Kingdom%s requests the latest Caravel technology from you."),
+	N_("%s's Kingdom%s requests the latest Galleon technology from you."),
+	N_("%s's Kingdom%s requests the latest Unicorn technology from you."),
+};
+const char *demand_tech_kingdom_demands[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> demands the latest <Tech> technology from you.
+	N_("%s's Kingdom%s demands the latest Catapult technology from you."),
+	N_("%s's Kingdom%s demands the latest Porcupine technology from you."),
+	N_("%s's Kingdom%s demands the latest Ballista technology from you."),
+	N_("%s's Kingdom%s demands the latest Cannon technology from you."),
+	N_("%s's Kingdom%s demands the latest Spitfire technology from you."),
+	N_("%s's Kingdom%s demands the latest Caravel technology from you."),
+	N_("%s's Kingdom%s demands the latest Galleon technology from you."),
+	N_("%s's Kingdom%s demands the latest Unicorn technology from you."),
+};
+const char *demand_tech_kingdom_agrees[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> agrees to transfer its latest <Tech> technology to you.
+	N_("%s's Kingdom%s agrees to transfer its latest Catapult technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Porcupine technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Ballista technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Cannon technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Spitfire technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Caravel technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Galleon technology to you."),
+	N_("%s's Kingdom%s agrees to transfer its latest Unicorn technology to you."),
+};
+const char *demand_tech_kingdom_refuses[] =
+{
+	// TRANSLATORS: <King>'s Kingdom<Color> refuses to transfer its latest <Tech> technology to you.
+	N_("%s's Kingdom%s refuses to transfer its latest Catapult technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Porcupine technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Ballista technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Cannon technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Spitfire technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Caravel technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Galleon technology to you."),
+	N_("%s's Kingdom%s refuses to transfer its latest Unicorn technology to you."),
+};
+const char *demand_tech_you_agree[] =
+{
+	// TRANSLATORS: You agree to transfer your latest <Tech> technology to <King>'s Kingdom<Color>.
+	N_("You agree to transfer your latest Catapult technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Porcupine technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Ballista technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Cannon technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Spitfire technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Caravel technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Galleon technology to %s's Kingdom%s."),
+	N_("You agree to transfer your latest Unicorn technology to %s's Kingdom%s."),
+};
+const char *demand_tech_you_refuse[] =
+{
+	// TRANSLATORS: You refuse to transfer your latest <Tech> technology to <King>'s Kingdom<Color>.
+	N_("You refuse to transfer your latest Catapult technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Porcupine technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Ballista technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Cannon technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Spitfire technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Caravel technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Galleon technology to %s's Kingdom%s."),
+	N_("You refuse to transfer your latest Unicorn technology to %s's Kingdom%s."),
+};
 //----- Begin of function TalkMsg::demand_tech ------//
 //
 // Demand for the latest version of the technology.
@@ -905,26 +1074,22 @@ void TalkMsg::demand_tech()
 		{
 			if( friendlyRequest )
 			{
-				// TRANSLATORS: You request the latest <Tech> technology from <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You request the latest %s technology from %s."), tech_res[talk_para1]->tech_des(), to_nation_name());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_you_request[talk_para1-1]), TO_NATION, TO_COLOR);
 			}
 			else
 			{
-				// TRANSLATORS: You demand the latest <Tech> technology from <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You demand the latest %s technology from %s."), tech_res[talk_para1]->tech_des(), to_nation_name());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_you_demand[talk_para1-1]), TO_NATION, TO_COLOR);
 			}
 		}
 		else
 		{
 			if( friendlyRequest )
 			{
-				// TRANSLATORS: <King's Kingdom> requests the latest <Tech> technology from you.
-				snprintf(str, MAX_STR_LEN+1, _("%s requests the latest %s technology from you."), from_nation_name(), tech_res[talk_para1]->tech_des());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_kingdom_requests[talk_para1-1]), FROM_NATION, FROM_COLOR);
 			}
 			else
 			{
-				// TRANSLATORS: <King's Kingdom> demands the latest <Tech> technology from you.
-				snprintf(str, MAX_STR_LEN+1, _("%s demands the latest %s technology from you."), from_nation_name(), tech_res[talk_para1]->tech_des());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_kingdom_demands[talk_para1-1]), FROM_NATION, FROM_COLOR);
 			}
 		}
 	}
@@ -933,20 +1098,16 @@ void TalkMsg::demand_tech()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King's Kingdom> agrees to transfer its latest <Tech> technology to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s agrees to transfer its latest %s technology to you."), to_nation_name(), tech_res[talk_para1]->tech_des());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_kingdom_agrees[talk_para1-1]), TO_NATION, TO_COLOR);
 			else
-				// TRANSLATORS: <King's Kingdom> refuses to transfer its latest <Tech> technology to you.
-				snprintf(str, MAX_STR_LEN+1, _("%s refuses to transfer its latest %s technology to you."), to_nation_name(), tech_res[talk_para1]->tech_des());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_kingdom_refuses[talk_para1-1]), TO_NATION, TO_COLOR);
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You agree to transfer your latest <Tech> technology to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You agree to transfer your latest %s technology to %s."), tech_res[talk_para1]->tech_des(), from_nation_name());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_you_agree[talk_para1-1]), FROM_NATION, FROM_COLOR);
 			else
-				// TRANSLATORS: You refuse to transfer your latest <Tech> technology to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse to transfer your latest %s technology to %s."), tech_res[talk_para1]->tech_des(), from_nation_name());
+				snprintf(str, MAX_STR_LEN+1, _(demand_tech_you_refuse[talk_para1-1]), FROM_NATION, FROM_COLOR);
 		}
 	}
 }
@@ -977,13 +1138,13 @@ void TalkMsg::request_military_aid()
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You request immediate military aid from <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You request immediate military aid from %s."), to_nation_name());
+			// TRANSLATORS: You request immediate military aid from <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You request immediate military aid from %s's Kingdom%s."), TO_NATION, TO_COLOR);
 		}
 		else
 		{
-			// TRANSLATORS: <King's Kingdom> requests immediate military aid from you.
-			snprintf(str, MAX_STR_LEN+1, _("%s requests immediate military aid from you."), from_nation_name());
+			// TRANSLATORS: <King>'s Kingdom<Color> requests immediate military aid from you.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s requests immediate military aid from you."), FROM_NATION, FROM_COLOR);
 		}
 	}
 	else
@@ -991,20 +1152,20 @@ void TalkMsg::request_military_aid()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King's Kingdom> agrees to immediately send your requested military aid.
-				snprintf(str, MAX_STR_LEN+1, _("%s agrees to immediately send your requested military aid."), to_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> agrees to immediately send your requested military aid.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s agrees to immediately send your requested military aid."), TO_NATION, TO_COLOR);
 			else
-				// TRANSLATORS: <King's Kingdom> denies you your requested military aid.
-				snprintf(str, MAX_STR_LEN+1, _("%s denies you your requested military aid."), to_nation_name());
+				// TRANSLATORS: <King>'s Kingdom<Color> denies you your requested military aid.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s denies you your requested military aid."), TO_NATION, TO_COLOR);
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You agree to immediately send military aid to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You agree to immediately send military aid to %s."), from_nation_name());
+				// TRANSLATORS: You agree to immediately send military aid to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You agree to immediately send military aid to %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 			else
-				// TRANSLATORS: You refuse to send military aid to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse to send military aid to %s."), from_nation_name());
+				// TRANSLATORS: You refuse to send military aid to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You refuse to send military aid to %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 		}
 	}
 }
@@ -1039,13 +1200,13 @@ void TalkMsg::request_trade_embargo()
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You request <King 1's Kingdom> to join an embargo on trade with <King 2's Kingdom><Kingdom color>.
-			snprintf(str, MAX_STR_LEN+1, _("You request %s to join an embargo on trade with %s%s."), to_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+			// TRANSLATORS: You request <King 1>'s Kingdom<Color> to join an embargo on trade with <King 2>'s Kingdom<Kingdom color>.
+			snprintf(str, MAX_STR_LEN+1, _("You request %s's Kingdom%s to join an embargo on trade with %s's Kingdom%s."), TO_NATION, TO_COLOR, NATION_PARA1, COLOR_PARA1);
 		}
 		else
 		{
-			// TRANSLATORS: <King 1's Kingdom> requests you to join an embargo on trade with <King 2's Kingdom><Kingdom color>.
-			snprintf(str, MAX_STR_LEN+1, _("%s requests you to join an embargo on trade with %s%s."), from_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+			// TRANSLATORS: <King 1>'s Kingdom<Color> requests you to join an embargo on trade with <King 2>'s Kingdom<Kingdom color>.
+			snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s requests you to join an embargo on trade with %s's Kingdom%s."), FROM_NATION, FROM_COLOR, NATION_PARA1, COLOR_PARA1);
 		}
 	}
 	else
@@ -1053,20 +1214,20 @@ void TalkMsg::request_trade_embargo()
 		if( viewing_nation_recno == from_nation_recno )
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: <King 1's Kingdom> agrees to join an embargo on trade with <King 2's Kingdom><Kingdom color>.
-				snprintf(str, MAX_STR_LEN+1, _("%s agrees to join an embargo on trade with %s%s."), to_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+				// TRANSLATORS: <King 1>'s Kingdom<Color> agrees to join an embargo on trade with <King 2>'s Kingdom<Kingdom color>.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s agrees to join an embargo on trade with %s's Kingdom%s."), TO_NATION, TO_COLOR, NATION_PARA1, COLOR_PARA1);
 			else
-				// TRANSLATORS: <King 1's Kingdom> refuses to join an embargo on trade with <King 2's Kingdom><Kingdom color>.
-				snprintf(str, MAX_STR_LEN+1, _("%s refuses to join an embargo on trade with %s%s."), to_nation_name(), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1));
+				// TRANSLATORS: <King 1>'s Kingdom<Color> refuses to join an embargo on trade with <King 2>'s Kingdom<Kingdom color>.
+				snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s refuses to join an embargo on trade with %s's Kingdom%s."), TO_NATION, TO_COLOR, NATION_PARA1, COLOR_PARA1);
 		}
 		else
 		{
 			if( reply_type == REPLY_ACCEPT )
-				// TRANSLATORS: You agree to join an embargo on trade with <King 1's Kingdom><Kingdom color> as requested by <King 2's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You agree to join an embargo on trade with %s%s as requested by %s."), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1), from_nation_name());
+				// TRANSLATORS: You agree to join an embargo on trade with <King 1>'s Kingdom<Kingdom color> as requested by <King 2>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You agree to join an embargo on trade with %s's Kingdom%s as requested by %s's Kingdom%s."), NATION_PARA1, COLOR_PARA1, FROM_NATION, FROM_COLOR);
 			else
-				// TRANSLATORS: You refuse to join an embargo on trade with <King 1's Kingdom><Kingdom color> as requested by <King 2's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse to join an embargo on trade with %s%s as requested by %s."), nation_array[talk_para1]->nation_name(), nation_color_code_str(talk_para1), from_nation_name());
+				// TRANSLATORS: You refuse to join an embargo on trade with <King 1>'s Kingdom<Kingdom color> as requested by <King 2>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You refuse to join an embargo on trade with %s's Kingdom%s as requested by %s's Kingdom%s."), NATION_PARA1, COLOR_PARA1, FROM_NATION, FROM_COLOR);
 		}
 	}
 }
@@ -1104,8 +1265,8 @@ void TalkMsg::request_surrender()
 	{
 		if( viewing_nation_recno == from_nation_recno )
 		{
-			// TRANSLATORS: You offer <Amount> for the throne of <King's Kingdom>.
-			snprintf(str, MAX_STR_LEN+1, _("You offer %s for the throne of %s."), misc.format(talk_para1*10), to_nation_name());
+			// TRANSLATORS: You offer <Amount> for the throne of <King>'s Kingdom<Color>.
+			snprintf(str, MAX_STR_LEN+1, _("You offer %s for the throne of %s's Kingdom%s."), misc.format(talk_para1*10), TO_NATION, TO_COLOR);
 		}
 		else
 		{
@@ -1132,8 +1293,8 @@ void TalkMsg::request_surrender()
 			}
 			else
 			{
-				// TRANSLATORS: You refuse to dishonor yourself by selling your throne to <King's Kingdom>.
-				snprintf(str, MAX_STR_LEN+1, _("You refuse to dishonor yourself by selling your throne to %s."), from_nation_name());
+				// TRANSLATORS: You refuse to dishonor yourself by selling your throne to <King>'s Kingdom<Color>.
+				snprintf(str, MAX_STR_LEN+1, _("You refuse to dishonor yourself by selling your throne to %s's Kingdom%s."), FROM_NATION, FROM_COLOR);
 			}
 		}
 	}
@@ -1155,13 +1316,13 @@ void TalkMsg::surrender()
 
 	if( viewing_nation_recno == from_nation_recno )
 	{
-		// TRANSLATORS: You have surrendered to <King's Kingdom>.
-		snprintf(str, MAX_STR_LEN+1, _("You have surrendered to %s."), to_nation_name());
+		// TRANSLATORS: You have surrendered to <King>'s Kingdom<Color>.
+		snprintf(str, MAX_STR_LEN+1, _("You have surrendered to %s's Kingdom%s."), TO_NATION, TO_COLOR);
 	}
 	else
 	{
-		// TRANSLATORS: <King's Kingdom> has surrendered to you.
-		snprintf(str, MAX_STR_LEN+1, _("%s has surrendered to you."), from_nation_name());
+		// TRANSLATORS: <King>'s Kingdom<Color> has surrendered to you.
+		snprintf(str, MAX_STR_LEN+1, _("%s's Kingdom%s has surrendered to you."), FROM_NATION, FROM_COLOR);
 	}
 }
 //------- End of function TalkMsg::surrender ------//

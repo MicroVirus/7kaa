@@ -371,7 +371,7 @@ void FirmHarbor::detect_main_menu()
 
 	//------- detect the build button ---------//
 
-	if( button_build.detect('B') )
+	if( button_build.detect(GETKEY(KEYEVENT_FIRM_BUILD)) )
 	{
 		harbor_menu_mode = HARBOR_MENU_BUILD;
 		disable_refresh = 1;    // static var for disp_info() only
@@ -381,7 +381,7 @@ void FirmHarbor::detect_main_menu()
 
 	//-------- detect the sail button ---------//
 
-	if( button_sail.detect('R') && browse_ship.recno() > 0 )
+	if( button_sail.detect(GETKEY(KEYEVENT_FIRM_PATROL)) && browse_ship.recno() > 0 )
 		sail_ship( ship_recno_array[browse_ship.recno()-1], COMMAND_PLAYER );
 
 	//---------- detect cancel build button -----------//
@@ -812,9 +812,10 @@ static void i_disp_queue_button(ButtonCustom *button, int repaintBody)
 //
 void FirmHarbor::detect_build_menu()
 {
-	int 	 	 unitId, x=INFO_X1+2, y=INFO_Y1, rc, quitFlag;
+	int 	 	 unitId, x=INFO_X1+2, y=INFO_Y1, rc, quitFlag, waitFlag;
 	UnitInfo* unitInfo;
 
+	waitFlag = 0;
 	for(int b=0; b<added_count; ++b)
 	{
 		// ###### begin Gilbert 20/9 #########//
@@ -832,12 +833,15 @@ void FirmHarbor::detect_build_menu()
 		}
 
 		//------ detect pressing on the big button -------//
-		else if( (rc = button_ship[b].detect(0,0,2)) != 0 )
+		else if( !button_queue_ship[b].button_wait && ((rc = button_ship[b].detect(0,0,2)) != 0) )
 		{
 			quitFlag = 1;		// quit the menu right after pressing the button
 		}
 		// ####### end Gilbert 20/9 ########//
-		
+
+		if( button_queue_ship[b].button_wait || button_ship[b].button_wait )
+			waitFlag = 1;
+
 		int shiftPressed = mouse.event_skey_state & SHIFT_KEY_MASK;
 
 		//------- process the action --------//
@@ -897,7 +901,7 @@ void FirmHarbor::detect_build_menu()
 
 	//------ detect the cancel button --------//
 
-	if( button_cancel.detect() || mouse.any_click(1) )		// press the cancel button or right click
+	if( button_cancel.detect() || (!waitFlag && mouse.any_click(1)) )		// press the cancel button or right click
 	{
 		harbor_menu_mode = HARBOR_MENU_MAIN;
 		info.disp();

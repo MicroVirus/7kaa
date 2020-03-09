@@ -87,9 +87,13 @@
 #include <OOPTMENU.h>
 #include <OINGMENU.h>
 // ##### end Gilbert 23/10 ######//
+#include <LocaleRes.h>
+#include <CmdLine.h>
+#include <FilePath.h>
+#include <ConfigAdv.h>
 
 #include <dbglog.h>
-#ifndef NO_WINDOWS
+#ifdef USE_WINDOWS
 #include <direct.h>
 #define chdir _chdir
 #else
@@ -111,13 +115,27 @@ static int  locate_ship_in_harbor();
 static int  locate_visible_ship();
 static int  detect_scenario_cheat_key(unsigned scanCode, unsigned skeyState);
 static int  get_mouse_loc_in_zoom_map(int &x, int &y);
+static char random_race();
 
 //----------- Define static variables ------------//
 
 static unsigned long last_frame_time=0, last_resend_time=0;
 static char          remote_send_success_flag=1;
 static char          scenario_cheat_flag=0;
+static short         last_frame_speed=0;
 
+static KeyEventType cheat_str[] = {
+   KEYEVENT_CHEAT_ENABLE1,
+   KEYEVENT_CHEAT_ENABLE1,
+   KEYEVENT_CHEAT_ENABLE1,
+   KEYEVENT_CHEAT_ENABLE2,
+   KEYEVENT_CHEAT_ENABLE2,
+   KEYEVENT_CHEAT_ENABLE2,
+   KEYEVENT_CHEAT_ENABLE3,
+   KEYEVENT_CHEAT_ENABLE3,
+   KEYEVENT_CHEAT_ENABLE3,
+   KEYEVENT_MAX
+};
 
 static std::string get_bundle_resources_path(void)
 {
@@ -257,17 +275,48 @@ int Sys::init_directx()
    //-------- initialize DirectDraw --------//
 
    DEBUG_LOG("Attempt vga.init()");
-   if( !vga.init() )
+   if( cmd_line.enable_if && !vga.init() )
       return 0;
    DEBUG_LOG("vga.init() ok");
-#if !defined(DEBUG) && !defined(_DEBUG)
-   vga.set_full_screen_mode(1);
-#endif
+
+   DEBUG_LOG("Attempt vga.load_pal()");
+   vga.load_pal(DIR_RES"PAL_STD.RES");
+   DEBUG_LOG("vga.load_pal() finish");
+
+   if( sys.debug_session )                // if we are currently in a debug session, don't lock the front buffer otherwise the system will hang up
+   {
+      DEBUG_LOG("Attempt vga_front.init_back()");
+      vga_front.init(1);
+      DEBUG_LOG("Attempt vga_true_front.init_front()");
+      vga_true_front.init(1);
+      DEBUG_LOG("Attempt vga.activate_pal()");
+      vga.activate_pal (&vga_front);
+      vga.activate_pal(&vga_true_front);
+      DEBUG_LOG("vga.activate_pal() finish");
+   }
+   else
+   {
+      vga_front.init(1);
+      vga.activate_pal(&vga_front);
+   }
+
+   DEBUG_LOG("Attempt vga_back.init_back()");
+   vga_back.init(0);
+   DEBUG_LOG("vga_back.init_back() finish");
+
+   DEBUG_LOG("Attempt vga_front.lock_buf()");
+   vga_front.lock_buf();
+   DEBUG_LOG("vga_front.lock_buf() finish");
+
+   DEBUG_LOG("Attempt vga_back.lock_buf()");
+   vga_back.lock_buf();
+   DEBUG_LOG("vga_back.lock_buf() finish");
 
    //---------- Initialize Audio ----------//
 
    DEBUG_LOG("Attempt audio.init()");
-   audio.init();
+   if( cmd_line.enable_if )
+      audio.init();
    DEBUG_LOG(audio.wav_init_flag);
    music.init();
    se_ctrl.init();
@@ -289,6 +338,7 @@ void Sys::deinit_directx()
 
    //------------------------------//
 
+   vga.save_status_report();
    DEBUG_LOG("Attempt vga.deinit()");
    vga.deinit();
    DEBUG_LOG("vga.deinit() finish");
@@ -312,20 +362,54 @@ int Sys::init_objects()
 
    //------- init resource class ----------//
 
-	#if( defined(GERMAN) || defined(FRENCH) || defined(SPANISH) )
-		font_std.init("SAN", 1);
-		font_hall.init("HALL", 1);
-	#else
-		font_std.init("STD", 2);
-	#endif
+   if( locale_res.fontset[0] )
+   {
+      String font;
 
-	font_san.init("SAN", 0);      // 0-zero inter-character space
-	font_mid.init("MID");
-	font_small.init("SMAL");
-	font_news.init("NEWS");
-	font_hitpoint.init("HITP");
-	font_bible.init("CASA", 1, 3);
-	font_bard.init("CASA", 0);
+      font = "STD_";
+      font += locale_res.fontset;
+      font_std.init(font, 1);
+
+      font = "SAN_";
+      font += locale_res.fontset;
+      font_san.init(font, 0);
+
+      font = "MID_";
+      font += locale_res.fontset;
+      font_mid.init(font);
+
+      font = "SMAL_";
+      font += locale_res.fontset;
+      font_small.init(font);
+
+      font = "NEWS_";
+      font += locale_res.fontset;
+      font_news.init(font);
+
+      font = "CASA_";
+      font += locale_res.fontset;
+      font_bible.init(font, 1, 1);
+      font_bard.init(font, 0);
+   }
+   else
+   {
+      // fall back to original fonts
+      font_std.init("STD", 2);
+      font_san.init("SAN", 0);      // 0-zero inter-character space
+      font_mid.init("MID");
+      font_small.init("SMAL");
+      font_news.init("NEWS");
+      font_bible.init("CASA", 1, 3);
+      font_bard.init("CASA", 0);
+   }
+
+   // non-localized fonts
+   font_hitpoint.init("HITP");
+
+   #ifdef ENABLE_NLS
+      // use correct conversion for non-localized fonts
+      font_hitpoint.cd = locale_res.cd_latin;
+   #endif
 
    image_icon.init(DIR_RES"I_ICON.RES",1,0);       // 1-read into buffer
    image_interface.init(DIR_RES"I_IF.RES",0,0);    // 0-don't read into the buffer, don't use common buffer
@@ -395,10 +479,6 @@ void Sys::deinit_objects()
    font_bible.deinit();
 	font_bard.deinit();
 
-	#if( defined(GERMAN) || defined(FRENCH) || defined(SPANISH) )
-		font_hall.deinit();
-	#endif
-
    image_icon.deinit();
    image_interface.deinit();
    image_menu.deinit();
@@ -433,17 +513,27 @@ void Sys::deinit_objects()
 int Sys::set_config_dir()
 {
    // Get the path for the config directory from SDL. Guaranteed to end with a path separator
-   char *home = SDL_GetPrefPath(CONFIG_ORGANIZATION_NAME, CONFIG_APPLICATION_NAME);
-   strcpy(dir_config, home);
-   SDL_free(home);
-   home = NULL;
+   char *home;
+
+   home = getenv("SKCONFIG");
+   if( home )
+   {
+      strcpy(dir_config, home);
+      strcat(dir_config, PATH_DELIM);
+   }
+   else
+   {
+      home = SDL_GetPrefPath(CONFIG_ORGANIZATION_NAME, CONFIG_APPLICATION_NAME);
+      strcpy(dir_config, home);
+      SDL_free(home);
+   }
 
    MSG("Game config dir path: %s\n", dir_config);
 
    // create the config directory
    if (!misc.mkpath(dir_config))
    {
-      show_error_dialog(_("Unable to determine a location for storing the game configuration."));
+      show_error_dialog(_("Unable to determine a location for storing the game configuration"));
       dir_config[0] = 0;
       return 0;
    }
@@ -498,6 +588,12 @@ void Sys::run(int isLoadedGame)
    main_loop(isLoadedGame);
 
    //-----------------------------------------//
+
+   //------ reset mouse ---------//
+
+   mouse.reset_click();
+   mouse.reset_boundary();
+   mouse_cursor.set_frame(0);
 
    misc.unlock_seed();
 
@@ -692,9 +788,8 @@ void Sys::main_loop(int isLoadedGame)
          vga_front.lock_buf();
 
          yield();       // could be improved, give back the control to Windows, so it can do some OS management. Maybe call WaitMessage() here and set up a timer to get messages regularly.
-#ifndef HEADLESS_SIM
-         vga.flip();
-#endif
+         if( cmd_line.enable_if )
+            vga.flip();
 
          detect();
 
@@ -733,6 +828,9 @@ void Sys::main_loop(int isLoadedGame)
                LOG_BEGIN;
                misc.unlock_seed();
 
+               if( remote.is_replay() )
+                  remote.process_receive_queue();
+
 #ifdef DEBUG_LONG_LOG
                if( remote.is_enable() )
                {
@@ -747,14 +845,15 @@ void Sys::main_loop(int isLoadedGame)
                LOG_END;
 
                // -------- compare objects' crc --------- //
-					// ###### patch begin Gilbert 20/1 ######//
-					if( remote.is_enable() && (remote.sync_test_level & 2) &&(frame_count % (remote.get_process_frame_delay()+3)) == 0)
+               // ###### patch begin Gilbert 20/1 ######//
+               if( (remote.is_enable() || remote.is_replay()) && (remote.sync_test_level & 2) && (frame_count % (remote.get_process_frame_delay()+3)) == 0 )
                {
                   // cannot compare every frame, as PROCESS_FRAME_DELAY >= 1
                   crc_store.record_all();
-                  crc_store.send_all();
+                  if( !remote.is_replay() )
+                     crc_store.send_all();
                }
-					// ###### patch end Gilbert 20/1 ######//
+               // ###### patch end Gilbert 20/1 ######//
 
             }
          }
@@ -786,9 +885,8 @@ void Sys::main_loop(int isLoadedGame)
                // second condition (markTime-lastDispFrameTime >= DWORD(1000/config.frame_speed) )
                // may happen in multiplayer, where 'should_next_frame' would pass (what means it's time
                // to process new frame according to config.frame_speed), but 'is_mp_sync' still failed.
-#ifndef HEADLESS_SIM
-               disp_frame();
-#endif
+               if( cmd_line.enable_if )
+                  disp_frame();
                lastDispFrameTime = markTime;
 
 					// ####### patch begin Gilbert 17/11 ######//
@@ -805,8 +903,8 @@ void Sys::main_loop(int isLoadedGame)
 								if( !nation_array.is_deleted(nationRecno) )
 								{
 									String newsStr;
-									// TRANSLATORS: Waiting for <King's Kingdom>
-									snprintf( newsStr, MAX_STR_LEN+1, _("Waiting for %s"), nation_array[nationRecno]->nation_name() );
+									// TRANSLATORS: Waiting for <King>'s Kingdom
+									snprintf( newsStr, MAX_STR_LEN+1, _("Waiting for %s's Kingdom"), nation_array[nationRecno]->king_name(1) );
 									int x2 = font_news.put( x, y, newsStr );
 									y += font_news.height() + 5;
 								}
@@ -866,11 +964,7 @@ void Sys::main_loop(int isLoadedGame)
 
             if( nation_array.player_recno )     // only save when the player is still in the game
             {
-               String errorMessage;
-               if ( !SaveGameProvider::save_game( remote.save_file_name, /*out*/ errorMessage ) )
-			   {
-				   box.msg( errorMessage );
-			   }
+               SaveGameProvider::save_game(remote.save_file_name);
 
                // ####### begin Gilbert 24/10 ######//
                //static String str;
@@ -929,21 +1023,15 @@ void Sys::auto_save()
       #endif
       {
          static int saveCount = 0;
-		 bool saveSuccessfull = false;
-		 String errorMessage;
          switch(saveCount)
          {
-            case 0:  saveSuccessfull = SaveGameProvider::save_game( "DEBUG1.SAV", /*out*/ errorMessage );
+            case 0:  SaveGameProvider::save_game("DEBUG1.SAV");
                      break;
-			case 1:  saveSuccessfull = SaveGameProvider::save_game( "DEBUG2.SAV", /*out*/ errorMessage );
+			case 1:  SaveGameProvider::save_game("DEBUG2.SAV");
                      break;
-			case 2:  saveSuccessfull = SaveGameProvider::save_game( "DEBUG3.SAV", /*out*/ errorMessage );
+			case 2:  SaveGameProvider::save_game("DEBUG3.SAV");
                      break;
          }
-		 if( !saveSuccessfull )
-		 {
-			box.msg( errorMessage );
-		 }
          if( ++saveCount>=3 )
             saveCount = 0;
       }
@@ -951,14 +1039,13 @@ void Sys::auto_save()
       {
          //---------- get path to savegames ----------//
 
-         char auto1_path[MAX_PATH+1], auto2_path[MAX_PATH+1];
+         FilePath auto1_path(dir_config);
+         FilePath auto2_path(dir_config);
 
-         if (misc.path_cat(auto1_path, dir_config, "AUTO.SAV", MAX_PATH+1) == 0 ||
-             misc.path_cat(auto2_path, dir_config, "AUTO2.SAV", MAX_PATH+1) == 0)
-         {
-	        ERR("Path to the savegames too long.\n");
+         auto1_path += "AUTO.SAV";
+         auto2_path += "AUTO2.SAV";
+         if( auto1_path.error_flag || auto2_path.error_flag )
             return;
-         }
 
          //--- rename the existing AUTO.SAV to AUTO2.SAV and save a new game ---//
 
@@ -970,11 +1057,7 @@ void Sys::auto_save()
             rename( auto1_path, auto2_path );
          }
 
-		 String errorMessage;
-         if( !SaveGameProvider::save_game( "AUTO.SAV", /*out*/ errorMessage ) )
-		 {
-			 box.msg( errorMessage );
-		 }
+         SaveGameProvider::save_game("AUTO.SAV");
       }
 
       //-*********** syn game test ***********-//
@@ -1003,16 +1086,15 @@ void Sys::auto_save()
       day_frame_count==0 && info.game_day==1 && info.game_month%2==0 )
 	// ###### patch end Gilbert 23/1 #######//
    {
-	  //---------- get path to savegames ----------//
+      //---------- get path to savegames ----------//
 
-      char auto1_path[MAX_PATH+1], auto2_path[MAX_PATH+1];
+      FilePath auto1_path(dir_config);
+      FilePath auto2_path(dir_config);
 
-	  if (misc.path_cat(auto1_path, dir_config, "AUTO.SVM", MAX_PATH+1) == 0 ||
-          misc.path_cat(auto2_path, dir_config, "AUTO2.SVM", MAX_PATH+1) == 0)
-      {
-	     ERR("Path to the savegames too long.\n");
+      auto1_path += "AUTO.SVM";
+      auto2_path += "AUTO2.SVM";
+      if( auto1_path.error_flag || auto2_path.error_flag )
          return;
-      }
 
       //--- rename the existing AUTO.SVM to AUTO2.SVM and save a new game ---//
 
@@ -1024,11 +1106,7 @@ void Sys::auto_save()
          rename( auto1_path, auto2_path );
       }
 
-	  String errorMessage;
-	  if( !SaveGameProvider::save_game( "AUTO.SVM", /*out*/ errorMessage ) )
-	  {
-		  box.msg( errorMessage );
-	  }
+      SaveGameProvider::save_game("AUTO.SVM");
    }
 }
 //-------- End of function Sys::auto_save --------//
@@ -1041,9 +1119,6 @@ void Sys::auto_save()
 //
 void Sys::pause()
 {
-#ifdef HEADLESS_SIM
-   return;
-#endif
    if( config.frame_speed && sys_flag == SYS_RUN )
    {
       set_speed( 0 );
@@ -1071,7 +1146,7 @@ void Sys::unpause()
 //-------- Begin of function Sys::show_error_dialog ----------//
 //
 // Show SDL error dialog that does not depend on video init. This is a blocking
-// routine, and never should be used after init.
+// routine, and never should be used after Sys::init.
 //
 void Sys::show_error_dialog(const char *formatStr, ...)
 {
@@ -1085,6 +1160,7 @@ void Sys::show_error_dialog(const char *formatStr, ...)
    vsnprintf( resultStr, RESULT_STR_LEN, formatStr, argPtr );
    va_end( argPtr );
 
+   deinit_directx(); // in case vga is full screen, destroy game window to ensure dialog is visible
    SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Seven Kingdoms", resultStr, NULL );
 }
 //----------- End of function Sys::show_error_dialog ----------//
@@ -1252,10 +1328,10 @@ int Sys::is_mp_sync(int *unreadyPlayerFlag)
          DEBUG_LOG("First send success" );
          remote.init_send_queue(frame_count+1, nation_array.player_recno);    // frame_count, initialize for next frame's send queue
          // sent random seed
-         char *p = (char *)remote.new_send_queue_msg(MSG_TELL_RANDOM_SEED, sizeof(short)+sizeof(long));
+         char *p = (char *)remote.new_send_queue_msg(MSG_TELL_RANDOM_SEED, sizeof(short)+sizeof(int32_t));
          *(short *)p = nation_array.player_recno;
          p += sizeof(short);
-         *(long *)p = misc.get_random_seed();
+         *(int32_t *)p = misc.get_random_seed();
       }
       else
       {
@@ -1279,10 +1355,10 @@ int Sys::is_mp_sync(int *unreadyPlayerFlag)
          DEBUG_LOG("resending ok");
          remote.init_send_queue(frame_count+1, nation_array.player_recno);    // frame_count, initialize for next frame's send queue
          // sent random seed
-         char *p = (char *)remote.new_send_queue_msg(MSG_TELL_RANDOM_SEED, sizeof(short)+sizeof(long));
+         char *p = (char *)remote.new_send_queue_msg(MSG_TELL_RANDOM_SEED, sizeof(short)+sizeof(int32_t));
          *(short *)p = nation_array.player_recno;
          p += sizeof(short);
-         *(long *)p = misc.get_random_seed();
+         *(int32_t *)p = misc.get_random_seed();
       }
       else
       {
@@ -1459,11 +1535,7 @@ void Sys::process_key(unsigned scanCode, unsigned skeyState)
             }
             else
             {
-            #ifdef GERMAN
-               if( detect_key_str(1, "!!!###") )
-            #else
-               if( detect_key_str(1, "!!!@@@###") )
-            #endif
+               if( detect_key_str(1, cheat_str) )
                {
                   box.msg( _("Cheat Mode Enabled.") );
                   (~nation_array)->cheat_enabled_flag = 1;
@@ -1512,124 +1584,142 @@ void Sys::detect_letter_key(unsigned scanCode, unsigned skeyState)
       }
    }
 
-   if( (keyCode = mouse.is_key(scanCode, skeyState, (unsigned short) 0, K_UNIQUE_KEY)) )
+   //---- keys for toggling map mode ----//
+
+   if( ISKEY(KEYEVENT_MAP_MODE_CYCLE) )
    {
-      keyCode = misc.lower(keyCode);
+      world.map_matrix->cycle_map_mode();
+   }
 
-      switch(keyCode)
-      {
-      //---- keys for toggling map mode ----//
+   else if( ISKEY(KEYEVENT_MAP_MODE0) )
+   {
+      world.map_matrix->toggle_map_mode(0);
+   }
 
-      case 'e':
-         world.map_matrix->cycle_map_mode();
-         break;
+   else if( ISKEY(KEYEVENT_MAP_MODE1) )
+   {
+      world.map_matrix->toggle_map_mode(1);
+   }
 
-      //--------- opaque report mode --------//
+   else if( ISKEY(KEYEVENT_MAP_MODE2) )
+   {
+      world.map_matrix->toggle_map_mode(2);
+   }
 
-      case 'p':
-         // Key overlaps with Seat of Power from unit build menu.
-         if ( ! info.is_unit_build_menu_opened())
-         {
-            config.opaque_report = !config.opaque_report;
+   //--------- opaque report mode --------//
 
-            if( config.opaque_report )
-               box.msg( _("Opaque report mode.") );
-            else
-               box.msg( _("Transparent report mode.") );
-         }
-         break;
+   else if( ISKEY(KEYEVENT_REPORT_OPAQUE_TOGGLE) )
+   {
+      config.opaque_report = !config.opaque_report;
 
-      //------ clear news messages ------//
+      if( config.opaque_report )
+         box.msg( _("Opaque report mode") );
+      else
+         box.msg( _("Transparent report mode") );
+   }
 
-      case 'x':
-         news_array.clear_news_disp();
-         break;
+   //------ clear news messages ------//
+
+   else if( ISKEY(KEYEVENT_CLEAR_NEWS) )
+   {
+      news_array.clear_news_disp();
+   }
 
       //------ open oldest open diplomatic message  ------//
 
-      case 'd':
-         news_array.view_first_diplomatic();
-         break;
+   else if( ISKEY(KEYEVENT_OPEN_DIPLOMATIC_MSG) )
+   {
+      news_array.view_first_diplomatic();
+   }
 
-      //------ jump to a location with natural resource ---//
+   //------ jump to a location with natural resource ---//
 
-      case 'j':
-         site_array.go_to_a_raw_site();
-         break;
+   else if( ISKEY(KEYEVENT_GOTO_RAW) )
+   {
+      site_array.go_to_a_raw_site();
+   }
 
-      //--------- bring up the option menu  ----------//
+   //--------- bring up the option menu  ----------//
 
-      case 'o':
-         // ##### begin Gilbert 5/11 #######//
-         // game.in_game_option_menu();
-         option_menu.enter(!remote.is_enable());
-         // ##### end Gilbert 5/11 #######//
-         break;
+   else if( ISKEY(KEYEVENT_OPEN_OPTION_MENU) )
+   {
+      // ##### begin Gilbert 5/11 #######//
+      // game.in_game_option_menu();
+      option_menu.enter(!remote.is_enable());
+      // ##### end Gilbert 5/11 #######//
+   }
 
-      //--------- forward/backward tutorial text block --------//
+   //--------- forward/backward tutorial text block --------//
 
-      case ',':
-         if( game.game_mode == GAME_TUTORIAL )
-            tutor.prev_text_block();
-         break;
+   else if( ISKEY(KEYEVENT_TUTOR_PREV) )
+   {
+      if( game.game_mode == GAME_TUTORIAL )
+         tutor.prev_text_block();
+   }
 
-      case '.':
-         if( game.game_mode == GAME_TUTORIAL )
-            tutor.next_text_block();
-         break;
+   else if( ISKEY(KEYEVENT_TUTOR_NEXT) )
+   {
+      if( game.game_mode == GAME_TUTORIAL )
+         tutor.next_text_block();
+   }
 
-      //---- keys for saving and loading game -----//
+   //---- keys for saving and loading game -----//
 
-      case 's':
-         save_game();
-         break;
+   else if( ISKEY(KEYEVENT_SAVE_GAME) )
+   {
+      save_game();
+   }
 
-      case 'l':
-         load_game();
-         break;
+   else if( ISKEY(KEYEVENT_LOAD_GAME) )
+   {
+      load_game();
+   }
 
-      case KEY_UP:
-         world.disp_next(-1, 0);    // previous same object type of any nation
-         break;
+   else if( ISKEY(KEYEVENT_OBJECT_PREV) )
+   {
+      world.disp_next(-1, 0);    // previous same object type of any nation
+   }
 
-      case KEY_DOWN:
-         world.disp_next(1, 0);     // next same object type of any nation
-         break;
+   else if( ISKEY(KEYEVENT_OBJECT_NEXT) )
+   {
+      world.disp_next(1, 0);     // next same object type of any nation
+   }
 
-      case KEY_LEFT:
-         world.disp_next(-1, 1);    // prevous same object type of the same nation
-         break;
+   else if( ISKEY(KEYEVENT_NATION_OBJECT_PREV) )
+   {
+      world.disp_next(-1, 1);    // prevous same object type of the same nation
+   }
 
-      case KEY_RIGHT:
-         world.disp_next(1, 1);     // next same object type of the same nation
-         break;
+   else if( ISKEY(KEYEVENT_NATION_OBJECT_NEXT) )
+   {
+      world.disp_next(1, 1);     // next same object type of the same nation
+   }
 
-      //---- key for quick locate -----//
+   //---- key for quick locate -----//
 
-      case 'k':
-         locate_king_general(RANK_KING);
-         break;
+   else if( ISKEY(KEYEVENT_GOTO_KING) )
+   {
+      locate_king_general(RANK_KING);
+   }
 
-      case 'g':
-         locate_king_general(RANK_GENERAL);
-         break;
+   else if( ISKEY(KEYEVENT_GOTO_GENERAL) )
+   {
+      locate_king_general(RANK_GENERAL);
+   }
 
-      case 'y':
-         locate_spy();
-         break;
+   else if( ISKEY(KEYEVENT_GOTO_SPY) )
+   {
+      locate_spy();
+   }
 
-      case 'h':
-         // Key overlaps with Harbour from unit build menu.
-         if ( ! info.is_unit_build_menu_opened())
-            locate_ship();
-         break;
+   else if( ISKEY(KEYEVENT_GOTO_SHIP) )
+   {
+      locate_ship();
+   }
 
-      case 'f':
-         // Key overlaps with Fort from unit build menu.
-         if ( ! info.is_unit_build_menu_opened())
-            locate_camp();
-         break;
-      }
+   else if( ISKEY(KEYEVENT_GOTO_CAMP) )
+   {
+      locate_camp();
    }
 }
 //--------- End of function Sys::detect_letter_key ---------//
@@ -1773,7 +1863,7 @@ void Sys::detect_cheat_key(unsigned scanCode, unsigned skeyState)
                   }
                }
             #else
-               townPtr->init_pop( misc.random(MAX_RACE)+1, 10, 100 );
+               townPtr->init_pop( random_race(), 10, 100 );
             #endif
             townPtr->auto_set_layout();
          }
@@ -1813,9 +1903,9 @@ void Sys::detect_cheat_key(unsigned scanCode, unsigned skeyState)
          config.fast_build = !config.fast_build;
 
          if( !config.fast_build )
-            box.msg( _("Fast build is now disabled") );
+            box.msg( _("Fast build is now disabled.") );
          else
-            box.msg( _("Fast build is now enabled") );
+            box.msg( _("Fast build is now enabled.") );
          break;
 
       //----- increase the combat level -------//
@@ -1937,9 +2027,9 @@ int Sys::detect_debug_cheat_key(unsigned scanCode, unsigned skeyState)
          config.disable_ai_flag = !config.disable_ai_flag;
 
          if( config.disable_ai_flag )
-            box.msg( "AI is now disabled" );
+            box.msg( "AI is now disabled." );
          else
-            box.msg( "AI is now enabled" );
+            box.msg( "AI is now enabled." );
          ++keyProcessed;
          break;
 
@@ -2379,7 +2469,7 @@ static int detect_scenario_cheat_key(unsigned scanCode, unsigned skeyState)
          keyProcessed++;
          break;
 
-      case 's':
+      case 's': //------------ force current-default-view nation (CTRL+F) to surrender to player ------------//
          if( info.default_viewing_nation_recno &&
              nation_array.player_recno &&
              nation_array[info.default_viewing_nation_recno]->is_ai() )
@@ -2388,6 +2478,18 @@ static int detect_scenario_cheat_key(unsigned scanCode, unsigned skeyState)
          }
          keyProcessed++;
          break;
+
+      case 'y': //-- cause independent/rebel town to found a new nation --//
+          if( town_array.selected_recno )
+          {
+              townPtr = town_array[town_array.selected_recno];
+              if( townPtr->nation_recno == 0 && nation_array.nation_count < MAX_NATION )
+              {
+                  townPtr->form_new_nation();
+              }
+          }
+          keyProcessed++;
+          break;
    }
 
    return keyProcessed;
@@ -2444,24 +2546,24 @@ int Sys::detect_set_speed(unsigned scanCode, unsigned skeyState)
 // return : <int> 1 - complete string detected
 //                0 - not detected
 //
-int Sys::detect_key_str(int keyStrId, const char* keyStr)
+int Sys::detect_key_str(int keyStrId, const KeyEventType* keyStr)
 {
    err_when( keyStrId < 0 || keyStrId >= MAX_KEY_STR );
 
-   unsigned char* keyStr2 = (unsigned char*) keyStr;
+   //const KeyEventType *keyStr = cheat_str;
 
-   if( mouse.key_code == keyStr2[key_str_pos[keyStrId]] )
+   if( ISKEY(keyStr[key_str_pos[keyStrId]]) )
       key_str_pos[keyStrId]++;
    else
       key_str_pos[keyStrId]=0;    // when one key unmatched, reset the counter
 
-   if( key_str_pos[keyStrId] >= (int) strlen(keyStr) )
+   if( keyStr[key_str_pos[keyStrId]] == KEYEVENT_MAX )
    {
       key_str_pos[keyStrId]=0;    // the full string has been entered successfully without any mistakes
       return 1;
    }
-   else
-      return 0;
+
+   return 0;
 }
 //----------- End of function Sys::detect_key_str --------//
 
@@ -2473,26 +2575,19 @@ int Sys::detect_key_str(int keyStrId, const char* keyStr)
 //
 void Sys::set_speed(int frameSpeed, int remoteCall)
 {
-   static int last_speed = 0;
    short requested_speed;
 
    if( frameSpeed > 0 )
    {
       // set the game speed
       requested_speed = frameSpeed;
-      last_speed = 0;
-   } else if (last_speed == 0 && config.frame_speed == 0) {
-	   // can happen when loading games; the game should unpause
-	   requested_speed = 12;
-	   last_speed = 0;
-   } else if (last_speed != 0 && config.frame_speed != 0) {
-	  // can happen when loading games; the game should pause
-	  requested_speed = 0;
-	  last_speed = config.frame_speed;
-   } else {
+      last_frame_speed = 0;
+   }
+   else
+   {
       // toggle last game speed
-      requested_speed = last_speed;
-      last_speed = config.frame_speed;
+      requested_speed = last_frame_speed;
+      last_frame_speed = config.frame_speed;
    }
 
    //--------- if multiplayer, update remote players setting -------//
@@ -2523,20 +2618,14 @@ void Sys::set_speed(int frameSpeed, int remoteCall)
 //
 void Sys::capture_screen()
 {
-   // NB: Increase this when allowing more decimals in the screenshot file, or when changing the screenshot filename
-   enum {MAX_SCREENSHOT_FILENAME_LENGTH = 8};
+   FilePath full_path(dir_config);
+   const char filename_template[] = "7KXX.BMP";
 
-   char full_path[MAX_PATH+1];
-   int path_len;
+   full_path += filename_template; // template for screenshot filename
+   if( full_path.error_flag )
+      return;
 
-   strcpy(full_path, dir_config);
-   path_len = strlen(full_path);
-   if (path_len + MAX_SCREENSHOT_FILENAME_LENGTH > MAX_PATH)
-   {
-	   ERR("Path to the screenshots too long.\n");
-	   return;
-   }
-
+   char *filename = (char*)full_path+strlen(dir_config);
    String str("7K");
 
    int i;
@@ -2550,7 +2639,7 @@ void Sys::capture_screen()
       str += i;
       str += ".BMP";
 
-	  strcpy(full_path + path_len, str);
+      memcpy(filename, str, strlen(filename_template));
 
       if( !misc.is_file_exist(full_path) )
          break;
@@ -2616,7 +2705,7 @@ void Sys::load_game()
    //-----------------------------------//
    if( rc == -1)
    {
-      box.msg( _("Fail Loading Game") );
+      box.msg( _("Failed Loading Game") );
       return;
    }
 
@@ -2697,7 +2786,7 @@ int Sys::chdir_to_game_dir()
    const char *test_file;
 
    // test current directory
-   test_file = DEFAULT_DIR_IMAGE "HALLFAME.ICN";
+   test_file = "IMAGE" PATH_DELIM "HALLFAME.ICN";
    if (misc.is_file_exist(test_file))
       return 1;
 
@@ -2720,13 +2809,13 @@ int Sys::chdir_to_game_dir()
    }
 
    // test compile time path
-#ifdef PACKAGE_DATA_PATH
-   chdir(PACKAGE_DATA_PATH);
+#ifdef PACKAGE_DATA_DIR
+   chdir(PACKAGE_DATA_DIR);
    if (misc.is_file_exist(test_file))
       return 1;
 #endif
 
-   show_error_dialog(_("Unable to locate the game resources."));
+   show_error_dialog(_("Unable to locate the game resources"));
 
    return 0;
 }
@@ -2737,19 +2826,32 @@ int Sys::chdir_to_game_dir()
 //
 // Set all game directories. Return true on success.
 //
+#define P PATH_DELIM
 int Sys::set_game_dir()
 {
    if (!chdir_to_game_dir())
       return 0;
 
-   strcpy(dir_image, DEFAULT_DIR_IMAGE);
-   strcpy(dir_encyc, DEFAULT_DIR_ENCYC);
-   strcpy(dir_encyc2, DEFAULT_DIR_ENCYC2);
-   strcpy(dir_movie, DEFAULT_DIR_MOVIE);
-   strcpy(dir_music, DEFAULT_DIR_MUSIC);
-   strcpy(dir_tutorial, DEFAULT_DIR_TUTORIAL);
-   strcpy(dir_scenario, DEFAULT_DIR_SCENARIO);
-   strcpy(dir_scenario_path[1], DEFAULT_DIR_SCENARI2);
+   set_one_dir( "HALLFAME.ICN"         , "IMAGE" P   , dir_image );
+   set_one_dir( "SEAT" P "NORMAN.ICN"  , "ENCYC" P   , dir_encyc );
+//#ifdef AMPLUS
+   set_one_dir( "SEAT" P "EGYPTIAN.ICN", "ENCYC2" P  , dir_encyc2 );
+//#endif
+   set_one_dir( "INTRO.AVI"            , "MOVIE" P   , dir_movie );
+
+#ifdef DEMO
+   set_one_dir( "DEMO.WAV"             , "MUSIC" P   , dir_music );
+   set_one_dir( "STANDARD.TUT"         , "TUTORIAL" P, dir_tutorial );
+   set_one_dir( "DEMO.SCN"             , "SCENARIO" P, dir_scenario );
+#else
+   set_one_dir( "NORMAN.WAV"           , "MUSIC" P   , dir_music );
+   set_one_dir( "1BAS_MIL.TUT"         , "TUTORIAL" P, dir_tutorial );
+   set_one_dir( "7FOR7.SCN"            , "SCENARIO" P, dir_scenario );
+#endif
+
+#if(MAX_SCENARIO_PATH >= 2)
+   set_one_dir( "SCN_01.SCN"           , "SCENARI2" P, dir_scenario_path[1] );
+#endif
 
    //-------- set game version ---------//
 
@@ -2758,6 +2860,29 @@ int Sys::set_game_dir()
    return 1;
 }
 //----------- End of function Sys::set_game_dir ----------//
+#undef P
+
+
+//-------- Begin of function Sys::set_one_dir ----------//
+//
+int Sys::set_one_dir(const char* checkFileName, const char* defaultDir, char* trueDir)
+{
+   FilePath full_path(defaultDir);
+   full_path += checkFileName;
+
+   if( !full_path.error_flag && misc.is_file_exist(full_path) )
+   {
+      strcpy(trueDir, defaultDir);
+   }
+   else
+   {
+      trueDir[0] = 0;
+      return 0;
+   }
+
+   return 1;
+}
+//----------- End of function Sys::set_one_dir ----------//
 
 
 //-------- Start of function locate_king_general -------------//
@@ -2992,3 +3117,15 @@ static int get_mouse_loc_in_zoom_map(int &x, int &y)
    return 0; // out of zoom map boundary
 }
 //--------- End of function get_mouse_loc_in_zoom_map ---------------//
+
+
+//-------- Begin of static function random_race --------//
+//
+// Uses misc.random() for random race
+//
+static char random_race()
+{
+	int num = misc.random(config_adv.race_random_list_max);
+	return config_adv.race_random_list[num];
+}
+//--------- End of static function random_race ---------//

@@ -62,8 +62,6 @@ Help::Help()
 {
 	memset( this, 0, sizeof(Help) );
 
-	help_info_array = (HelpInfo*) mem_add( sizeof(HelpInfo) * MAX_HELP_INFO );
-
 	save_scr_x1 = -1;
 }
 //------- Begin of function Help::Help ----------//
@@ -82,8 +80,9 @@ Help::~Help()
 
 void Help::init(const char* resName)
 {
-	String str;
+	help_info_array = (HelpInfo*) mem_add( sizeof(HelpInfo) * MAX_HELP_INFO );
 
+	String str;
 	str  = DIR_RES;
 	str += resName;
 
@@ -114,6 +113,7 @@ void Help::deinit()
 	{
 		mem_del( help_text_buf );
 		help_text_buf = NULL;
+		help_text_buf_size = 0;
 	}
 }
 //------- Begin of function Help::deinit ----------//
@@ -302,8 +302,9 @@ void Help::disp()
 			if( helpInfo->help_code[0] == help_code[0] &&
 				 strcmp( helpInfo->help_code, help_code )==0 )
 			{
+				const char *text_ptr = *helpInfo->help_text_ptr ? _(helpInfo->help_text_ptr) : helpInfo->help_text_ptr;
 				disp_help( help_x, help_y,
-							  _(helpInfo->help_title), _(helpInfo->help_text_ptr) );
+							  _(helpInfo->help_title), text_ptr );
 				break;
 			}
 		}
@@ -336,9 +337,10 @@ void Help::disp()
 			if( spotX >= helpInfo->area_x1 && spotY >= helpInfo->area_y1 &&
 				 spotX <= helpInfo->area_x2 && spotY <= helpInfo->area_y2 )
 			{
+				const char *text_ptr = *helpInfo->help_text_ptr ? _(helpInfo->help_text_ptr) : helpInfo->help_text_ptr;
 				disp_help( (helpInfo->area_x1+helpInfo->area_x2)/2,
 							  (helpInfo->area_y1+helpInfo->area_y2)/2,
-							  _(helpInfo->help_title), _(helpInfo->help_text_ptr) );
+							  _(helpInfo->help_title), text_ptr );
 				break;
 			}
 		}
@@ -503,6 +505,102 @@ void Help::set_help(int x1, int y1, int x2, int y2, const char* helpCode)
 //---------- End of function Help::set_help ---------//
 
 
+const char *unit_help_general[MAX_UNIT_TYPE+1] =
+{
+	N_("Norman General"),
+	N_("Maya General"),
+	N_("Greek General"),
+	N_("Viking General"),
+	N_("Persian General"),
+	N_("Chinese General"),
+	N_("Japanese General"),
+	N_("Caravan"),
+	N_("Catapult"),
+	N_("Ballista"),
+	N_("Spitfire"),
+	N_("Cannon"),
+	N_("Porcupine"),
+	N_("Trader"),
+	N_("Transport"),
+	N_("Caravel"),
+	N_("Galleon"),
+	N_("Dragon"),
+	N_("Jing Nung"),
+	N_("Lord of Healing"),
+	N_("Thor"),
+	N_("Phoenix"),
+	N_("Kukulcan"),
+	N_("Mind Turner"),
+	// TRANSLATORS: Unit icon help popup with rank title. In the original game, fryhtans used the human ranks in the help message. Use General or Ordo whichever makes sense.
+	N_("Deezboanz General"),
+	N_("Rattus General"),
+	N_("Broosken General"),
+	N_("Haubudam General"),
+	N_("Pfith General"),
+	N_("Rokken General"),
+	N_("Doink General"),
+	N_("Wyrm General"),
+	N_("Droog General"),
+	N_("Ick General"),
+	N_("Sauroid General"),
+	N_("Karrotten General"),
+	N_("Holgh General"),
+	N_("Egyptian General"),
+	N_("Mughul General"),
+	N_("Zulu General"),
+	N_("Isis"),
+	N_("Djini"),
+	N_("uNkulunkulu"),
+	N_("Unicorn"),
+};
+const char *unit_help_king[MAX_UNIT_TYPE+1] =
+{
+	N_("Norman King"),
+	N_("Maya King"),
+	N_("Greek King"),
+	N_("Viking King"),
+	N_("Persian King"),
+	N_("Chinese King"),
+	N_("Japanese King"),
+	N_("Caravan"),
+	N_("Catapult"),
+	N_("Ballista"),
+	N_("Spitfire"),
+	N_("Cannon"),
+	N_("Porcupine"),
+	N_("Trader"),
+	N_("Transport"),
+	N_("Caravel"),
+	N_("Galleon"),
+	N_("Dragon"),
+	N_("Jing Nung"),
+	N_("Lord of Healing"),
+	N_("Thor"),
+	N_("Phoenix"),
+	N_("Kukulcan"),
+	N_("Mind Turner"),
+	// TRANSLATORS: Unit icon help popup with rank title. In the original game, fryhtans used the human ranks in the help message. Use King or All High whichever makes sense.
+	N_("Deezboanz King"),
+	N_("Rattus King"),
+	N_("Broosken King"),
+	N_("Haubudam King"),
+	N_("Pfith King"),
+	N_("Rokken King"),
+	N_("Doink King"),
+	N_("Wyrm King"),
+	N_("Droog King"),
+	N_("Ick King"),
+	N_("Sauroid King"),
+	N_("Karrotten King"),
+	N_("Holgh King"),
+	N_("Egyptian King"),
+	N_("Mughul King"),
+	N_("Zulu King"),
+	N_("Isis"),
+	N_("Djini"),
+	N_("uNkulunkulu"),
+	N_("Unicorn"),
+};
 //--------- Begin of function Help::set_unit_help --------//
 //
 void Help::set_unit_help(int unitId, int rankId, int x1, int y1, int x2, int y2)
@@ -514,18 +612,12 @@ void Help::set_unit_help(int unitId, int rankId, int x1, int y1, int x2, int y2)
 
 	static String str;
 
-	str = _(unit_res[unitId]->name);
-
 	if( rankId==RANK_KING )
-	{
-		// TRANSLATORS: <Race> King
-		snprintf( str, MAX_STR_LEN+1, _("%s King"), _(unit_res[unitId]->name) );
-	}
+		str = _(unit_help_king[unitId-1]);
 	else if( rankId==RANK_GENERAL )
-	{
-		// TRANSLATORS: <Race> General
-		snprintf( str, MAX_STR_LEN+1, _("%s General"), _(unit_res[unitId]->name) );
-	}
+		str = _(unit_help_general[unitId-1]);
+	else
+		str = _(unit_res[unitId]->name);
 
 	set_custom_help( x1, y1, x2, y2, str );
 }

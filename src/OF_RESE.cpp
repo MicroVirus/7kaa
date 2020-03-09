@@ -165,7 +165,7 @@ void FirmResearch::disp_main_menu(int refreshFlag)
 			button_vacate_firm.set_help_code("MOBILIZE");
 		}
 
-		if (worker_count)
+		if( have_own_workers() )
 			button_vacate_firm.enable();
 		else
 			button_vacate_firm.disable();
@@ -204,7 +204,7 @@ void FirmResearch::detect_main_menu()
 
 	//------ detect the select research button -------//
 
-	if( button_select_research.detect('B') )
+	if( button_select_research.detect(GETKEY(KEYEVENT_FIRM_BUILD)) )
 	{
 		research_menu_mode = RESEARCH_MENU_RESEARCH;
 		disable_refresh = 1;    // static var for disp_info() only

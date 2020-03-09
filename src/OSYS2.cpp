@@ -62,6 +62,8 @@
 #include <OFIRMDIE.h>
 #include <OOPTMENU.h>
 #include <OINGMENU.h>
+#include <CmdLine.h>
+#include <gettext.h>
 
 
 //---------- define static variables ----------//
@@ -245,27 +247,15 @@ void Sys::process()
 		day_frame_count = 0;
 	}
 
-	//### begin alex 12/9 ###//
-	//---------- update data structure of selected trading unit ------------//
-	unit_array.update_selected_trade_unit_info();
-	//#### end alex 12/9 ####//
-
 	//------ display the current frame ------//
 
 	LOG_MSG("begin sys.disp_frame");
 	misc.lock_seed();
-#ifndef HEADLESS_SIM
-	disp_frame();
-#endif
+	if( cmd_line.enable_if )
+		disp_frame();
 	misc.unlock_seed();
 	LOG_MSG("end sys.disp_frame");
 	LOG_MSG(misc.get_random_seed() );
-
-	//### begin alex 12/9 ###//
-	//--------- send message for selected trading unit in multiplayer game -------//
-	unit_array.mp_mark_selected_caravan();
-	unit_array.mp_mark_selected_ship();
-	//#### end alex 12/9 ####//
 
 	//-----------------------------------------//
 
@@ -518,6 +508,10 @@ void Sys::set_view_mode(int viewMode, int viewingNationRecno, int viewingSpyRecn
 
 		info.viewing_spy_recno = viewingSpyRecno;
 	}
+	if( viewMode == MODE_NATION && info.nation_report_mode == NATION_REPORT_CHAT )
+		SDL_StartTextInput();
+	else
+		SDL_StopTextInput();
 
 	view_mode = viewMode;
 	disp_view_mode();
@@ -1022,7 +1016,22 @@ void Sys::disp_zoom()
 	sys.frames_in_this_second++;		// no. of frames displayed in this second
 
 	if( view_mode==MODE_NORMAL )
+	{
 		disp_frames_per_second();
+
+		if( (remote.is_enable() || remote.is_replay()) && (remote.sync_test_level & 0x40) )
+		{
+			// Warn user we are out of sync
+			vga.use_back();
+
+			if( !(remote.sync_test_level & 1) )
+				font_news.disp( ZOOM_X1+10, ZOOM_Y1+30, _("Multiplayer Random Seed Sync Error"), MAP_X2 );
+			else if( !(remote.sync_test_level & 2) )
+				font_news.disp( ZOOM_X1+10, ZOOM_Y1+30, _("Multiplayer Object Sync Error"), MAP_X2 );
+
+			vga.use_front();
+		}
+	}
 }
 //-------- End of function Sys::disp_zoom --------//
 

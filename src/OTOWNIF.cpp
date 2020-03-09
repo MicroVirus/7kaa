@@ -397,7 +397,7 @@ void Town::disp_main_menu(int refreshFlag)
 
 		if( button_grant.init_flag )
 		{
-			if( nation_array[nation_recno]->cash > 0 )
+			if( nation_recno && nation_array[nation_recno]->cash > 0 )
 				button_grant.enable();
 			else
 				button_grant.disable();
@@ -552,10 +552,10 @@ void Town::detect_main_menu()
 
 	//------- detect buttons --------//
 
-	if( button_recruit.detect('R') )
+	if( button_recruit.detect(GETKEY(KEYEVENT_TOWN_RECRUIT)) )
 		recruit(-1, 0, COMMAND_PLAYER);
 
-	if( button_train.detect('B') )
+	if( button_train.detect(GETKEY(KEYEVENT_TOWN_TRAIN)) )
 	{
 		town_menu_mode = TOWN_MENU_TRAIN;
 		disable_refresh = 1;    // static var for disp_info() only
@@ -848,7 +848,7 @@ void Town::disp_train_menu(int refreshFlag)
 	}
 	else if( refreshFlag == INFO_REPAINT )
 	{
-		font_san.d3_put( INFO_X1, INFO_Y1, INFO_X2, INFO_Y1+18, _("Train (Cost:$30, Skill:20)") );
+		font_san.d3_put( INFO_X1, INFO_Y1, INFO_X2, INFO_Y1+18, _("Train (Cost: $30, Skill: 20)") );
 		int x=INFO_X1, y=INFO_Y1+24;
 
 		for(int i=1; i<=MAX_TRAINABLE_SKILL; i++)
@@ -990,8 +990,9 @@ static void i_disp_queue_skill_button(ButtonCustom *button, int repaintBody)
 //
 void Town::detect_train_menu()
 {
-	int	x=INFO_X1+2, y=INFO_Y1+24, rc, quitFlag;
+	int	x=INFO_X1+2, y=INFO_Y1+24, rc, quitFlag, waitFlag;
 
+	waitFlag = 0;
 	for(int b=1; b<=MAX_TRAINABLE_SKILL; ++b)
 	{
 		// ###### begin Gilbert 10/9 ########//
@@ -1002,11 +1003,15 @@ void Town::detect_train_menu()
 			quitFlag = 0;		// don't quit the menu right after pressing the button
 		}
 		//------ detect pressing on the big button -------//
-		else if( (rc= button_skill[b-1].detect(0,0,2)) != 0)
+		// but defer to the queue button if clicked over that
+		else if( !button_queue_skill[b-1].button_wait && ((rc= button_skill[b-1].detect(0,0,2)) != 0) )
 		{
 			quitFlag = 1;		// quit the menu right after pressing the button
 		}
 		// ###### end Gilbert 10/9 ########//
+
+		if( button_queue_skill[b-1].button_wait || button_skill[b-1].button_wait )
+			waitFlag = 1;
 
 		int shiftPressed = mouse.event_skey_state & SHIFT_KEY_MASK;
 
@@ -1065,7 +1070,7 @@ void Town::detect_train_menu()
 	}
 	//------ detect the cancel button --------//
 
-	if( button_cancel3.detect() || mouse.any_click(1) )		// press the cancel button or right click
+	if( button_cancel3.detect() || (!waitFlag && mouse.any_click(1)) )		// press the cancel button or right click
 	{
 		// ##### begin Gilbert 26/9 ########//
 		se_ctrl.immediate_sound("TURN_OFF");

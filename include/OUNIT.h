@@ -199,6 +199,8 @@ struct TeamInfo
 };
 #pragma pack()
 
+struct UnitCrc;
+
 //----------- Define class Unit -----------//
 
 #pragma pack(1)
@@ -380,6 +382,8 @@ public:
 			  int  true_nation_recno();            // the true nation recno of the unit, taking care of the situation where the unit is a spy
 	virtual int  is_ai_all_stop();
 			  int  get_cur_loc(short& xLoc, short& yLoc);
+			  int  get_cur_loc2(short& xLoc, short& yLoc);
+			  short is_leader_in_range();
 
 	virtual void die()         {;}
 
@@ -474,11 +478,11 @@ public:
 	void  attack_town(int townXLoc, int townYLoc, int xOffset=0, int yOffset=0, int resetBlockedEdge=1);
 	void  attack_wall(int wallXLoc, int wallYLoc, int xOffset=0, int yOffset=0, int resetBlockedEdge=1);
 
-	void  hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage);
-	void  hit_building(Unit* parentUnit, int targetXLoc, int targetYLoc, float attackDamage);
-	void  hit_firm(Unit* parentUnit, int targetXLoc, int targetYLoc, float attackDamage);
-	void  hit_town(Unit* parentUnit, int targetXLoc, int targetYLoc, float attackDamage);
-	void  hit_wall(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage);
+	void  hit_target(Unit* parentUnit, Unit* targetUnit, float attackDamage, short parentNationRecno);
+	void  hit_building(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno);
+	void  hit_firm(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno);
+	void  hit_town(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno);
+	void  hit_wall(Unit* attackUnit, int targetXLoc, int targetYLoc, float attackDamage, short attackNationRecno);
 
 	int   max_attack_range();
 	void  gain_experience();
@@ -568,6 +572,7 @@ public:
 	//-------------- multiplayer checking codes ---------------//
 	virtual	uint8_t crc8();
 	virtual	void	clear_ptr();
+	virtual	void	init_crc(UnitCrc *c);
 
 private:
 	//------------------ idle functions -------------------//
@@ -750,10 +755,6 @@ public:
 	short idle_blocked_unit_reset_count; // used to improve performance for searching related to attack
 
 	short visible_unit_count;
-	char	mp_first_frame_to_select_caravan;	// for multiplayer, true if 1st frame to select caravan
-	char	mp_first_frame_to_select_ship;		// ditto for ship
-	short	mp_pre_selected_caravan_recno;		// for multiplayer, 0 or recno that caravan selected in previous frame
-	short	mp_pre_selected_ship_recno;			// ditto for ship
 
 	static short   selected_land_unit_count;
 	static short   selected_sea_unit_count;
@@ -811,21 +812,6 @@ public:
 
 	//--------- unit filter function ----------//
 	int   divide_attack_by_nation(short nationRecno, short *selectedArray, int selectedCount);
-
-	//--------- for multiplayers' caravan and ship ---------//
-	void	mp_mark_selected_caravan();
-	int	mp_get_selected_caravan_count();
-	void	mp_reset_selected_caravan_count();
-	void	mp_add_selected_caravan(short unitRecno);
-	int	mp_is_selected_caravan(short unitRecno);
-
-	void	mp_mark_selected_ship();
-	int	mp_get_selected_ship_count();
-	void	mp_reset_selected_ship_count();
-	void	mp_add_selected_ship(short unitRecno);
-	int	mp_is_selected_ship(short unitRecno);
-
-	void	update_selected_trade_unit_info();
 
 	int   write_file(File* filePtr);
 	int   read_file(File* filePtr);

@@ -81,9 +81,6 @@
     <ClInclude Include="..\include\mem_input_stream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\mouse_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\MPTYPES.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -363,9 +360,6 @@
     <ClInclude Include="..\include\ORESDB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\ORESTXT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\ORESX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -540,21 +534,6 @@
     <ClInclude Include="..\include\RESOURCE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\surface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\surface_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\surface_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\vga_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\vga_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\vga_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -594,13 +573,34 @@
     <ClInclude Include="..\include\WebService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\platform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\posix_string_compat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\storage_constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CmdLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ConfigAdv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FilePath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\LocaleRes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\OMP_CRC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PlayerStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ReplayFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\session_desc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1442,9 +1442,6 @@
     <ClCompile Include="..\src\OUNITAM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\OUNITAMT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\OUNITAT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1547,12 +1544,6 @@
     <ClCompile Include="..\src\player_desc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\surface_sdl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\vga_sdl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\vgautil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1571,7 +1562,25 @@
     <ClCompile Include="..\src\OSaveGameProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\platform\windows.cpp">
+    <ClCompile Include="..\src\CmdLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ConfigAdv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LocaleRes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OVGA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PlayerStats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ReplayFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\session_desc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

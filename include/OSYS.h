@@ -25,7 +25,6 @@
 #define __OSYS_H
 
 #include <ALL.h>
-#include <storage_constants.h>
 #include <stdint.h>
 
 //------ Define common data buffer size  ------//
@@ -74,6 +73,8 @@ enum	{	NO_DEBUG_SYN = 0,
 			DEBUG_SYN_AUTO_LOAD,
 		};
 //#### end alex 11/8 ####//
+
+enum KeyEventType : int;
 
 //-------- Define class Sys -----------//
 
@@ -125,18 +126,18 @@ public:
 
 	char  	cdrom_drive;
 
-	char    dir_config[MAX_PATH+1];
-	char  	dir_image[MAX_PATH+1];
-	char  	dir_encyc[MAX_PATH+1];
-	char  	dir_encyc2[MAX_PATH+1];
-	char  	dir_music[MAX_PATH+1];
-	char  	dir_movie[MAX_PATH+1];
-	char  	dir_tutorial[MAX_PATH+1];
+	char    dir_config[FilePath::MAX_FILE_PATH];
+	char  	dir_image[FilePath::MAX_FILE_PATH];
+	char  	dir_encyc[FilePath::MAX_FILE_PATH];
+	char  	dir_encyc2[FilePath::MAX_FILE_PATH];
+	char  	dir_music[FilePath::MAX_FILE_PATH];
+	char  	dir_movie[FilePath::MAX_FILE_PATH];
+	char  	dir_tutorial[FilePath::MAX_FILE_PATH];
 
 	union
 	{
-		char dir_scenario[MAX_PATH+1];
-		char dir_scenario_path[MAX_SCENARIO_PATH][MAX_PATH+1];
+		char dir_scenario[FilePath::MAX_FILE_PATH];
+		char dir_scenario_path[MAX_SCENARIO_PATH][FilePath::MAX_FILE_PATH];
 	};
 
 	//------- other vars --------//
@@ -192,6 +193,7 @@ public:
 	int 		set_config_dir();
 	int		chdir_to_game_dir();
 	int		set_game_dir();
+	int		set_one_dir(const char* checkFileName, const char* defaultDir, char* trueDir);
 
 	//-------- for load/save games --------//
 
@@ -222,7 +224,6 @@ private:
 	int		is_mp_sync( int *unreadyPlayerFlag );
 	void		auto_save();
 
-	void 		blt_next_frame();
 	void		disp_frames_per_second();
 
 	void		process_key(unsigned scanCode, unsigned skeyState);
@@ -233,7 +234,7 @@ private:
 	int			detect_debug_cheat_key(unsigned scanCode, unsigned skeyState);
 	int 		detect_set_speed(unsigned scanCode, unsigned skeyState);
 
-	int 		detect_key_str(int keyStrId, const char* keyStr);
+	int 		detect_key_str(int keyStrId, const KeyEventType* keyStr);
 };
 
 extern Sys sys;

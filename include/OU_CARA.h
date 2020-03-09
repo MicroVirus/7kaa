@@ -90,14 +90,9 @@ public:
 public:
 	int			num_of_pick_up_goods(char *enableTable);
 
-	//----------- single player version --------------//
 	void			pick_up_set_auto();
 	void			pick_up_set_none();
 	void			pick_up_toggle(int pos);
-
-	//----------- multiplayer version --------------//
-	void			mp_pick_up_set_auto(char *enableTable);
-	void			mp_pick_up_set_none(char *enableTable);
 };
 #pragma pack()
 
@@ -110,11 +105,10 @@ public:
 
 public:
 	int	update_pick_up(char *enableFlag=NULL);
-
-	//----------- multiplayer version --------------//
-	void			mp_pick_up_toggle(int pos);
 };
 #pragma pack()
+
+struct UnitCaravanCrc;
 
 //----------- Define class Caravan -----------//
 
@@ -156,7 +150,6 @@ public:
 	void 	set_stop(int stopId, int stopXLoc, int stopYLoc, char remoteAction);
 	void	del_stop(int stopId, char remoteAction);
 	void	update_stop_list();
-	void	update_stop_and_goods_info();
 	void 	set_stop_pick_up(int stopId, int newPIckUpType, int remoteAction);
 	int 	can_set_stop(int firmRecno);
 	int	has_pick_up_type(int stopId, int pickUpType);
@@ -176,6 +169,7 @@ public:
 	//-------------- multiplayer checking codes ---------------//
 	virtual	uint8_t crc8();
 	virtual	void	clear_ptr();
+	virtual	void	init_crc(UnitCaravanCrc *c);
 
 private:
 	void 	disp_stop(int dispY1, int refreshFlag);

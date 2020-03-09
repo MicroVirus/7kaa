@@ -259,6 +259,13 @@ void Game::main_menu()
 			}
 		}
 
+		// method to start a game replay at this time
+		if( mouse.is_key_event() && mouse.scan_code == 'r')
+		{
+			battle.run_replay();
+			refreshFlag=1;
+		}
+
 		//-------------------------------------//
 
 		if( sys.signal_exit_flag == 1 || i == MAIN_OPTION_COUNT-1 )			// quit the system now
@@ -365,6 +372,10 @@ void Game::disp_version()
 
 	#ifdef DEV_VERSION
 		str += "-dev";
+	#endif
+
+	#ifndef HAVE_KNOWN_BUILD
+		str += "?";
 	#endif
 
 	#ifdef DEBUG
@@ -613,6 +624,7 @@ void Game::single_player_menu()
 
 						if( save_game_array.load_game() == 1)
 						{
+							sys.set_speed(9, COMMAND_AUTO);
 							battle.run_loaded();
 							deinit();
 						}
@@ -855,7 +867,7 @@ void Game::multi_player_menu(int lobbied, char *game_host)
 							{
 								err_when( !loadedRecno );
 								// ####### begin Gilbert 13/2 #######//
-								load_mp_game(save_game_array[loadedRecno]->file_name, lobbied, game_host);
+								load_mp_game(save_game_array[loadedRecno]->file_info.name, lobbied, game_host);
 								// ####### begin Gilbert 13/2 #######//
 							}
 							{

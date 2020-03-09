@@ -170,7 +170,7 @@ void FirmWar::disp_main_menu(int refreshFlag)
 			button_vacate_firm.set_help_code("MOBILIZE");
 		}
 
-		if (worker_count)
+		if( have_own_workers() )
 			button_vacate_firm.enable();
 		else
 			button_vacate_firm.disable();
@@ -221,7 +221,7 @@ void FirmWar::detect_main_menu()
 
 	//------ detect the select research button -------//
 
-	if( button_select_build.detect('B') )
+	if( button_select_build.detect(GETKEY(KEYEVENT_FIRM_BUILD)) )
 	{
 		war_menu_mode = WAR_MENU_BUILD;
 		disable_refresh = 1;    // static var for disp_info() only
@@ -292,9 +292,10 @@ void FirmWar::disp_build_menu(int refreshFlag)
 void FirmWar::detect_build_menu()
 {
 
-	int 	 	 unitId, x=INFO_X1+2, y=INFO_Y1, rc, quitFlag;
+	int 	 	 unitId, x=INFO_X1+2, y=INFO_Y1, rc, quitFlag, waitFlag;
 	UnitInfo* unitInfo;
 
+	waitFlag = 0;
 	for( int b = 0; b < added_count; ++b)
 	{
 		// ##### begin Gilbert 10/9 ######//
@@ -314,15 +315,19 @@ void FirmWar::detect_build_menu()
 
 		//------ detect pressing on the big button -------//
 
-		else if( (rc = button_weapon[b].detect(0,0,2)) != 0 )
+		else if( !button_queue_weapon[b].button_wait && ((rc = button_weapon[b].detect(0,0,2)) != 0) )
 		{
 			quitFlag = 1;		// quit the menu right after pressing the button
 		}
 		// ######## end Gilbert 10/9 #########//
 
+		if( button_queue_weapon[b].button_wait || button_weapon[b].button_wait )
+			waitFlag = 1;
+
 		int shiftPressed = mouse.event_skey_state & SHIFT_KEY_MASK;
 
 		//------- process the action --------//
+
 
 		if( rc > 0 )
 		{
@@ -377,7 +382,7 @@ void FirmWar::detect_build_menu()
 	}
 	//------ detect the cancel button --------//
 
-	if( button_cancel.detect() )
+	if( button_cancel.detect() || (!waitFlag && mouse.any_click(1)) )
 	{
 		// ##### begin Gilbert 25/9 ######//
 		se_ctrl.immediate_sound("TURN_OFF");

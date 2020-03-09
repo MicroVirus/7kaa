@@ -25,6 +25,7 @@
 #include <OSYS.h>
 #include <ONEWS.h>
 #include <ODATE.h>
+#include <OGFILE.h>
 #include <OSaveGameArray.h>
 #include <OSaveGameProvider.h>
 #include <OF_MONS.h>
@@ -35,11 +36,14 @@
 #include <OBATTLE.h>
 #include <OGAME.h>
 #include <ONATIONA.h>
+#include <PlayerStats.h>
+#include <ConfigAdv.h>
 
 //--------- declare static vars ----------//
 
 static void init_scenario_var(ScenInfo* scenInfo);
 static int sort_scenario_func(const void *arg1, const void *arg2);
+using namespace nsPlayerStats;
 
 //---------- Begin of function Game::select_run_scenario ----------//
 //
@@ -54,6 +58,7 @@ int Game::select_run_scenario()
 	ScenInfo* scenInfoArray = NULL;
 	int scenInfoSize = 0;
 	int dirId;
+
 	for( dirId = 0; dirId < MAX_SCENARIO_PATH; ++dirId )
 	{
 		if( DIR_SCENARIO_PATH(dirId)[0] )
@@ -97,6 +102,16 @@ int Game::select_run_scenario()
 
 						fileTxtScen.get_token();		// skip "Bonus:"
 						scenInfoArray[scenInfoSize].goal_score_bonus = (short) fileTxtScen.get_num();
+
+						// Get the internal name from the header for player stats tracking
+						{
+							playerStats.load_player_stats(true);
+							String path;
+							path = DIR_SCENARIO_PATH(dirId);
+							path += gameDir[i]->name;
+							PlayStatus status = playerStats.get_scenario_play_status(gameDir[i]->name);
+							scenInfoArray[scenInfoSize].play_status = static_cast<int>(status);
+						}
 					}
 				}
 			}
@@ -148,9 +163,19 @@ int Game::run_scenario(ScenInfo* scenInfo)
 		strcpy(playerName, config.player_name);
 		// ###### end Gilbert 1/11 #########//
 
-		String errorMessage;
-		if( SaveGameProvider::load_scenario(str, /*out*/ errorMessage) > 0 )
+		if( SaveGameProvider::load_scenario(str) > 0 )
 		{
+			ConfigAdv backup;
+			if( config_adv.scenario_config )
+			{
+				String str2;
+				str2  = DIR_SCENARIO_PATH(scenInfo->dir_id);
+				str2 += "config.txt";
+
+				backup = config_adv;
+				config_adv.load(str2);
+			}
+
 			init_scenario_var(scenInfo);
 
 			// ##### begin Gilbert 1/11 #######//
@@ -163,10 +188,16 @@ int Game::run_scenario(ScenInfo* scenInfo)
 			strcpy(config.player_name, playerName);
 			// ##### end Gilbert 1/11 #######//
 
+			playerStats.set_scenario_play_status(scenInfo->file_name, PlayStatus::PLAYED);
+
 			battle.run_loaded();
+
+			if( config_adv.scenario_config )
+				config_adv = backup;
 		}
-		else {
-			box.msg(errorMessage);
+		else
+		{
+			box.msg(GameFile::status_str());
 		}
 		game.deinit();
 		return 1;

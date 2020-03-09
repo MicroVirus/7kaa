@@ -573,6 +573,7 @@ void Firm::assign_unit(int unitRecno)
 	else if( firmInfo->need_worker )
 	{
 		assign_worker(unitRecno);
+		sort_worker();
 	}
 }
 //--------- End of function Firm::assign_unit -----------//
@@ -2321,6 +2322,8 @@ void Firm::update_worker()
 				workerPtr->hit_points = maxHitPoints;
 		}
 	}
+
+	sort_worker();
 }
 //----------- End of function Firm::update_worker ---------//
 
@@ -2379,6 +2382,16 @@ int Firm::create_unit(int unitId, int townRecno, int unitHasJob)
 //
 int Firm::mobilize_worker(int workerId, char remoteAction)
 {
+	err_when( workerId<1 || workerId>worker_count );
+
+	Worker *workerPtr = worker_array+workerId-1;
+
+	if( remoteAction <= COMMAND_REMOTE && !workerPtr->is_nation(firm_recno, nation_recno) )
+	{
+		// cannot order mobilization of foreign workers
+		return 0;
+	}
+
 	if(!remoteAction && remote.is_enable() )
 	{
 		// packet strcture : <firm_recno> <workerId>
@@ -2390,11 +2403,9 @@ int Firm::mobilize_worker(int workerId, char remoteAction)
 
 	err_when( !worker_array );    // this function shouldn't be called if this firm does not need worker
 
-   err_when( workerId<1 || workerId>worker_count );
-
 	//------------- resign worker --------------//
 
-	Worker thisWorker = worker_array[workerId-1];
+	Worker thisWorker = *workerPtr;
 
 	int oldWorkerCount = worker_count;
 
@@ -2419,6 +2430,8 @@ int Firm::mobilize_worker(int workerId, char remoteAction)
 
 	err_when( unitRecno2 && unitRecno );		// only one of them should have value
 	err_when( !unitRecno2 && !unitRecno );		// one of them must have a value
+
+	sort_worker();
 
 	if( unitRecno )
 		return unitRecno;
@@ -2561,24 +2574,38 @@ void Firm::mobilize_all_workers(char remoteAction)
 
 	//------- detect buttons on hiring firm workers -------//
 
-	int   loopCount = 0;
+	#ifdef DEBUG
+		int loopCount = 0;
+	#endif
+
 	short unitRecno;
+	int mobileWorkerId = 1;
 
 	err_when( worker_count > MAX_WORKER );
 
-	while( worker_count > 0 )
+	while( worker_count > 0 && mobileWorkerId <= worker_count )
 	{
 		err_when(++loopCount > 100);
 
-		unitRecno = mobilize_worker(1, COMMAND_AUTO);        // always record 1 as the workers info are moved forward from the back to the front
+	        Worker *workerPtr = worker_array+mobileWorkerId-1;
+
+		if( !workerPtr->is_nation(firm_recno, nation_recno) )
+		{
+			// prohibit mobilizing workers not under your color
+			mobileWorkerId++;
+			continue;
+		}
+
+		unitRecno = mobilize_worker(mobileWorkerId, COMMAND_AUTO);        // always record 1 as the workers info are moved forward from the back to the front
 
 		if(!unitRecno)
 			break; // keep the rest workers as there is no space for creating the unit
 
-		if (nation_recno == nation_array.player_recno)
+		Unit* unitPtr = unit_array[unitRecno];
+		unitPtr->team_id = unit_array.cur_team_id;
+
+		if( nation_recno == nation_array.player_recno )
 		{
-			Unit* unitPtr = unit_array[unitRecno];
-			unitPtr->team_id = unit_array.cur_team_id;
 			unitPtr->selected_flag = 1;
 			unit_array.selected_count++;
 			if ( !unit_array.selected_recno )
@@ -2885,6 +2912,17 @@ void Firm::set_worker_home_town(int townRecno, char remoteAction, int workerId)
 	if( !workerId || workerId > worker_count )
 		return;
 
+	Town *townPtr = town_array[townRecno];
+	Worker* workerPtr = worker_array+workerId-1;
+
+	if( workerPtr->town_recno != townRecno )
+	{
+		if( !workerPtr->is_nation(firm_recno, nation_recno) )
+			return;
+		if( townPtr->population >= MAX_TOWN_POPULATION )
+			return;
+	}
+
 	if(!remoteAction && remote.is_enable() )
 	{
 		// packet structure : <firm recno> <town recno> <workderId>
@@ -2895,11 +2933,7 @@ void Firm::set_worker_home_town(int townRecno, char remoteAction, int workerId)
 		return;
 	}
 
-	err_when( workerId<1 || workerId>worker_count );
-
 	//-------------------------------------------------//
-
-	Worker* workerPtr = worker_array+workerId-1;
 
    err_when( !workerPtr->race_id );
 
@@ -2910,12 +2944,13 @@ void Firm::set_worker_home_town(int townRecno, char remoteAction, int workerId)
 
 	//--- otherwise, set the worker's home town to the new one ---//
 
-	else if( workerPtr->is_nation(firm_recno, nation_recno) )		// only allow when the worker lives in a town belonging to the same nation
+	else if( workerPtr->is_nation(firm_recno, nation_recno) &&
+		townPtr->nation_recno == nation_recno )		// only allow when the worker lives in a town belonging to the same nation and moving domestically
 	{
 		int workerLoyalty = workerPtr->loyalty();
 
 		town_array[workerPtr->town_recno]->dec_pop(workerPtr->race_id, 1);
-		town_array[townRecno]->inc_pop(workerPtr->race_id, 1, workerLoyalty);
+		townPtr->inc_pop(workerPtr->race_id, 1, workerLoyalty);
 
 		workerPtr->town_recno = townRecno;
 	}
@@ -3691,12 +3726,13 @@ int Worker::max_attack_range()
 // Whether this worker belongs to the specific nation.
 //
 // <int> firmRecno - the recno of the firm the worker works in
-// <int> nationRecno - the recno of th nation to check against. 
+// <int> nationRecno - the recno of the nation to check against.
+// <int> checkSpy - check spy against true nation (default : 0)
 //
-int Worker::is_nation(int firmRecno, int nationRecno)
+int Worker::is_nation(int firmRecno, int nationRecno, int checkSpy)
 {
-	if( spy_recno && spy_array[spy_recno]->true_nation_recno == nationRecno )
-		return 1;
+	if( checkSpy && spy_recno )
+		return spy_array[spy_recno]->true_nation_recno == nationRecno;
 
 	if( town_recno )
 		return town_array[town_recno]->nation_recno == nationRecno;
@@ -3740,13 +3776,8 @@ int Firm::should_show_info()
 
 	//----- if any of the workers belong to the player, show the info of this firm -----//
 
-	Worker* workerPtr = worker_array;
-
-	for( int i=0 ; i<worker_count ; i++, workerPtr++ )
-	{
-		if( workerPtr->is_nation(firm_recno, nation_array.player_recno) )
-			return 1;
-	}
+	if( have_own_workers(1) )
+		return 1;
 
 	//---- if there is a phoenix of the player over this firm ----//
 
@@ -3891,4 +3922,23 @@ void Firm::reward(int workerId, int remoteAction)
 }
 //----------- End of function Firm::reward -----------//
 
+
+//--------- Begin of function Firm::have_own_workers ---------//
+//
+// if player has any workers in the building
+//
+// <int> checkSpy - optionally check for cloaked spies as well (default : 0)
+//
+int Firm::have_own_workers(int checkSpy)
+{
+	Worker* workerPtr = worker_array;
+
+	for( int i=0 ; i<worker_count ; i++, workerPtr++ )
+	{
+		if( workerPtr->is_nation(firm_recno, nation_array.player_recno, checkSpy) )
+			return 1;
+	}
+	return 0;
+}
+//----------- End of function Firm::have_own_workers -----------//
 

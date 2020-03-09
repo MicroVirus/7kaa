@@ -29,6 +29,10 @@
 #include <OMONSRES.h>
 #include <OU_MONS.h>
 #include "gettext.h"
+#include <ConfigAdv.h>
+
+static char random_race();
+
 
 //--------- Begin of function UnitMonster::UnitMonster --------//
 UnitMonster::UnitMonster()
@@ -46,6 +50,38 @@ void UnitMonster::set_monster_action_mode(char monsterActionMode)
 //---------- End of function UnitMonster::set_monster_action_mode --------//
 
 
+const char *monster_name_king[] =
+{
+	N_("All High Deezboanz"),
+	N_("All High Rattus"),
+	N_("All High Broosken"),
+	N_("All High Haubudam"),
+	N_("All High Pfith"),
+	N_("All High Rokken"),
+	N_("All High Doink"),
+	N_("All High Wyrm"),
+	N_("All High Droog"),
+	N_("All High Ick"),
+	N_("All High Sauroid"),
+	N_("All High Karrotten"),
+	N_("All High Holgh"),
+};
+const char *monster_name_general[] =
+{
+	N_("Deezboanz Ordo"),
+	N_("Rattus Ordo"),
+	N_("Broosken Ordo"),
+	N_("Haubudam Ordo"),
+	N_("Pfith Ordo"),
+	N_("Rokken Ordo"),
+	N_("Doink Ordo"),
+	N_("Wyrm Ordo"),
+	N_("Droog Ordo"),
+	N_("Ick Ordo"),
+	N_("Sauroid Ordo"),
+	N_("Karrotten Ordo"),
+	N_("Holgh Ordo"),
+};
 //--------- Begin of function UnitMonster::unit_name ---------//
 //
 // [int] withTitle - whether return a string with the title of the unit
@@ -55,19 +91,18 @@ char* UnitMonster::unit_name(int withTitle)
 {
 	static String str;
 
-	char* monsterName = monster_res[get_monster_id()]->name;   // contribution is used for storing the monster id. temporary
-
-	str = monsterName;
-
 	switch( rank_id )
 	{
 		case RANK_KING:
-			snprintf( str, MAX_STR_LEN+1, _("All High %s"), monsterName );
+			str = _(monster_name_king[get_monster_id()-1]);
 			break;
 
 		case RANK_GENERAL:
-			snprintf( str, MAX_STR_LEN+1, _("%s Ordo"), monsterName );
+			str = _(monster_name_general[get_monster_id()-1]);
 			break;
+
+		default:
+			str = _(monster_res[get_monster_id()]->name);
 	}
 
 	return str;
@@ -224,7 +259,7 @@ void UnitMonster::king_leave_scroll()
 	}
 
 	if( !bestRaceId )
-		bestRaceId = misc.random(MAX_RACE)+1;		// if there is no human units nearby (perhaps just using weapons)
+		bestRaceId = random_race();		// if there is no human units nearby (perhaps just using weapons)
 
 	//------ locate for space to add the scroll -------//
 
@@ -458,3 +493,15 @@ void UnitMonster::group_order_monster(int destXLoc, int destYLoc, int actionType
 	}
 }
 //---------- End of function UnitMonster::group_order_monster --------//
+
+
+//-------- Begin of static function random_race --------//
+//
+// Uses misc.random() for random race
+//
+static char random_race()
+{
+	int num = misc.random(config_adv.race_random_list_max);
+	return config_adv.race_random_list[num];
+}
+//--------- End of static function random_race ---------//

@@ -234,21 +234,17 @@ void NewsArray::new_king(int nationRecno, int kingUnitRecno)
 //
 // <int>   firmRecno  - recno of the firm destroyed.
 // <Unit*> attackUnit - recno to the attacking unit.
+// <short> destroyerNationRecno - recno of the nation that destroyed the firm.
 //
 // short_para1 - id. of the firm destroyed.
 // short_para2 - name id of the town where the firm is located.
 // short_para3 - destroyer type: 1 - a nation, 2 - rebels, 3 - Fryhtans.
 //
-void NewsArray::firm_destroyed(int firmRecno, Unit* attackUnit)
+void NewsArray::firm_destroyed(int firmRecno, Unit *attackUnit, short destroyerNationRecno)
 {
 	Firm* firmPtr = firm_array[firmRecno];
 
 	err_when( firmPtr->nation_recno != nation_array.player_recno );
-
-	int destroyerNationRecno=0;
-
-	if( attackUnit )
-		destroyerNationRecno = attackUnit->nation_recno;
 
 	News* newsPtr = add_news( NEWS_FIRM_DESTROYED, NEWS_NORMAL, firmPtr->nation_recno, destroyerNationRecno );
 
@@ -266,16 +262,18 @@ void NewsArray::firm_destroyed(int firmRecno, Unit* attackUnit)
 
 	newsPtr->short_para3 = DESTROYER_UNKNOWN;
 
-	if( attackUnit )
+	if( destroyerNationRecno )
+	{
+		if( !nation_array.is_deleted(destroyerNationRecno) )
+			newsPtr->short_para3 = DESTROYER_NATION;
+	}
+	else if( attackUnit )
 	{
 		if( attackUnit->unit_mode == UNIT_MODE_REBEL )
 			newsPtr->short_para3 = DESTROYER_REBEL;
 
 		else if( unit_res[attackUnit->unit_id]->unit_class == UNIT_CLASS_MONSTER )
 			newsPtr->short_para3 = DESTROYER_MONSTER;
-
-		else if( attackUnit->nation_recno )
-			newsPtr->short_para3 = DESTROYER_NATION;
 	}
 
 	//--------- set location ---------//
@@ -327,17 +325,13 @@ void NewsArray::firm_captured(int firmRecno, int takeoverNationRecno, int spyTak
 // <int> townNameId	 - name id. of the town destroyed.
 // <int> xLoc, yLoc   - location of the town
 // <Unit*> attackUnit - recno to the attacking unit.
+// <short> destroyerNationRecno - recno of the nation that destroyed the firm.
 //
 // short_para1 - name id. of the town destroyed.
 // short_para2 - destroyer type: 1 - a nation, 2 - rebels, 3 - Fryhtans.
 //
-void NewsArray::town_destroyed(int townNameId, int xLoc, int yLoc, Unit* attackUnit)
+void NewsArray::town_destroyed(int townNameId, int xLoc, int yLoc, Unit* attackUnit, short destroyerNationRecno)
 {
-	int destroyerNationRecno=0;
-
-	if( attackUnit )
-		destroyerNationRecno = attackUnit->nation_recno;
-
 	News* newsPtr = add_news( NEWS_TOWN_DESTROYED, NEWS_NORMAL, nation_array.player_recno, destroyerNationRecno );
 
 	if( !newsPtr )		// only news of nations that have contact with the player are added
@@ -349,16 +343,18 @@ void NewsArray::town_destroyed(int townNameId, int xLoc, int yLoc, Unit* attackU
 
 	newsPtr->short_para2 = DESTROYER_UNKNOWN;
 
-	if( attackUnit )
+	if( destroyerNationRecno )
+	{
+		if( !nation_array.is_deleted(destroyerNationRecno) )
+			newsPtr->short_para2 = DESTROYER_NATION;
+	}
+	else if( attackUnit )
 	{
 		if( attackUnit->unit_mode == UNIT_MODE_REBEL )
 			newsPtr->short_para2 = DESTROYER_REBEL;
 
 		else if( unit_res[attackUnit->unit_id]->unit_class == UNIT_CLASS_MONSTER )
 			newsPtr->short_para2 = DESTROYER_MONSTER;
-
-		else if( attackUnit->nation_recno )
-			newsPtr->short_para2 = DESTROYER_NATION;
 	}
 
 	//-------- set location ----------//

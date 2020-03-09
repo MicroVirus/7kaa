@@ -36,6 +36,7 @@
 #include <ONATION.h>
 #include <dbglog.h>
 #include "gettext.h"
+#include <FilePath.h>
 
 #include <string.h> // for strncpy
 
@@ -64,8 +65,8 @@ void HallOfFame::deinit()
 
 
 void HallOfFame::set_last_savegame_file_name(const char* fileName) {
-	strncpy(last_savegame_file_name, fileName, MAX_PATH);
-	last_savegame_file_name[MAX_PATH] = '\0';
+	strncpy(last_savegame_file_name, fileName, SaveGameInfo::MAX_FILE_PATH);
+	last_savegame_file_name[SaveGameInfo::MAX_FILE_PATH] = '\0';
 }
 
 
@@ -73,15 +74,13 @@ void HallOfFame::set_last_savegame_file_name(const char* fileName) {
 //
 int HallOfFame::read_hall_of_fame()
 {
-	char full_path[MAX_PATH+1];
+	FilePath full_path(sys.dir_config);
 	int  rc;
 	File file;
 
-	if (!misc.path_cat(full_path, sys.dir_config, HALL_OF_FAME_FILE_NAME, MAX_PATH))
-	{
-		ERR("Path to the hall of fame too long.\n");
+	full_path += HALL_OF_FAME_FILE_NAME;
+	if( full_path.error_flag )
 		return 0;
-	}
 
 	if( !misc.is_file_exist(full_path) )
 		return 0;
@@ -99,7 +98,7 @@ int HallOfFame::read_hall_of_fame()
 	//------ read last saved game file name ------//
 
 	if( rc )
-		rc = file.file_read( last_savegame_file_name, MAX_PATH+1 );
+		rc = file.file_read( last_savegame_file_name, SaveGameInfo::MAX_FILE_PATH+1 );
 
 	file.file_close();
 
@@ -112,15 +111,13 @@ int HallOfFame::read_hall_of_fame()
 //
 int HallOfFame::write_hall_of_fame()
 {
-	char full_path[MAX_PATH+1];
+	FilePath full_path(sys.dir_config);
 	int  rc;
 	File file;
 
-	if (!misc.path_cat(full_path, sys.dir_config, HALL_OF_FAME_FILE_NAME, MAX_PATH))
-	{
-		ERR("Path to the hall of fame too long.\n");
+	full_path += HALL_OF_FAME_FILE_NAME;
+	if( full_path.error_flag )
 		return 0;
-	}
 
 	rc = file.file_create( full_path, 0, 1 );  // 0=don't handle error itself
 
@@ -135,7 +132,7 @@ int HallOfFame::write_hall_of_fame()
 	//------ write last saved game file name ------//
 
 	if( rc )
-		rc = file.file_write( last_savegame_file_name, MAX_PATH+1 );
+		rc = file.file_write( last_savegame_file_name, SaveGameInfo::MAX_FILE_PATH+1 );
 
 	file.file_close();
 
@@ -263,7 +260,8 @@ void HallFameEntry::disp_info(int x, int y, int pos)
 
 	//----------------------------------------//
 
-	str  = _("Score : ");
+	str  = _("Score");
+	str += " : ";
 	str += score;
 
 	fontPtr->put( x, y2, str );
@@ -282,7 +280,8 @@ void HallFameEntry::disp_info(int x, int y, int pos)
 		x-=10;			// position adjustment for the German version
 	#endif
 
-	str  = _("Period : ");
+	str  = _("Period");
+	str += " : ";
 	str += misc.num_to_str(start_year);     // without adding comma separators
 	str += "-";
 	str += misc.num_to_str(end_year);
@@ -291,7 +290,8 @@ void HallFameEntry::disp_info(int x, int y, int pos)
 
 	//----------------------------------------//
 
-	str  = _("Difficulty : ");
+	str  = _("Difficulty");
+	str += " : ";
 	str += difficulty_rating;
 
 	fontPtr->put( x+420, y2, str );

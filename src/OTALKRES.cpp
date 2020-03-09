@@ -55,6 +55,10 @@ enum { TALK_LINE_HEIGHT = 18 };
 
 static String nation_name_str_array[MAX_NATION];
 
+// ----------- Define static function ----------//
+
+static char* select_nation_color(char nation_color);
+
 //---------- Begin of function TalkRes::TalkRes -----------//
 //
 TalkRes::TalkRes() : talk_msg_array( sizeof(TalkMsg), 100 )
@@ -272,11 +276,7 @@ int TalkRes::add_trade_embargo_choices()
 		{
 			//------ add color bar -------//
 
-			char colorCodeStr[] = "0 ";
-
-			colorCodeStr[0] = FIRST_NATION_COLOR_CODE_IN_TEXT + nation_array[i]->color_scheme_id;
-
-			nation_name_str_array[i-1] = colorCodeStr;
+			nation_name_str_array[i-1] = select_nation_color(nation_array[i]->color_scheme_id);
 
 			//------ add natino name ------//
 
@@ -317,11 +317,7 @@ int TalkRes::add_declare_war_choices()
 		{
 			//------ add color bar -------//
 
-			char colorCodeStr[] = "0 ";
-
-			colorCodeStr[0] = FIRST_NATION_COLOR_CODE_IN_TEXT + nation_array[i]->color_scheme_id;
-
-			nation_name_str_array[i-1] = colorCodeStr;
+			nation_name_str_array[i-1] = select_nation_color(nation_array[i]->color_scheme_id);
 
 			//------ add natino name ------//
 
@@ -792,7 +788,8 @@ void TalkRes::send_talk_msg_now(TalkMsg* talkMsgPtr)
 			news_array.diplomacy( talk_msg_array.recno() );
 			// ###### begin Gilbert 9/10 ########//
 			// sound effect
-			se_ctrl.immediate_sound(talkMsgPtr->talk_id==TALK_DECLARE_WAR ? (char*)"DECL_WAR":(char*)"GONG");
+			if( toNation->get_relation(talkMsgPtr->from_nation_recno)->has_contact )
+				se_ctrl.immediate_sound(talkMsgPtr->talk_id==TALK_DECLARE_WAR ? (char*)"DECL_WAR":(char*)"GONG");
 			// ###### end Gilbert 9/10 ########//
 			break;
 
@@ -1087,7 +1084,7 @@ int TalkRes::detect_talk()
 		choice_question_second_line = NULL;
 
 		talk_choice_count = 0;
-		add_talk_choice( _("Continue"), 0 );
+		add_talk_choice( _("Continue."), 0 );
 	}
 
 	return 1;
@@ -1376,3 +1373,16 @@ void TalkRes::del_all_nation_msg(int nationRecno)
 }
 //-------- End of function TalkRes::del_all_nation_msg ---------//
 
+
+#define ASCII_ZERO 0x30
+//------ Begin of static function select_nation_color ------//
+//
+static char* select_nation_color(char nation_color)
+{
+	static char colorCodeStr[] = "@COL0 ";
+
+	colorCodeStr[4] = ASCII_ZERO + nation_color;
+
+	return colorCodeStr;
+}
+//------ End of static function select_nation_color ------//

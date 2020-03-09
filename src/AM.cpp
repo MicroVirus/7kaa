@@ -24,11 +24,8 @@
 #include <ALL.h>
 #include <version.h>
 
-#ifndef NO_WINDOWS
-#include <initguid.h>
-#endif
-
 #ifdef ENABLE_INTRO_VIDEO
+#include <initguid.h>
 #include <dshow.h>
 #endif
 
@@ -110,8 +107,11 @@
 #include <OINGMENU.h>
 // ###### end Gilbert 23/10 #######//
 #include <dbglog.h>
-#include <locale.h>
+#include <CmdLine.h>
+#include <LocaleRes.h>
+#include <PlayerStats.h>
 #include "gettext.h"
+#include <ConfigAdv.h>
 
 //------- define game version constant --------//
 
@@ -196,6 +196,7 @@ RockRes           rock_res;
 ExploredMask      explored_mask;
 Help              help;
 Tutor             tutor;
+LocaleRes         locale_res;
 
 //-------- Game Data class -----------//
 
@@ -230,12 +231,16 @@ GameSet           game_set;         // no constructor
 Battle            battle;
 Power             power;
 World             world;
+char              scenario_file_name[FilePath::MAX_FILE_PATH+1];
 SaveGameArray     save_game_array;
+nsPlayerStats::PlayerStats playerStats;
 HallOfFame        hall_of_fame;
 // ###### begin Gilbert 23/10 #######//
 OptionMenu			option_menu;
 InGameMenu			in_game_menu;
 // ###### end Gilbert 23/10 #######//
+CmdLine           cmd_line;
+ConfigAdv         config_adv;
 
 //----------- Global Variables -----------//
 
@@ -282,23 +287,6 @@ DBGLOG_DEFAULT_CHANNEL(am);
 
 static void extra_error_handler();
 
-/* Override obstinate SDL hacks */
-#ifdef __WINE__
-# ifdef main
-#   undef main
-# endif
-#endif
-
-#if (!defined(NO_WINDOWS) && !USE_SDL)
-// Prototype main since the runtime does not do that for us
-int main(int, char**);
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
-{
-	return main(__argc, __argv);
-}
-#endif
-
 //---------- Begin of function main ----------//
 //
 // Compilation constants:
@@ -308,34 +296,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // DEBUG3 - debugging some functions (e.g. Location::get_loc()) which
 //          will cause major slowdown.
 //
-// Command line paramters:
-// -join <named or ip address>
-//   Begin the program by attempting to connect to the specified address.
-// -host
-//   Begin the program by hosting a multiplayer match
-// -name <player name>
-//   Set the name you wish to be known as.
-//
-// You cannot specify -join or -host more than once.
-//
 int main(int argc, char **argv)
 {
-#ifdef ENABLE_NLS
-	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE, LOCALE_PATH);
-	textdomain(PACKAGE);
-#endif
-
-	const char *lobbyJoinCmdLine = "-join";
-	const char *lobbyHostCmdLine = "-host";
-	const char *lobbyNameCmdLine = "-name";
-	const char *demoCmdLine = "-demo";
-	const char *demoSpeedCmdLine = "-speed";
-	char *join_host = NULL;
-	int lobbied = 0;
-	int demoSelection = 0;
-	int demoSpeed = 99;
-
+	if (!sys.set_game_dir())
+		return 1;
+	locale_res.init();
 	sys.set_config_dir();
 
 	//try to read from CONFIG.DAT, moved to AM.CPP
@@ -345,55 +310,19 @@ int main(int argc, char **argv)
 		new_config_dat_flag = 1;
 		config.init();
 	}
+	config_adv.init();
+	if( config_adv.locale[0] )
+		locale_res.load();
 
 	//----- read command line arguments -----//
 
-	for (int i = 0; i < argc; i++) {
-		if (!strcmp(argv[i], lobbyJoinCmdLine)) {
-			if (lobbied) {
-				sys.show_error_dialog(_("You cannot specify multiple -host or -join options."));
-				return 1;
-			}
-			if (i >= argc - 1) {
-				sys.show_error_dialog(_("Expected argument after %s."), lobbyJoinCmdLine);
-				return 1;
-			}
-			lobbied = 1;
-			join_host = argv[i+1];
-			i++;
-		} else if (!strcmp(argv[i], lobbyHostCmdLine)) {
-			if (lobbied) {
-				sys.show_error_dialog(_("You cannot specify multiple -host or -join options."));
-				return 1;
-			}
-			lobbied = 1;
-		} else if (!strcmp(argv[i], lobbyNameCmdLine)) {
-			if (i >= argc - 1) {
-				sys.show_error_dialog(_("Expected argument after %s."), lobbyNameCmdLine);
-				return 1;
-			}
-			strncpy(config.player_name, argv[i+1], HUMAN_NAME_LEN);
-			config.player_name[HUMAN_NAME_LEN] = 0;
-			i++;
-		} else if (!strcmp(argv[i], demoCmdLine)) {
-			demoSelection = 1;
-		} else if (!strcmp(argv[i], demoSpeedCmdLine)) {
-			if (i >= argc - 1) {
-				sys.show_error_dialog(_("Expected argument after %s."), demoSpeedCmdLine);
-				return 1;
-			}
-			demoSpeed = atoi(argv[i+1]);
-			i++;
-		}
-	}
+	if( !cmd_line.init(argc, argv) )
+		return 1;
 
 #ifdef ENABLE_INTRO_VIDEO
 	//----------- play movie ---------------//
 
-	if (!sys.set_game_dir())
-		return 1;
-
-	if (!lobbied && !demoSelection)
+	if( cmd_line.startup_mode == STARTUP_NORMAL )
 	{
 		String movieFileStr;
 		movieFileStr = DIR_MOVIE;
@@ -426,31 +355,41 @@ int main(int argc, char **argv)
 #endif // ENABLE_INTRO_VIDEO
 
 	if( !sys.init() )
+	{
+		vga.save_status_report();
 		return 1;
+	}
 
 	err.set_extra_handler( extra_error_handler );   // set extra error handler, save the game when a error happens
 
-	if (!lobbied && !demoSelection)
-		game.main_menu();
-#ifndef DISABLE_MULTI_PLAYER
-	else if (!demoSelection)
-		game.multi_player_menu(lobbied, join_host);
-#endif // DISABLE_MULTI_PLAYER
-	else if (!lobbied)
+	switch( cmd_line.startup_mode )
 	{
+	case STARTUP_NORMAL:
+		game.main_menu();
+		break;
+#ifndef DISABLE_MULTI_PLAYER
+	case STARTUP_MULTI_PLAYER:
+		game.multi_player_menu(1, cmd_line.join_host);
+		break;
+#endif
+	case STARTUP_TEST:
+		game.init();
+		battle.run_test();
+		game.deinit();
+		break;
+	case STARTUP_DEMO:
 		mouse_cursor.set_icon(CURSOR_NORMAL);
-		sys.set_speed(demoSpeed);
 		sys.disp_fps_flag = 1;
 		config.help_mode = NO_HELP;
-		game.game_mode = GAME_DEMO;
 		game.init();
-#ifdef HEADLESS_SIM
+		game.game_mode = GAME_DEMO;
 		info.init_random_seed(0);
 		battle.run(0);
-#else
-		battle.run_test();
-#endif
 		game.deinit();
+		break;
+	default:
+		game.main_menu();
+		break;
 	}
 
 	sys.deinit();

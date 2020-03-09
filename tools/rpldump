@@ -1,0 +1,544 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+use Scalar::Util qw(looks_like_number);
+
+use constant {
+	FILE_MAGIC_SIZE => 4,
+	CONFIG_FILE_SIZE => 144,
+	NATION_PARA_SIZE => 3*2+21,
+	FRAME_HEADER_SIZE => 2,
+	MSG_HEADER_SIZE => 6,
+	FIRST_REMOTE_MSG_ID => hex('25D3'),
+	INT_SIZE => 4,
+};
+
+my $player_count = 2;
+my @msg_ids = (
+	['MSG_QUEUE_HEADER', 'Ls', [qw(senderFrameCount nationRecno)]],
+	['MSG_QUEUE_TRAILER'],
+	['MSG_NEW_NATION'],
+	['MSG_UPDATE_GAME_SETTING'],
+	['MSG_START_GAME'],
+	['MSG_NEXT_FRAME', 's', [qw(nationRecno)]],
+	['MSG_REQUEST_RESEND'],
+	['MSG_TELL_SEND_TIME'],
+	['MSG_SET_SPEED'],
+	['MSG_TELL_RANDOM_SEED', 'sl', [qw(nationRecno remoteSeed)]],
+	['MSG_REQUEST_SAVE'],
+	['MSG_PLAYER_QUIT'],
+
+	['MSG_UNIT_STOP'],
+	['MSG_UNIT_MOVE', 'sssss*', [qw(destXLoc destYLoc selectedCount divided selectedUnitArray)]],
+	['MSG_UNIT_SET_FORCE_MOVE'],
+	['MSG_UNIT_ATTACK'],
+	['MSG_UNIT_ASSIGN', 'sssss*', [qw(destX destY selectedCount divided selectedArray)]],
+	['MSG_UNIT_CHANGE_NATION'],
+	['MSG_UNIT_BUILD_FIRM', 'ssss', [qw(unitRecno xLoc yLoc firmId)]],
+	['MSG_UNIT_BURN'],
+	['MSG_UNITS_SETTLE'],
+	['MSG_UNIT_SET_GUARD'],
+	['MSG_UNIT_SET_RANK'],
+	['MSG_UNIT_DISMOUNT'],
+	['MSG_UNIT_REWARD'],
+	['MSG_UNITS_TRANSFORM'],
+	['MSG_UNIT_RESIGN', 'ss', [qw(unitRecno nationRecno)]],
+	['MSG_UNITS_ASSIGN_TO_SHIP'],
+	['MSG_UNITS_SHIP_TO_BEACH'],
+	['MSG_UNIT_SUCCEED_KING'],
+	['MSG_UNITS_RETURN_CAMP'],
+	['MSG_U_CARA_CHANGE_GOODS', 'sss', [qw(unitRecno stopId pickUpType)]],
+	['MSG_U_CARA_SET_STOP', 'ssss', [qw(unitRecno stopId xLoc yLoc)]],
+	['MSG_U_CARA_DEL_STOP', 'ss', [qw(unitRecno stopId)]],
+	['MSG_U_CARA_SELECTED', 's', [qw(spriteRecno)]],
+	['MSG_U_SHIP_UNLOAD_UNIT'],
+	['MSG_U_SHIP_UNLOAD_ALL_UNITS'],
+	['MSG_U_SHIP_CHANGE_GOODS'],
+	['MSG_U_SHIP_SET_STOP'],
+	['MSG_U_SHIP_DEL_STOP'],
+	['MSG_U_SHIP_CHANGE_MODE'],
+	['MSG_U_SHIP_SELECTED'],
+	['MSG_U_GOD_CAST'],
+	['MSG_UNIT_SPY_NATION', 'sss', [qw(spriteRecno newNationRecno groupDefect)]],
+	['MSG_UNIT_SPY_NOTIFY_CLOAKED_NATION'],
+	['MSG_UNIT_CHANGE_AGGRESSIVE_MODE'],
+	['MSG_SPY_CHANGE_NOTIFY_FLAG', 'ss', [qw(spyRecno newNotifyFlag)]],
+	['MSG_SPY_ASSASSINATE'],
+	['MSG_UNIT_ADD_WAY_POINT'],
+
+	['MSG_FIRM_SELL'],
+	['MSG_FIRM_CANCEL', 's', [qw(firmRecno)]],
+	['MSG_FIRM_DESTRUCT'],
+	['MSG_FIRM_SET_REPAIR'],
+	['MSG_FIRM_TRAIN_LEVEL'],
+	['MSG_FIRM_MOBL_WORKER'],
+	['MSG_FIRM_MOBL_ALL_WORKERS', 's', [qw(firmRecno)]],
+	['MSG_FIRM_MOBL_OVERSEER'],
+	['MSG_FIRM_MOBL_BUILDER'],
+	['MSG_FIRM_TOGGLE_LINK_FIRM'],
+	['MSG_FIRM_TOGGLE_LINK_TOWN'],
+	['MSG_FIRM_PULL_TOWN_PEOPLE'],
+	['MSG_FIRM_SET_WORKER_HOME'],
+	['MSG_FIRM_BRIBE'],
+	['MSG_FIRM_CAPTURE'],
+
+	['MSG_FIRM_REWARD'],
+	['MSG_F_CAMP_PATROL'],
+	['MSG_F_CAMP_TOGGLE_PATROL'],
+	['MSG_F_INN_HIRE', 'sss', [qw(firm_recno hireId nation_recno)]],
+	['MSG_F_MARKET_SCRAP'],
+	['MSG_F_MARKET_HIRE_CARA'],
+	['MSG_F_RESEARCH_START'],
+	['MSG_F_WAR_BUILD_WEAPON'],
+	['MSG_F_WAR_CANCEL_WEAPON'],
+	['MSG_F_WAR_SKIP_WEAPON'],
+	['MSG_F_HARBOR_BUILD_SHIP', 'sss', [qw(firm_recno unitId createRemoveAmount)]],
+	['MSG_F_HARBOR_SAIL_SHIP', 'ss', [qw(firm_recno unitRecno)]],
+	['MSG_F_HARBOR_SKIP_SHIP'],
+	['MSG_F_FACTORY_CHG_PROD'],
+	['MSG_F_BASE_MOBL_PRAYER'],
+	['MSG_F_BASE_INVOKE_GOD'],
+
+	['MSG_TOWN_RECRUIT', 'ssss', [qw(townRecno skillId raceId amount)]],
+	['MSG_TOWN_SKIP_RECRUIT'],
+	['MSG_TOWN_MIGRATE'],
+	['MSG_TOWN_COLLECT_TAX'],
+	['MSG_TOWN_REWARD'],
+	['MSG_TOWN_TOGGLE_LINK_FIRM'],
+	['MSG_TOWN_TOGGLE_LINK_TOWN'],
+	['MSG_TOWN_AUTO_TAX'],
+	['MSG_TOWN_AUTO_GRANT'],
+	['MSG_TOWN_GRANT_INDEPENDENT'],
+
+	['MSG_WALL_BUILD'],
+	['MSG_WALL_DESTRUCT'],
+
+	['MSG_SPY_CYCLE_ACTION'],
+	['MSG_SPY_LEAVE_TOWN'],
+	['MSG_SPY_LEAVE_FIRM'],
+	['MSG_SPY_CAPTURE_FIRM'],
+	['MSG_SPY_DROP_IDENTITY'],
+	['MSG_SPY_REWARD'],
+	['MSG_SPY_EXPOSED'],
+
+	['MSG_SEND_TALK_MSG'],
+	['MSG_REPLY_TALK_MSG', 'lcc', [qw(talkRecno replyType padding)]],
+	['MSG_NATION_CONTACT'],
+	['MSG_NATION_SET_SHOULD_ATTACK'],
+	['MSG_CHAT'],
+
+	['MSG_COMPARE_NATION', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_UNIT', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_FIRM', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_TOWN', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_BULLET', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_REBEL', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_SPY', 'sC*', [qw(array_len crc)]],
+	['MSG_COMPARE_TALK', 'sC*', [qw(array_len crc)]],
+
+	['LAST_REMOTE_MSG_ID'],
+);
+
+my (
+	$MSG_QUEUE_HEADER,
+	$MSG_QUEUE_TRAILER,
+	$MSG_NEW_NATION,
+	$MSG_UPDATE_GAME_SETTING,
+	$MSG_START_GAME,
+	$MSG_NEXT_FRAME,
+	$MSG_REQUEST_RESEND,
+	$MSG_TELL_SEND_TIME,
+	$MSG_SET_SPEED,
+	$MSG_TELL_RANDOM_SEED,
+	$MSG_REQUEST_SAVE,
+	$MSG_PLAYER_QUIT,
+
+	$MSG_UNIT_STOP,
+	$MSG_UNIT_MOVE,
+	$MSG_UNIT_SET_FORCE_MOVE,
+	$MSG_UNIT_ATTACK,
+	$MSG_UNIT_ASSIGN,
+	$MSG_UNIT_CHANGE_NATION,
+	$MSG_UNIT_BUILD_FIRM,
+	$MSG_UNIT_BURN,
+	$MSG_UNITS_SETTLE,
+	$MSG_UNIT_SET_GUARD,
+	$MSG_UNIT_SET_RANK,
+	$MSG_UNIT_DISMOUNT,
+	$MSG_UNIT_REWARD,
+	$MSG_UNITS_TRANSFORM,
+	$MSG_UNIT_RESIGN,
+	$MSG_UNITS_ASSIGN_TO_SHIP,
+	$MSG_UNITS_SHIP_TO_BEACH,
+	$MSG_UNIT_SUCCEED_KING,
+	$MSG_UNITS_RETURN_CAMP,
+	$MSG_U_CARA_CHANGE_GOODS,
+	$MSG_U_CARA_SET_STOP,
+	$MSG_U_CARA_DEL_STOP,
+	$MSG_U_CARA_SELECTED,
+	$MSG_U_SHIP_UNLOAD_UNIT,
+	$MSG_U_SHIP_UNLOAD_ALL_UNITS,
+	$MSG_U_SHIP_CHANGE_GOODS,
+	$MSG_U_SHIP_SET_STOP,
+	$MSG_U_SHIP_DEL_STOP,
+	$MSG_U_SHIP_CHANGE_MODE,
+	$MSG_U_SHIP_SELECTED,
+	$MSG_U_GOD_CAST,
+	$MSG_UNIT_SPY_NATION,
+	$MSG_UNIT_SPY_NOTIFY_CLOAKED_NATION,
+	$MSG_UNIT_CHANGE_AGGRESSIVE_MODE,
+	$MSG_SPY_CHANGE_NOTIFY_FLAG,
+	$MSG_SPY_ASSASSINATE,
+	$MSG_UNIT_ADD_WAY_POINT,
+
+	$MSG_FIRM_SELL,
+	$MSG_FIRM_CANCEL,
+	$MSG_FIRM_DESTRUCT,
+	$MSG_FIRM_SET_REPAIR,
+	$MSG_FIRM_TRAIN_LEVEL,
+	$MSG_FIRM_MOBL_WORKER,
+	$MSG_FIRM_MOBL_ALL_WORKERS,
+	$MSG_FIRM_MOBL_OVERSEER,
+	$MSG_FIRM_MOBL_BUILDER,
+	$MSG_FIRM_TOGGLE_LINK_FIRM,
+	$MSG_FIRM_TOGGLE_LINK_TOWN,
+	$MSG_FIRM_PULL_TOWN_PEOPLE,
+	$MSG_FIRM_SET_WORKER_HOME,
+	$MSG_FIRM_BRIBE,
+	$MSG_FIRM_CAPTURE,
+
+	$MSG_FIRM_REWARD,
+	$MSG_F_CAMP_PATROL,
+	$MSG_F_CAMP_TOGGLE_PATROL,
+	$MSG_F_INN_HIRE,
+	$MSG_F_MARKET_SCRAP,
+	$MSG_F_MARKET_HIRE_CARA,
+	$MSG_F_RESEARCH_START,
+	$MSG_F_WAR_BUILD_WEAPON,
+	$MSG_F_WAR_CANCEL_WEAPON,
+	$MSG_F_WAR_SKIP_WEAPON,
+	$MSG_F_HARBOR_BUILD_SHIP,
+	$MSG_F_HARBOR_SAIL_SHIP,
+	$MSG_F_HARBOR_SKIP_SHIP,
+	$MSG_F_FACTORY_CHG_PROD,
+	$MSG_F_BASE_MOBL_PRAYER,
+	$MSG_F_BASE_INVOKE_GOD,
+
+	$MSG_TOWN_RECRUIT,
+	$MSG_TOWN_SKIP_RECRUIT,
+	$MSG_TOWN_MIGRATE,
+	$MSG_TOWN_COLLECT_TAX,
+	$MSG_TOWN_REWARD,
+	$MSG_TOWN_TOGGLE_LINK_FIRM,
+	$MSG_TOWN_TOGGLE_LINK_TOWN,
+	$MSG_TOWN_AUTO_TAX,
+	$MSG_TOWN_AUTO_GRANT,
+	$MSG_TOWN_GRANT_INDEPENDENT,
+
+	$MSG_WALL_BUILD,
+	$MSG_WALL_DESTRUCT,
+
+	$MSG_SPY_CYCLE_ACTION,
+	$MSG_SPY_LEAVE_TOWN,
+	$MSG_SPY_LEAVE_FIRM,
+	$MSG_SPY_CAPTURE_FIRM,
+	$MSG_SPY_DROP_IDENTITY,
+	$MSG_SPY_REWARD,
+	$MSG_SPY_EXPOSED,
+
+	$MSG_SEND_TALK_MSG,
+	$MSG_REPLY_TALK_MSG,
+	$MSG_NATION_CONTACT,
+	$MSG_NATION_SET_SHOULD_ATTACK,
+	$MSG_CHAT,
+
+	$MSG_COMPARE_NATION,
+	$MSG_COMPARE_UNIT,
+	$MSG_COMPARE_FIRM,
+	$MSG_COMPARE_TOWN,
+	$MSG_COMPARE_BULLET,
+	$MSG_COMPARE_REBEL,
+	$MSG_COMPARE_SPY,
+	$MSG_COMPARE_TALK,
+
+	$LAST_REMOTE_MSG_ID,
+) = (FIRST_REMOTE_MSG_ID)..(FIRST_REMOTE_MSG_ID+scalar(@msg_ids));
+
+my %pack_id_to_fmt_id = (
+	'C' => '%hhu',
+	'L' => '%u',
+	'S' => '%hu',
+	'c' => '%hhd',
+	'l' => '%d',
+	's' => '%hd',
+);
+
+my %pack_id_to_len = (
+	'C' => 1,
+	'L' => 4,
+	'S' => 2,
+	'c' => 1,
+	'l' => 4,
+	's' => 2,
+);
+
+if (!@ARGV) {
+	print "Usage: $0 FILE.RPL\n";
+	exit 1;
+}
+
+my $fh;
+my $frame_count;
+my $file_version;
+my @game_ver = (0,0,0,0,0);
+my $frame_delay = 5;
+my $random_seed;
+my $nation_count;
+
+if (!open($fh, $ARGV[0], )) {
+	print "Unable to open $ARGV[0]\n";
+	exit 1;
+}
+
+my $buf;
+if (read($fh, $buf, FILE_MAGIC_SIZE) != FILE_MAGIC_SIZE) {
+	print "Invalid file\n";
+	goto error_out;
+}
+if ($buf ne "7KRP") {
+	print "Invalid file\n";
+	goto error_out;
+}
+if (read($fh, $buf, INT_SIZE) != INT_SIZE) {
+	print "Invalid file\n";
+	goto error_out;
+}
+$file_version = unpack('L', $buf);
+if ($file_version == 1) {
+	my $file_header_size = INT_SIZE*7;
+	if (read($fh, $buf, $file_header_size) != $file_header_size) {
+		print "Invalid file\n";
+		goto error_out;
+	}
+	($game_ver[0], $game_ver[1], $game_ver[2], $game_ver[3], $game_ver[4], $frame_delay, $random_seed) = unpack('LLLLLLL', $buf);
+} elsif ($file_version == 0) {
+	my $file_header_size = INT_SIZE*5;
+	if (read($fh, $buf, $file_header_size) != $file_header_size) {
+		print "Invalid file\n";
+		goto error_out;
+	}
+	($game_ver[0], $game_ver[1], $game_ver[2], $game_ver[3], $random_seed) = unpack('LLLLL', $buf);
+} else {
+	print "Invalid file\n";
+	goto error_out;
+}
+print "Game version: @game_ver\n";
+print "Random Seed: $random_seed\n";
+if (read($fh, $buf, CONFIG_FILE_SIZE) != CONFIG_FILE_SIZE) {
+	print "Invalid file\n";
+	goto error_out;
+}
+if (read($fh, $buf, 2) != 2) {
+	print "Invalid file\n";
+	goto error_out;
+}
+$nation_count = unpack('s', $buf);
+for (my $i = 0; $i < $nation_count; $i++) {
+	process_nation($fh);
+}
+
+$frame_count = 0;
+while (read($fh, $buf, FRAME_HEADER_SIZE) == FRAME_HEADER_SIZE) {
+	my $frame_size;
+	my $msg_id;
+	$frame_size = unpack('S', $buf);
+	$frame_count++;
+	if (!process_frame($fh, $frame_size)) {
+		goto error_out;
+	}
+}
+
+close($fh);
+exit 0;
+
+error_out:
+close($fh);
+exit 1;
+
+sub msg_id_to_str {
+	my $msg_id;
+	my $idx;
+	($msg_id) = @_;
+	$idx = $msg_id - FIRST_REMOTE_MSG_ID;
+	if ($idx >= 0 && $idx <= @msg_ids) {
+		return $msg_ids[$idx][0];
+	}
+	return sprintf("(invalid)0x%x", $_[0]);
+}
+
+sub pack_str_to_fmt_str {
+	my $pack_str;
+	my $fmt_ids;
+	my $msg_len;
+	my $len;
+	my $last_len;
+	my $last_fmt;
+	my $last_fmt_id;
+	my @fmt;
+	my @pack_ids;
+	my $i;
+	($pack_str, $fmt_ids, $msg_len) = @_;
+	@pack_ids = split(//, $pack_str);
+	$len = 0;
+	for ($i = 0; $i < @pack_ids && $len < $msg_len; $i++) {
+		my $id;
+		if (defined($fmt_ids->[$i])) {
+			$id = $fmt_ids->[$i] . "=";
+		} else {
+			$id = "";
+		}
+		if ($pack_ids[$i] eq '*') {
+			if (!defined($last_fmt)) {
+				die;
+			}
+			my $count = ($msg_len - $len) / $last_len;
+			$fmt[$#fmt] = "${last_fmt_id}ARRAY(" . join(" ", map {$last_fmt} 0..$count) . ")";
+			last;
+		}
+		if (!defined($pack_id_to_fmt_id{$pack_ids[$i]}) || !defined($pack_id_to_len{$pack_ids[$i]})) {
+			die "Perl specifier '$pack_ids[$i]' does not have the format and size specified for printing";
+		}
+		$last_fmt = $pack_id_to_fmt_id{$pack_ids[$i]};
+		$last_len = $pack_id_to_len{$pack_ids[$i]};
+		$last_fmt_id = $id;
+		$len += $last_len;
+		push(@fmt, "${id}$last_fmt");
+	}
+	return join(" ", @fmt);
+}
+
+sub process_nation {
+	my $fh;
+	my $buf;
+	my @params;
+
+	($fh) = @_;
+
+	read($fh, $buf, NATION_PARA_SIZE);
+	@params = unpack("sssZ*", $buf);
+	printf("Nation Parameters: nation_recno=%hd color_scheme=%hd race_id=%hd player_name=%s\n", @params);
+}
+
+sub process_frame {
+	my $fh;
+	my $frame_size;
+	my $bytes;
+	my $pos;
+	my %frame;
+
+	($fh, $frame_size) = @_;
+
+	%frame = (
+		nation => 0,
+	);
+	$bytes = 0;
+	$pos = tell($fh);
+	printf("--- begin frame %d at %x with size %d ---\n", $frame_count, $pos, $frame_size);
+	while ($bytes < $frame_size) {
+		my $buf;
+		my $msg_size;
+		my $msg_id;
+		if (read($fh, $buf, MSG_HEADER_SIZE) != MSG_HEADER_SIZE) {
+			print "truncated file in message header\n";
+			return 0;
+		}
+		($msg_size, $msg_id) = unpack('SL', $buf);
+		$bytes += MSG_HEADER_SIZE;
+		my $read_size = $msg_size - 4;
+		if ($read_size <= 0) {
+			print "corrupt file\n";
+			return 0;
+		}
+		if (read($fh, $buf, $read_size) != $read_size) {
+			print "truncated file in message data\n";
+			return 0;
+		}
+		$bytes += $read_size;
+		process_msg(\%frame, $pos, $buf, $read_size, $msg_id);
+		$pos = tell($fh);
+	}
+	print "--- end frame $frame_count ---\n";
+	return 1;
+}
+
+sub process_msg {
+	my $frame;
+	my $pos;
+	my $packed_msg;
+	my $size;
+	my $msg_id;
+	my $idx;
+	my $format;
+	my @data;
+
+	($frame, $pos, $packed_msg, $size, $msg_id) = @_;
+
+	if ($size <= 0) {
+		printf("frame=%d pos=%x size=%hu msg_size=%hu nation=%d, msg=%s\n", $frame_count, $pos, $size+6, $size+4, $frame->{nation}, msg_id_to_str($msg_id));
+	}
+	$format = "";
+	$idx = $msg_id - FIRST_REMOTE_MSG_ID;
+	if ($idx >= 0 && $idx <= @msg_ids) {
+		my $encoding;
+		if (defined($msg_ids[$idx][1])) {
+			$encoding = $msg_ids[$idx][1];
+			#$format = $msg_ids[$idx][2];
+			$format = pack_str_to_fmt_str($encoding, $msg_ids[$idx][2], $size);
+		} else {
+			$encoding = "S"x($size/2);
+			$format = "%hu "x($size/2);
+			chop($format);
+		}
+		@data = unpack($encoding, $packed_msg);
+	} else {
+		@data = unpack("H$size", $packed_msg);
+		$format = "%s";
+	}
+	#printf("frame=%d pos=%x size=%hu msg_size=%hu nation=%d msg=%s $format\n", $frame_count, $pos, $size+6, $size+4, $frame->{nation}, msg_id_to_str($msg_id), @data);
+	printf("nation=%d msg=%s $format\n", $frame->{nation}, msg_id_to_str($msg_id), @data);
+
+	if ($msg_id == $MSG_QUEUE_HEADER) {
+		$frame->{nation} = $data[1];
+	} elsif ($msg_id == $MSG_TELL_RANDOM_SEED) {
+		if (defined($frame->{random_seed})) {
+			if ($frame->{random_seed} != $data[1]) {
+				print "---desync rng at frame=$frame_count ($frame->{random_seed} != $data[1])---\n";
+			}
+		} else {
+			$frame->{random_seed} = $data[1];
+		}
+	} elsif ($msg_id >= $MSG_COMPARE_NATION && $msg_id <= $MSG_COMPARE_TALK) {
+		my $key = msg_id_to_str($msg_id);
+		if (defined($frame->{crc}{$key})) {
+			my $crc = $frame->{crc}{$key};
+			my $desync;
+			$desync = 0;
+			if (@$crc != @data) {
+				$desync = @$crc + @data;
+			}
+			for (my $i = 1; $i < @$crc; $i++) {
+				if ($crc->[$i] != $data[$i]) {
+					$desync = $i;
+					last;
+				}
+			}
+			if ($desync) {
+				print "---desync crc of $key at frame=$frame_count crc_id=$desync ($crc->[$desync] != $data[$desync])---\n";
+			}
+		} else {
+			$frame->{crc}{$key} = [@data];
+		}
+	}
+}

@@ -110,6 +110,13 @@ static void disp_talk_msg_sent(int refreshFlag);
 
 static int  sort_talk_msg( const void *a, const void *b );
 
+static void put_heading(char justify, int x1, int y1, int x2, int y2, const char *textPtr);
+static char* nation_color_code_str(int nationRecno);
+
+#define J_L Font::LEFT_JUSTIFY
+#define J_C Font::CENTER_JUSTIFY
+#define J_R Font::RIGHT_JUSTIFY
+
 
 //--------- Begin of function Info::disp_nation ---------//
 //
@@ -126,10 +133,10 @@ void Info::disp_nation(int refreshFlag)
 
 	vga_back.d3_panel_up(REPORT_BROWSE_X1, REPORT_BROWSE_Y1, REPORT_BROWSE_X2, REPORT_BROWSE_Y1+33 );
 
-	font_san.put( x	 , y+7, _("Kingdom") );
+	put_heading( J_L, x    , y, x+185, y+29, _("Kingdom") );
 
-	font_san.put( x+185, y+7, _("Reputation") );
-	font_san.put( x+275, y+7, _("Status") );
+	put_heading( J_C, x+185, y, x+275, y+29, _("Reputation") );
+	put_heading( J_L, x+275, y, x+345, y+29, _("Status") );
 
 
 #if(defined(SPANISH))
@@ -160,20 +167,11 @@ void Info::disp_nation(int refreshFlag)
 	font_san.put( x+465, y   , "Handels-" );
 	font_san.put( x+465, y+13, "Betrag" );
 #else
-	// TRANSLATORS: Part of "Allow Attack"
-	font_san.put( x+345, y   , _("Allow") );
-	// TRANSLATORS: Part of "Allow Attack"
-	font_san.put( x+343, y+13, _("Attack") );
+	put_heading( J_L, x+345, y   , x+405, y+29, _("Allow Attack") );
 
-	// TRANSLATORS: Part of "Trade Treaty"
-	font_san.put( x+405, y   , pgettext("OR_NAT", "Trade") );
-	// TRANSLATORS: Part of "Trade Treaty"
-	font_san.put( x+405, y+13, _("Treaty") );
+	put_heading( J_L, x+405, y   , x+465, y+29, _("Trade Treaty") );
 
-	// TRANSLATORS: Part of "Trade Amount"
-	font_san.put( x+465, y   , pgettext("OR_NAT", "Trade") );
-	// TRANSLATORS: Part of "Trade Amount"
-	font_san.put( x+465, y+13, _("Amount") );
+	put_heading( J_L, x+465, y   , REPORT_BROWSE_X2-20, y+29, _("Trade Amount") );
 #endif
 
 
@@ -409,6 +407,10 @@ static int detect_button()
 		if( mouse.single_click( x, REPORT_BUTTON_Y1, x+REPORT_BUTTON_WIDTH-1, REPORT_BUTTON_Y2 ) )
 		{
 			info.nation_report_mode = i;
+			if( info.nation_report_mode == NATION_REPORT_CHAT )
+				SDL_StartTextInput();
+			else
+				SDL_StopTextInput();
 			return 1;
 		}
 
@@ -534,11 +536,7 @@ static void disp_nation_info()
 
 		//--------- duration of current status ----------//
 
-		// TRANSLATORS: Duration of <War/Tense/Neutral/Friendly/Alliance> Status
-		str = _("Duration of %s Status");
-		snprintf( xstr, MAX_STR_LEN+1, str, nationRelation->status_str() );
-
-		font_san.field( x1, y+=16, xstr, x2, nationRelation->status_duration_str(), x3, INFO_REPAINT, "STATTIME" );
+		font_san.field( x1, y+=16, nationRelation->duration_of_status_str(), x2, nationRelation->status_duration_str(), x3, INFO_REPAINT, "STATTIME" );
 
 		//------- display the allow_attack field --------//
 
@@ -858,40 +856,29 @@ static void put_talk_msg_rec(int recNo, int x1, int y, int refreshFlag)
 
 	//---------------------------------------//
 
-	const char* str1;
-
-	if( isTo )
-		// TRANSLATORS: To <Nation color> on <Date> :
-		str1 = _("To");
-	else
-		// TRANSLATORS: From <Nation color> on <Date> :
-		str1 = _("From");
-
-	font_san.put( x , y, str1 );
-
-	x += font_san.text_width(str1)+5;
-
-	//---------------------------------------//
+	String str;
+	char *nation_color, *date_str;
 
 	if( talkMsg->from_nation_recno == info.viewing_nation_recno )
-		nation_array[talkMsg->to_nation_recno]->disp_nation_color(x, y+2);
+		nation_color = nation_color_code_str(talkMsg->to_nation_recno);
 	else
-		nation_array[talkMsg->from_nation_recno]->disp_nation_color(x, y+2);
-
-	x+=18;
-
-	String str;
-	char xstr[MAX_STR_LEN+1] = {0};
-
-	// TRANSLATORS: To/From <Nation color> on <Date> :
-	str = _("on %s :");
+		nation_color = nation_color_code_str(talkMsg->from_nation_recno);
 
 	if( talkMsgDisp->is_reply )
-		snprintf( xstr, MAX_STR_LEN+1, str, date.date_str(talkMsg->reply_date) );
+		date_str = date.date_str(talkMsg->reply_date);
 	else
-		snprintf( xstr, MAX_STR_LEN+1, str, date.date_str(talkMsg->date) );
+		date_str = date.date_str(talkMsg->date);
 
-	font_san.put( x , y, xstr );
+	if( isTo )
+		// TRANSLATORS: To<Nation color> on <Date> :
+		snprintf(str, MAX_STR_LEN+1, _("To%s on %s :"), nation_color, date_str);
+	else
+		// TRANSLATORS: From<Nation color> on <Date> :
+		snprintf(str, MAX_STR_LEN+1, _("From%s on %s :"), nation_color, date_str);
+
+	font_san.put( x , y, str );
+
+	//---------------------------------------//
 
 	font_san.put( x1, y+13, talkMsg->msg_str(info.viewing_nation_recno, talkMsgDisp->is_reply), 0, browse_talk_msg.ix2 );
 }
@@ -1060,3 +1047,30 @@ void Info::player_reply_chat(int withNationRecno)
 }
 //-------- End of function Info::player_reply_chat ---------//
 
+
+//-------- Begin of static function put_heading --------//
+//
+static void put_heading(char justify, int x1, int y1, int x2, int y2, const char *textPtr)
+{
+	int dispLines=0;
+	int totalLines=0;
+	font_san.count_line(x1,y1,x2,y2,textPtr,0,dispLines,totalLines);
+	if( dispLines > 1 )
+		font_san.put_paragraph(x1,y1,x2,y2,textPtr,-1,1,1,justify);
+	else if( y1+7<y2 )
+		font_san.put_paragraph(x1,y1+7,x2,y2,textPtr,-1,1,1,justify);
+}
+//----------- End of static function put_heading -----------//
+
+
+#define ASCII_ZERO 0x30
+//----- Begin of static function nation_color_code_str ------//
+//
+static char* nation_color_code_str(int nationRecno)
+{
+	static char colorCodeStr[] = " @COL0";
+
+	colorCodeStr[5] = ASCII_ZERO + nation_array[nationRecno]->color_scheme_id;
+	return colorCodeStr;
+}
+//------- End of static function nation_color_code_str ------//

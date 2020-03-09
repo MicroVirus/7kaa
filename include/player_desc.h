@@ -36,13 +36,7 @@ public:
 	char authorized;
 	ENetAddress address;
 
-	PlayerDesc();
-	PlayerDesc(ENetAddress *address);
-	PlayerDesc(const char *name);
-
-	uint32_t pid();
-	char *friendly_name_str();
-	ENetAddress *get_address();
+	PlayerDesc(const char* name, const ENetAddress& address);
 };
 
 #endif // __PLAYER_DESC_H

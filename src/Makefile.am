@@ -1,4 +1,4 @@
-SUBDIRS = enet imgfun openal platform
+SUBDIRS = enet imgfun openal
 if USE_CURL
 SUBDIRS += curl
 endif
@@ -6,6 +6,9 @@ endif
 bin_PROGRAMS = 7kaa
 7kaa_SOURCES = \
 	AM.cpp \
+	ConfigAdv.cpp \
+	CmdLine.cpp \
+	LocaleRes.cpp \
 	OAI_ACT.cpp \
 	OAI_ACT2.cpp \
 	OAI_ATTK.cpp \
@@ -222,7 +225,6 @@ bin_PROGRAMS = 7kaa
 	OUNITAC.cpp \
 	OUNITAI.cpp \
 	OUNITAM.cpp \
-	OUNITAMT.cpp \
 	OUNITAT.cpp \
 	OUNITAT2.cpp \
 	OUNITAT3.cpp \
@@ -252,6 +254,7 @@ bin_PROGRAMS = 7kaa
 	OU_VEHI.cpp \
 	OVBROWIF.cpp \
 	OVBROWSE.cpp \
+	OVGA.cpp \
 	OVGABUF.cpp \
 	OVGABUF2.cpp \
 	OVGALOCK.cpp \
@@ -269,6 +272,8 @@ bin_PROGRAMS = 7kaa
 	OW_ROCK.cpp \
 	OW_SOUND.cpp \
 	OW_WALL.cpp \
+	PlayerStats.cpp \
+	ReplayFile.cpp \
 	dbglog.cpp \
 	file_input_stream.cpp \
 	file_output_stream.cpp \
@@ -279,12 +284,19 @@ bin_PROGRAMS = 7kaa
 	mem_input_stream.cpp \
 	misc_uuid.cpp \
 	output_stream.cpp \
+	session_desc.cpp \
 	player_desc.cpp \
-	surface_sdl.cpp \
-	vga_sdl.cpp \
 	vgautil.cpp \
 	vgautil2.cpp
 
+AM_CPPFLAGS = \
+	-DPACKAGE_DATA_DIR=\"$(pkgdatadir)\" \
+	-DLOCALE_DIR=\"$(localedir)\"
+
+AM_CXXFLAGS = $(GLOBAL_CFLAGS)
+AM_CXXFLAGS += $(SDL_CFLAGS)
+
+AM_LDFLAGS = $(GLOBAL_LDFLAGS)
 
 7kaa_LDADD =
 
@@ -302,20 +314,17 @@ else
 7kaa_LDADD += ./imgfun/generic/libimgfun_generic.a
 endif
 
-7kaa_LDADD += ./platform/libplatform.a
-
-7kaa_LDADD += @LIBINTL@
-
 if USE_CURL
 7kaa_LDADD += ./curl/libWebService.a
 endif
 
 if USE_WINDOWS
 7kaa_SOURCES += ico.rc
+endif
+
 SUFFIXES = .rc
 .rc.o:
-	windres -I "$(top_srcdir)/include" -i $< $@
+	$(WINDRES) -I "$(top_srcdir)/include" -i $< $@
 ico.o: $(top_srcdir)/include/version.h 7k.ico
-endif
 
 EXTRA_DIST = 7k.ico ico.rc

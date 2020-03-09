@@ -23,6 +23,7 @@
 
 #include <OSYS.h>
 #include <WebService.h>
+#include <FilePath.h>
 
 static size_t WriteMemoryCallback(char *contents, size_t size, size_t nmemb, std::string *buffer)
 {
@@ -50,9 +51,10 @@ void WebService::init()
 	if( !curl )
 		return;
 
-	std::string cookie_file = sys.dir_config;
+	FilePath cookie_file(sys.dir_config);
 	cookie_file += "cookies.txt";
-	curl_easy_setopt(curl, CURLOPT_COOKIEJAR, cookie_file.c_str());
+	if( !cookie_file.error_flag )
+		curl_easy_setopt(curl, CURLOPT_COOKIEJAR, (char*)cookie_file);
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
@@ -60,6 +62,9 @@ void WebService::init()
 	// Use a hard timeout at 10 seconds. This is not foolproof, but it is
 	// somewhat necessary while we are using the blocking API.
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+#ifndef ENABLE_IPV6
+	curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+#endif
 
 	init_flag = 1;
 }

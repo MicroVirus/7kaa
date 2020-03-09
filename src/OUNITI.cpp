@@ -197,7 +197,7 @@ void Unit::process_idle()
 	//---------------------------------------------------------------------------//
 	if(action_mode>=ACTION_ATTACK_UNIT && action_mode<=ACTION_ATTACK_WALL)
 	{
-		if(unit_array.idle_blocked_unit_reset_count && *(long*)blocked_edge)
+		if(unit_array.idle_blocked_unit_reset_count && *(uint32_t*)blocked_edge)
 		{
 			unit_array.idle_blocked_unit_reset_count = 0;
 			memset(blocked_edge, 0, sizeof(char)*4);
@@ -1215,6 +1215,11 @@ void Unit::idle_detect_helper_attack(short unitRecno)
 		Unit *targetUnit = unit_array[actionPara];
 
 		if(targetUnit->nation_recno==nation_recno)
+			return;
+
+		// the targetUnit this unitPtr is attacking may have entered a
+		// building by now due to processing order -- skip this one
+		if(!targetUnit->is_visible())
 			return;
 
 		if(misc.points_distance(next_x_loc(), next_y_loc(), targetUnit->next_x_loc(), targetUnit->next_y_loc())<HELP_DISTANCE)

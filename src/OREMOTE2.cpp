@@ -400,6 +400,18 @@ void Remote::process_receive_queue()
 	RemoteQueue &rq = receive_queue[0];
 	RemoteQueueTraverse rqt(rq);
 
+	if( connectivity_mode == MODE_REPLAY )
+	{
+		replay.read_queue(&rq);
+		if( replay.at_eof() )
+		{
+			connectivity_mode = MODE_REPLAY_END;
+			sys.signal_exit_flag = 2;
+		}
+	}
+	else
+		replay.write_queue(&rq);
+
 	if( !rq.validate_queue() )
 		err.run( "Queue corrupted, Remote::process_receive_queue()" );
 

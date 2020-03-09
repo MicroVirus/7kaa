@@ -57,6 +57,8 @@ public:
 };
 #pragma pack()
 
+struct FirmInnCrc;
+
 //------- Define class FirmInn --------//
 
 #pragma pack(1)
@@ -82,6 +84,7 @@ public:
 	void		assign_unit(int unitRecno);
 
 	int		hire(short recNo);
+	int		hire_remote(short unitId, short combat_level, short skill_id, short skill_level, short hire_cost, short spy_recno);
 
 	virtual	void auto_defense(short targetRecno);
 	virtual	FirmInn* cast_to_FirmInn() { return this; };
@@ -91,6 +94,7 @@ public:
 	//-------------- multiplayer checking codes ---------------//
 	virtual	uint8_t crc8();
 	virtual	void	clear_ptr();
+	virtual	void	init_crc(FirmInnCrc *c);
 
 private:
 	int 		should_add_inn_unit();

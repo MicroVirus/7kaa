@@ -41,6 +41,7 @@
 // ##### patch begin Gilbert 20/1 #######//
 #include <OBOX.h>
 // ##### patch end Gilbert 20/1 #######//
+#include <gettext.h>
 
 //---------------- Define variable type ---------------//
 
@@ -263,7 +264,7 @@ void RemoteMsg::new_nation()
 //
 // structure of data_buf:
 //
-// <long>     - random seed
+// <int32_t>  - random seed
 // <short>    - The number of nations joined
 // <Nation..> - An array of nation objects
 //
@@ -275,8 +276,8 @@ void RemoteMsg::update_game_setting()
 
 	//------- set random seed -----------//
 
-	misc.set_random_seed(*(long*)dataPtr);
-	dataPtr 		    += sizeof(long);
+	misc.set_random_seed(*(int32_t*)dataPtr);
+	dataPtr += sizeof(int32_t);
 
 	//------- update nation_array -----------//
 
@@ -416,7 +417,7 @@ void RemoteMsg::set_speed()
 // structure of data_buf:
 //
 // <short>  - nation recno
-// <long>   - random seed
+// <int32_t> - random seed
 //
 void RemoteMsg::tell_random_seed()
 {
@@ -424,7 +425,7 @@ void RemoteMsg::tell_random_seed()
 	char *p = data_buf;
 	short nationRecno = *(short *)p;
 	p += sizeof(short);
-	long remoteSeed = *(long *)p;
+	int32_t remoteSeed = *(int32_t *)p;
 
 #if defined(DEBUG) && defined(ENABLE_LOG)
 	String logLine("remote random seed ");
@@ -438,7 +439,7 @@ void RemoteMsg::tell_random_seed()
 	// it assume random seed of each nation come in sequence
 	// if may fails when connection lost
 
-	static long lastRemoteSeed = -1;
+	static int32_t lastRemoteSeed = -1;
 	static short lastNation = 0x7fff;
 	if( nationRecno <= lastNation)
 	{
@@ -456,11 +457,9 @@ void RemoteMsg::tell_random_seed()
 			LOG_DUMP;
 			if( (remote.sync_test_level & 1) && (remote.sync_test_level >= 0) )
 			{
-				remote.sync_test_level = ~remote.sync_test_level;	// signal error encountered
+				remote.sync_test_level = ~1;	// signal error encountered
 				if( sys.debug_session )
-					err.run( "Multiplayer Random Seed Sync Error." );
-				else
-					box.msg( "Multiplayer Random Seed Sync Error." );
+					err.run( _("Multiplayer Random Seed Sync Error") );
 			}
 		}
 	}
@@ -1719,7 +1718,7 @@ void RemoteMsg::firm_set_worker_home()
 	// packet structure : <firm recno> <town recno> <workerId>
 	short *shortPtr = (short *)data_buf;
 
-	if( validate_firm(*shortPtr) && validate_town(shortPtr[1]) )
+	if( validate_firm(*shortPtr) && validate_town(shortPtr[1], 1) )
 	{
 #ifdef DEBUG_LONG_LOG
 		long_log->printf("firm %d workder %d migrate to town %d\n", shortPtr[0], shortPtr[2], shortPtr[1]);
@@ -1855,7 +1854,7 @@ void RemoteMsg::firm_reward()
 void RemoteMsg::inn_hire()
 {
 	err_when( id != MSG_F_INN_HIRE);
-	// packet structure : <firm recno>, <hire Id> <nation no>
+	// packet structure : <firm recno> <unit id> <combat level> <skill id> <skill_level> <hire cost> <spy recno> <nation no>
 	short *shortPtr = (short *)data_buf;
 	if( validate_firm(*shortPtr) )
 	{
@@ -1863,10 +1862,10 @@ void RemoteMsg::inn_hire()
 		if(inn)
 		{
 #ifdef DEBUG_LONG_LOG
-			long_log->printf("inn %d hire %d, by nation %d\n", shortPtr[0], shortPtr[1], shortPtr[2]);
+			long_log->printf("inn %d hire %d, by nation %d\n", shortPtr[0], shortPtr[1], shortPtr[7]);
 #endif
-			inn->hire(shortPtr[1]);
-			if( shortPtr[2] == nation_array.player_recno)
+			inn->hire_remote(shortPtr[1], shortPtr[2], shortPtr[3], shortPtr[4], shortPtr[5], shortPtr[6]);
+			if( shortPtr[7] == nation_array.player_recno)
 			{
 				inn->put_info(INFO_REPAINT);
 			}
@@ -2648,7 +2647,13 @@ void RemoteMsg::spy_drop_identity()
 #ifdef DEBUG_LONG_LOG
 		long_log->printf("spy %d drop identity\n", shortPtr[0]);
 #endif
-		spy_array[*shortPtr]->drop_spy_identity();
+		Spy* spyPtr = spy_array[*shortPtr];
+		if( spyPtr->spy_place != SPY_MOBILE ) // message can only be for mobile spy
+			return;
+		short sprite_recno = spyPtr->spy_place_para; // mobile spy
+		spyPtr->drop_spy_identity();
+		if( sprite_recno && sprite_recno == unit_array.selected_recno )
+			info.disp();
 	}
 }
 // ------- End of function RemoteMsg::spy_drop_identity ------//
@@ -2779,24 +2784,6 @@ void RemoteMsg::caravan_selected()
 	err_when( id != MSG_U_CARA_SELECTED );
 	// packet structure : <sprite_recno>
 	short *shortPtr = (short *)data_buf;
-	
-	short unitCount =1;
-	validate_selected_unit_array(shortPtr, unitCount);
-
-	if( unitCount <= 0)
-		return;
-	
-	#ifdef DEBUG
-		Unit *unitPtr = unit_array[*shortPtr];
-		err_when( unitPtr->unit_id != UNIT_CARAVAN);
-	#endif
-
-	//------ help to check syn. for multiplayer ------//
-	#ifdef DEBUG
-		misc.random(100);
-	#endif
-
-	unit_array.mp_add_selected_caravan(*shortPtr);
 }
 // ------- End of function RemoteMsg::caravan_selected -------//
 
@@ -2807,24 +2794,6 @@ void RemoteMsg::ship_selected()
 	err_when( id != MSG_U_SHIP_SELECTED );
 	// packet structure : <sprite_recno>
 	short *shortPtr = (short *)data_buf;
-
-	short unitCount =1;
-	validate_selected_unit_array(shortPtr, unitCount);
-
-	if(unitCount <= 0)
-		return;
-
-	#ifdef DEBUG
-		Unit *unitPtr = unit_array[*shortPtr];
-		err_when(unit_res[unitPtr->unit_id]->unit_class != UNIT_CLASS_SHIP || unitPtr->unit_id==UNIT_TRANSPORT);
-	#endif
-
-	//------ help to check syn. for multiplayer ------//
-	#ifdef DEBUG
-		misc.random(100);
-	#endif
-
-	unit_array.mp_add_selected_ship(*shortPtr);
 }
 // ------- End of function RemoteMsg::ship_selected -------//
 
@@ -2868,11 +2837,9 @@ void	RemoteMsg::compare_remote_object()
 	if( (remote.sync_test_level & 2) && (remote.sync_test_level >= 0)
 		&& crc_store.compare_remote(id, data_buf) )
 	{
-		remote.sync_test_level = ~remote.sync_test_level;	// signal error encountered
+		remote.sync_test_level = ~2;	// signal error encountered
 		if( sys.debug_session )
-			err.run( "Multiplayer Random Seed Sync Error." );
-		else
-			box.msg( "Multiplayer Random Seed Sync Error." );
+			err.run( _("Multiplayer Object Sync Error") );
 	}
 	// ###### patch end Gilbert 20/1 #######//
 }

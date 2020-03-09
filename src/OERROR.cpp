@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifndef NO_WINDOWS
+#ifdef USE_WINDOWS
 #include <windows.h> // OutputDebugString
 #endif
 
@@ -121,12 +121,14 @@ void Error::internal(char* errMsg,const char* fileName,int lineNum)
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifndef NO_WINDOWS
+#ifdef USE_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
-	if( vga.is_inited() )
+	if( sys.init_flag )
 		box.msg( strBuf, 0 );
+	else
+		sys.show_error_dialog( "%s\n", strBuf );
 
 	sys.deinit_directx();
 
@@ -162,12 +164,14 @@ void Error::mem()
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifndef NO_WINDOWS
+#ifdef USE_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
-	if( vga.is_inited() )
+	if( sys.init_flag )
 		box.msg( strBuf, 0 );
+	else
+		sys.show_error_dialog( "%s\n", strBuf );
 
 	sys.deinit_directx();
 
@@ -204,12 +208,14 @@ void Error::msg( const char *format, ... )
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifndef NO_WINDOWS
+#ifdef USE_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
-	if( vga.is_inited() )
+	if( sys.init_flag )
 		box.msg( strBuf, 0 );
+	else
+		sys.show_error_dialog( "%s\n", strBuf );
 
 	sys.deinit_directx();
 
@@ -254,12 +260,14 @@ void Error::run( const char *format, ... )
 	//-------- display error message -------//
 
 	ERR("%s\n", strBuf);
-#ifndef NO_WINDOWS
+#ifdef USE_WINDOWS
 	OutputDebugString( strBuf );
 #endif
 
-	if( vga.is_inited() )
+	if( sys.init_flag )
 		box.msg( strBuf, 0 );
+	else
+		sys.show_error_dialog( "%s\n", strBuf );
 
 	// Richard 17-1-2014: Set exit flag to signal termination (for atexit cleanup)
 	sys.signal_exit_flag = 1;

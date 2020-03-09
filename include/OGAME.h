@@ -73,9 +73,10 @@ struct ScenInfo
 
 	char* 	file_name;
 	char  	scen_name[SCEN_NAME_LEN+1];
-	char		dir_id;			// real path look from DIR_SCENARIO_PATH(dir_id)
-	short		goal_difficulty;
+	char	dir_id;			// real path look from DIR_SCENARIO_PATH(dir_id)
+	short	goal_difficulty;
 	short 	goal_score_bonus;
+	int		play_status;
 };
 
 //-------- Define class Game -----------//
@@ -122,7 +123,9 @@ public:
 	// ###### end Gilbert 24/10 #######//
 
 	// ###### begin Gilbert 13/2 #######//
+#ifndef DISABLE_MULTI_PLAYER
 	void 			multi_player_menu(int lobbied, char *game_host);
+#endif
 	// ###### end Gilbert 13/2 #######//
 
 	int 			write_file(File* filePtr);
@@ -161,7 +164,7 @@ private:
 #pragma pack()
 
 extern Game game;
-extern char game_demo_mode, game_design_mode;
+extern char game_demo_mode, game_design_mode, scenario_file_name[FilePath::MAX_FILE_PATH+1];
 
 //-------------------------------------//
 

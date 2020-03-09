@@ -2,14 +2,14 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([7kaa], [2.15.0], [the3dfxdude@gmail.com], [],
+AC_INIT([7kaa], [2.15.4], [the3dfxdude@gmail.com], [],
 	[http://7kfans.com/])
 AC_CONFIG_SRCDIR([src/AM.cpp])
 AC_CONFIG_HEADERS([include/config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([foreign])
-ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([no])])
 
 dnl Utility definitions
 
@@ -35,32 +35,20 @@ AC_DEFUN([SEARCH_LIB_FLAGS], [
   ])
 ])
 
-dnl EVAL_SHELL_VAR(NAME)
-dnl Recursively does "eval NAME=$NAME" until $NAME stays the same
-AC_DEFUN([EVAL_SHELL_VAR], [
-  AS_VAR_PUSHDEF([prev], [ac_previous_$1])
-  AS_VAR_SET([prev], [$$1])
-  while true; do
-    eval $1="\"$$1\""
-    AS_VAR_IF([prev], ["$$1"], [
-      break
-    ])
-    AS_VAR_SET([prev], [$$1])
-  done
-  AS_VAR_POPDEF([prev])
-])
-
 # Checks for programs.
-CXXFLAGS="$CXXFLAGS -fsigned-char"
 AC_LANG(C++)
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_LN_S
 PKG_PROG_PKG_CONFIG
-
 AX_CXX_COMPILE_STDCXX_11(,[mandatory])
+save_CXXFLAGS="$CXXFLAGS"
 
+GLOBAL_CFLAGS="-include \"\$(top_builddir)/include/config.h\""
+GLOBAL_LDFLAGS=""
+
+CXXFLAGS="$CXXFLAGS -fsigned-char"
 AC_MSG_CHECKING(whether char is signed)
 AC_COMPILE_IFELSE([AC_LANG_SOURCE(
 #include <limits.h>
@@ -69,11 +57,27 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE(
 #endif
   )],[
     AC_MSG_RESULT(yes)
+    GLOBAL_CFLAGS="$GLOBAL_CFLAGS -fsigned-char"
   ],[
     AC_MSG_RESULT(no)
     AC_ERROR([The compiler must interpret char as signed])
   ]
 )
+CXXFLAGS="$save_CXXFLAGS"
+
+dnl See if 387 fpu is supported
+CXXFLAGS="$CXXFLAGS -mfpmath=387"
+AC_MSG_CHECKING(checking if compiler can emit 387 instructions)
+AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+  )],[
+    AC_MSG_RESULT(yes)
+    GLOBAL_CFLAGS="$GLOBAL_CFLAGS -mfpmath=387 -ffloat-store"
+    fpu_type=387
+  ],[
+    AC_MSG_RESULT(no)
+  ]
+)
+CXXFLAGS="$save_CXXFLAGS"
 
 # Checks for header files.
 dnl AC_CHECK_HEADERS([])
@@ -93,6 +97,11 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_CHECK_FUNCS([_NSGetExecutablePath])
 
+AX_STRING_STRCASECMP
+if test x"$ac_cv_string_strcasecmp" = "xno" ; then
+  AX_STRINGS_STRCASECMP
+fi
+
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.19])
 
@@ -101,8 +110,7 @@ AM_GNU_GETTEXT_VERSION([0.19])
 audio_backend=openal # openal
 input_backend=sdl    # sdl
 video_backend=sdl    # sdl
-use_windows=no
-use_mingw=no
+platform=posix
 jwasm_fmt="-elf -zt0"
 enable_enet=yes
 
@@ -110,7 +118,6 @@ enable_enet=yes
 # enable_asm=no
 # enable_curl=yes
 # enable_debug=no
-# with_wine=no
 # enable_dynamic_support_libs=no
 
 # Configuration options
@@ -130,20 +137,14 @@ AC_ARG_ENABLE([debug],
   [], [enable_debug=no]
 )
 
-AC_ARG_ENABLE([network],
-  AS_HELP_STRING([--disable-network], [disable network support]),
-  [], [enable_network=yes]
+AC_ARG_ENABLE([multiplayer],
+  AS_HELP_STRING([--enable-multiplayer], [enable multiplayer support in menu]),
+  [enable_multiplayer=yes], [enable_multiplayer=auto]
 )
 
-#AC_ARG_WITH([wine],
-#  AS_HELP_STRING([--with-wine], [build with winelib using wineg++]),
-#  [], [with_wine=no]
-#)
-
-AC_ARG_ENABLE([dynamic-support-libs],
-  AS_HELP_STRING([--enable-dynamic-suppport-libs],
-		 [do not link statically with libgcc and libstdc++ on mingw]),
-  [], [enable_dynamic_support_libs=no]
+AC_ARG_ENABLE([dynamic-mingw-gnulibs],
+  AS_HELP_STRING([--enable-dynamic-mingw-gnulibs], [enable dynamic linking to gnu libs on mingw]),
+  [], [enable_dynamic_mingw_gnulibs=no]
 )
 
 
@@ -151,33 +152,18 @@ AC_ARG_ENABLE([dynamic-support-libs],
 
 AS_CASE(["$host"],
   [*-mingw*], [
-    use_windows=yes
-    use_mingw=yes
+    platform=windows
     jwasm_fmt=-coff
-])
+    AC_CHECK_TOOL([WINDRES],[windres])
+  ]
+)
 
 AM_CONDITIONAL([AUDIO_OPENAL], [test "$audio_backend" = openal])
 AM_CONDITIONAL([INPUT_SDL],    [test "$input_backend" = sdl])
 AM_CONDITIONAL([VIDEO_SDL],    [test "$video_backend" = sdl])
-AM_CONDITIONAL([USE_WINDOWS],  [test "$use_windows"   = yes])
+AM_CONDITIONAL([USE_WINDOWS],  [test "$platform"      = windows])
 AM_CONDITIONAL([USE_ASM],      [test "$enable_asm"    = yes])
 AM_CONDITIONAL([USE_CURL],     [test "$enable_curl"   = yes])
-
-
-# Wine set-up
-
-AS_IF([test "$with_wine" = yes], [
-  winecxx=$(which wineg++)
-  AS_IF([test -z "$winecxx"], [
-    AC_ERROR([wineg++ not found])
-  ])
-  AC_MSG_CHECKING([the wine prefix])
-  wine_prefix=$(echo "$winecxx" | sed 's/\/bin\/wineg++$//')
-  AC_MSG_RESULT([$wine_prefix])
-  CXX="wineg++"
-  CXXFLAGS="$CXXFLAGS -I\"$wine_prefix/include/wine/msvcrt\""
-  CXXFLAGS="$CXXFLAGS -I\"$wine_prefix/include/wine/windows\""
-])
 
 
 # Jwasm assembler set-up
@@ -193,6 +179,34 @@ AS_IF([test "$enable_asm" = yes], [
 
 # Library dependencies
 
+AS_IF([test "$USE_NLS" = "yes"], [
+  found_gettext=no
+  found_iconv=no
+  AC_CHECK_FUNC([gettext], [found_gettext=builtin])
+  AS_IF([test "$found_gettext" = no], [
+    AC_CHECK_LIB([intl], [gettext], [
+      found_gettext=libintl
+    ])
+  ])
+  AS_IF([test "$found_gettext" = no], [
+    AC_MSG_ERROR([gettext is required for NLS])
+  ])
+  AC_CHECK_FUNC([iconv], [found_iconv=builtin])
+  AS_IF([test "$found_iconv" = no], [
+    AC_CHECK_LIB([iconv], [iconv], [
+      found_iconv=libiconv
+    ])
+  ])
+  AS_IF([test "$found_iconv" = no], [
+    AC_CHECK_LIB([iconv], [libiconv], [
+      found_iconv=libiconv
+    ])
+  ])
+  AS_IF([test "$found_iconv" = no], [
+    AC_MSG_ERROR([iconv is required for NLS])
+  ])
+])
+
 AS_IF([test "$audio_backend" = openal], [
   PKG_CHECK_MODULES([OPENAL], [openal], [
     AC_DEFINE_UNQUOTED([OPENAL_AL_H], [<AL/al.h>],
@@ -205,19 +219,14 @@ AS_IF([test "$audio_backend" = openal], [
     ])
   ])
 
-  CXXFLAGS="$CXXFLAGS $OPENAL_CFLAGS"
   LIBS="$OPENAL_LIBS $LIBS"
 ])
 
-AS_IF([test "$input_backend" = sdl \
-       || test "$video_backend" = sdl], [
-  AM_PATH_SDL2([], [], [
-    AC_ERROR([SDL not found])
-  ])
-
-  CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
-  LIBS="$SDL_LIBS $LIBS"
+AM_PATH_SDL2([2.0.4], [], [
+  AC_ERROR([SDL not found])
 ])
+dnl FIXME: SDLmain can screw up some autoconf macros
+LIBS="$SDL_LIBS $LIBS"
 
 AS_IF([test "$enable_enet" = yes], [
   PKG_CHECK_MODULES([ENET], [libenet], [], [
@@ -226,7 +235,6 @@ AS_IF([test "$enable_enet" = yes], [
     ])
   ])
 
-  CXXFLAGS="$CXXFLAGS $ENET_CFLAGS"
   LIBS="$LIBS $ENET_LIBS"
 ])
 
@@ -235,48 +243,44 @@ AS_IF([test "$enable_curl" = yes], [
     AC_ERROR([curl not found])
   ])
 
-  CXXFLAGS="$CXXFLAGS $CURL_CFLAGS"
   LIBS="$LIBS $CURL_LIBS"
 ])
 
-AS_IF([test "$use_windows" = yes], [
+AS_IF([test "$platform" = windows], [
   LIBS="-lole32 -lmsvcrt -lwinmm $LIBS"
 
   AS_IF([test "$enable_debug" = no], [
-    LDFLAGS="$LDFLAGS -mwindows"
+    GLOBAL_LDFLAGS="$GLOBAL_LDFLAGS -mwindows"
   ])
 
-  AC_DEFINE([USE_WINDOWS], [1], [Define to 1 if building on the windows platform])
-])
-
-AS_IF([test "$use_mingw" = yes], [
-  AS_IF([test "$enable_dynamic_support_libs" = no], [
-    # Static linking on windows, plus a thread library work-around:
-    # The --whole-archive switch makes the linker try to static link anyway,
-    # even though the application does not call the library.
+  AS_IF([test "$enable_dynamic_mingw_gnulibs" = no], [
+    dnl Static linking on windows, plus a thread library work-around:
+    dnl The --whole-archive switch makes the linker try to static link anyway,
+    dnl even though the application does not call the library.
     LIBS="$LIBS -static-libstdc++ -static-libgcc -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive"
   ])
 ])
 
+dnl Note if mingw static is on, this is statically linked too
+AS_IF([test "$found_gettext" = libintl], [
+  LIBS="$LIBS -lintl"
+])
+AS_IF([test "$found_iconv" = libiconv], [
+  LIBS="$LIBS -liconv"
+])
+
+
 # Defines
 
-# Ensure the prefix is set
-test "x$prefix" = xNONE && prefix=$ac_default_prefix
-
-AS_IF([test "$use_mingw" != yes], [
-  pkgdatadir='${datadir}/${PACKAGE_TARNAME}'
-  EVAL_SHELL_VAR([pkgdatadir])
-  AC_DEFINE_UNQUOTED([PACKAGE_DATA_PATH], ["$pkgdatadir"],
-		     [Define to the path to the game data])
+AS_IF([test "$fpu_type" = 387], [
+  AC_DEFINE([HAVE_KNOWN_BUILD], [1], [Define to 1 if this build config meets requirements for stable game play])
 ])
 
-EVAL_SHELL_VAR([localedir])
-AC_DEFINE_UNQUOTED([LOCALE_PATH], ["$localedir"], [
-  Define to the locale path
+AS_IF([test "$platform" = windows], [
+  AC_DEFINE([USE_WINDOWS], [1], [Define to 1 if building for the windows platform])
 ])
-
-AS_IF([test "$use_windows" != yes], [
-  AC_DEFINE([NO_WINDOWS], [1], [Define to 1 if not using Windows headers])
+AS_IF([test "$platform" = posix], [
+  AC_DEFINE([USE_POSIX], [1], [Define to 1 if building for the posix compliant platform])
 ])
 
 AS_CASE(["$video_backend"],
@@ -307,6 +311,17 @@ AS_IF([test "$input_backend" = sdl || test "$video_backend" = sdl], [
 	    [Define to 1 if using SDL as the video/input backend])
 ])
 
+AS_IF([test "$enable_multiplayer" = auto], [
+  enable_multiplayer=yes
+  AS_IF([test "$fpu_type" != 387], [
+    enable_multiplayer=no
+  ])
+])
+AS_IF([test "$enable_multiplayer" != yes], [
+  AC_DEFINE([DISABLE_MULTI_PLAYER], [1], [Define to 1 if the multiplayer menu option is disabled])
+])
+
+
 AS_IF([test "$enable_curl" = yes], [
   AC_DEFINE([HAVE_LIBCURL], [1],
 	    [Define to 1 if using libcurl])
@@ -326,8 +341,8 @@ AS_IF([test "$enable_asm" = yes], [
   ])
 ])
 
-CXXFLAGS="$CXXFLAGS -I\"\$(top_srcdir)/include\""
-CXXFLAGS="$CXXFLAGS -include \"\$(top_builddir)/include/config.h\""
+AC_SUBST([GLOBAL_LDFLAGS])
+AC_SUBST([GLOBAL_CFLAGS])
 
 AC_CONFIG_FILES([
   Makefile
@@ -340,7 +355,6 @@ AC_CONFIG_FILES([
   src/imgfun/generic/Makefile
   src/imgfun/x86/Makefile
   src/openal/Makefile
-  src/platform/Makefile
   po/Makefile.in
 ])
 
@@ -351,4 +365,5 @@ AC_MSG_NOTICE([video backend: $video_backend])
 AC_MSG_NOTICE([input backend: $input_backend])
 echo
 AC_MSG_NOTICE([x86 asm: $enable_asm])
+AC_MSG_NOTICE([multiplayer: $enable_multiplayer])
 AC_MSG_NOTICE([debugging features: $enable_debug])

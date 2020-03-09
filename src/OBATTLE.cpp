@@ -46,10 +46,15 @@
 #include <OBATTLE.h>
 #include <OMOUSECR.h>
 #include <vga_util.h>
+#include <CmdLine.h>
+#include <FilePath.h>
+#include <ConfigAdv.h>
 
 //---------- define static functions -------------//
 
 static int is_space(int xLoc1, int yLoc1, int xLoc2, int yLoc2, char mobileType);
+static char random_race();
+static char random_race_time();
 
 //-------- Begin of function Battle::init --------//
 //
@@ -85,10 +90,6 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 	}
 #endif
 
-#ifdef HEADLESS_SIM
-	game.game_mode = GAME_DEMO; // skip end screens
-#endif
-
 	// ####### begin Gilbert 24/10 #######//
 	//-- random seed is initalized at connecting multiplayer --//
 	//if( !mpGame )
@@ -108,18 +109,7 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 
 	//------- create player nation --------//
 
-	if( !mpGame )
-	{
-#ifndef HEADLESS_SIM
-		// if config.race_id == 0, select a random race, but don't call misc.random
-		int nationRecno = nation_array.new_nation( NATION_OWN,
-								config.race_id ? config.race_id : 1+misc.get_time() % MAX_RACE,
-								config.player_nation_color );
-
-		nation_array.set_human_name( nationRecno, config.player_name );
-#endif
-	}
-	else
+	if( mpGame )
 	{
 		for( int i = 0; i < mpPlayerCount; ++i )
 		{
@@ -128,6 +118,15 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 				err.run( "Unexpected nation recno created" );
 			nation_array.set_human_name( nationRecno, mpGame[i].player_name );
 		}
+	}
+	else if( game.game_mode != GAME_DEMO )
+	{
+		// if config.race_id == 0, select a random race, but don't call misc.random
+		int nationRecno = nation_array.new_nation( NATION_OWN,
+								config.race_id ? config.race_id : random_race_time(),
+								config.player_nation_color );
+
+		nation_array.set_human_name( nationRecno, config.player_name );
 	}
 
 	//--------- create ai nations --------//
@@ -140,13 +139,11 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 		err_when( aiToCreate < 0 );
 		create_ai_nation(aiToCreate);
 	}
-	else
+	else if( game.game_mode == GAME_DEMO )
 	{
-#ifdef HEADLESS_SIM
 		create_ai_nation(config.ai_nation_count+1); // no human player
-#else
+	} else {
 		create_ai_nation(config.ai_nation_count);
-#endif
 	}
 
 	//------ create pregame objects ------//
@@ -174,13 +171,10 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 
 	//---- reset config parameter ----//
 
-	// Set speed to normal. When hosting, broadcast the speed to the clients. As a client, set to default speed initially.
-	if ( remote.is_enable() && !remote.is_host )
-		sys.set_speed(12, COMMAND_REMOTE);
-#ifndef HEADLESS_SIM
+	if( !remote.is_enable() && cmd_line.game_speed >= 0 )
+		sys.set_speed(cmd_line.game_speed, COMMAND_AUTO);
 	else
-		sys.set_speed(12, COMMAND_PLAYER);
-#endif
+		sys.set_speed(12, COMMAND_AUTO);
 
 	//---- reset cheats ----//
 
@@ -191,6 +185,15 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 
 	if( sys.testing_session )
 		config.show_unit_path = 3;
+
+	if( game.game_mode == GAME_DEMO )
+	{
+		// observation mode
+		world.unveil(0, 0, MAX_WORLD_X_LOC-1, MAX_WORLD_Y_LOC-1);
+		world.visit(0, 0, MAX_WORLD_X_LOC-1, MAX_WORLD_Y_LOC-1, 0, 0);
+
+		config.blacken_map = 0;
+	}
 
 	// ######## begin Gilbert 11/11 #######//
 	// enable tech and god, useful for multi-player
@@ -208,10 +211,12 @@ void Battle::run(NewNationPara *mpGame, int mpPlayerCount)
 
 	//------- enable/disable sound effects -------//
 
-#ifndef HEADLESS_SIM
-	int songId = (~nation_array)->race_id <= 7 ? (~nation_array)->race_id+1 : music.random_bgm_track();
+	int songId;
+	if( nation_array.player_recno && (~nation_array)->race_id <= 7 )
+		songId = (~nation_array)->race_id+1;
+	else
+		songId = music.random_bgm_track();
 	music.play(songId, sys.cdrom_drive ? MUSIC_CD_THEN_WAV : 0 );
-#endif
 
 	mouse_cursor.restore_icon(oldCursor);
 
@@ -250,7 +255,7 @@ void Battle::run_sim()
 
 	// if config.race_id == 0, select a random race, but don't call misc.random
 	nation_array.new_nation( NATION_OWN,
-		config.race_id ? config.race_id : 1+misc.get_time() % MAX_RACE,
+		config.race_id ? config.race_id : random_race_time(),
 		config.player_nation_color );
 
 	//--------- create ai nations --------//
@@ -386,7 +391,7 @@ void Battle::create_ai_nation(int aiNationCount)
 		err_when( nation_array.size() == MAX_NATION );
 
 		if( config.random_start_up )
-			raceId = misc.random(MAX_RACE)+1;
+			raceId = random_race();
 		else
 			raceId = nation_array.random_unused_race();
 
@@ -490,7 +495,7 @@ void Battle::create_pregame_object()
 				if( misc.random(2)==0 )
 					unitId = race_res[nationPtr->race_id]->basic_unit_id;
 				else
-					unitId = race_res[ misc.random(MAX_RACE)+1 ]->basic_unit_id;
+					unitId = race_res[ random_race() ]->basic_unit_id;
 
 				if( misc.random(3)==0 )
 					rankId = RANK_GENERAL;
@@ -567,7 +572,7 @@ void Battle::create_pregame_object()
 		if(startUpIndependentTown)
 		{
 			//------ create independent towns -------//
-			raceId = i%MAX_RACE+1;
+			raceId = config_adv.race_random_list[i%config_adv.race_random_list_max];
 			if(!create_town( 0, raceId, xLoc, yLoc ) )
 			{
 				startUpIndependentTown = 0;
@@ -647,6 +652,32 @@ void Battle::run_loaded()
 	sys.run(1);
 }
 //--------- End of function Battle::run_loaded ---------//
+
+
+//-------- Begin of function Battle::run_replay --------//
+//
+void Battle::run_replay()
+{
+	NewNationPara *mpGame = (NewNationPara *)mem_add(sizeof(NewNationPara)*MAX_NATION);
+	int mpPlayerCount = 0;
+	FilePath full_path(sys.dir_config);
+
+	full_path += "NONAME.RPL";
+	if( full_path.error_flag )
+		return;
+
+	if( !remote.init_replay_load(full_path, mpGame, &mpPlayerCount) )
+		return;
+
+	game.init();
+	game.game_mode = GAME_DEMO;
+	game.game_has_ended = 1;
+	battle.run(mpGame, mpPlayerCount);
+	mem_del(mpGame);
+	remote.deinit();
+	game.deinit();
+}
+//--------- End of function Battle::run_replay ---------//
 
 
 //-------- Begin of function Battle::run_test --------//
@@ -801,7 +832,7 @@ int Battle::create_town(int nationRecno, int raceId, int& xLoc, int& yLoc)
 					curPop = MAX_TOWN_POPULATION-totalPop;
 
 				err_when(curPop==0);
-				townPtr->init_pop( misc.random(MAX_RACE)+1, curPop, townResistance, 0, 1 );
+				townPtr->init_pop( random_race(), curPop, townResistance, 0, 1 );
 				totalPop += curPop;
 			}
 		}
@@ -939,3 +970,26 @@ static int is_space(int xLoc1, int yLoc1, int xLoc2, int yLoc2, char mobileType)
 }
 //--------- End of static function is_space ---------//
 
+
+//-------- Begin of static function random_race --------//
+//
+// Uses misc.random() for random race
+//
+static char random_race()
+{
+	int num = misc.random(config_adv.race_random_list_max);
+	return config_adv.race_random_list[num];
+}
+//--------- End of static function random_race ---------//
+
+
+//-------- Begin of static function random_race_time --------//
+//
+// Uses current time for random race
+//
+static char random_race_time()
+{
+	int num = misc.get_time();
+	return config_adv.race_random_list[num%config_adv.race_random_list_max];
+}
+//--------- End of static function random_race_time ---------//

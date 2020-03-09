@@ -28,9 +28,6 @@
 
 //--------- Define macro ant ------------//
 
-#define LEFT_JUSTIFY    0
-#define CENTER_JUSTIFY  1
-#define RIGHT_JUSTIFY   2
 #define NOCLIP          0
 #define CLIP            1
 
@@ -53,6 +50,7 @@ public:
    char*  lower();
    int    len()         { return strlen(str_buf); }
    int    at(char*);
+   void   catf(const char *format, ...);
 
    char*  right(int needLen)           { return substr( len()-needLen ); }
    char*  left(int needLen)             { return substr( 0, needLen ); }

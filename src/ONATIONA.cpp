@@ -33,6 +33,7 @@
 #include <ONATIONA.h>
 #include <OREMOTE.h>
 #include <OLOG.h>
+#include <ConfigAdv.h>
 
 //### begin alex 22/9 ###//
 #ifdef DEBUG
@@ -172,10 +173,13 @@ int NationArray::new_nation(NewNationPara& nationPara)
 	Nation* nationPtr   = nation_array[nationRecno];
 
 	err_when( nationRecno != nationPara.nation_recno );
-	err_when( !remote.is_enable() );
+	err_when( !remote.is_enable() && !remote.is_replay() );
 
-	char nationType = 
-		nationPara.dp_player_id == remote.self_player_id() ? NATION_OWN : NATION_REMOTE;
+	char nationType;
+	if( remote.is_enable() )
+		nationType = nationPara.dp_player_id == remote.self_player_id() ? NATION_OWN : NATION_REMOTE;
+	else // replay mode, force all to be remote
+		nationType = NATION_REMOTE;
 
 	if( nationType == NATION_OWN )
 	{
@@ -427,11 +431,18 @@ int NationArray::random_unused_race()
 	//----- figure out which race has been used, which has not -----//
 
 	char usedRaceArray[MAX_RACE];
-	int  usedCount=0;
+	int  usedCount=MAX_RACE;
 
-	memset( usedRaceArray, 0, sizeof(usedRaceArray) );
+	// need to make sure disable races aren't included, work backwards
+	memset( usedRaceArray, 1, sizeof(usedRaceArray) );
 
 	int i;
+	for( i=0 ; i<config_adv.race_random_list_max; i++ )
+	{
+		usedRaceArray[config_adv.race_random_list[i]-1] = 0; // reset on
+		usedCount--;
+	}
+
 	for( i=1 ; i<=nation_array.size() ; i++ )
 	{
 		if( nation_array.is_deleted(i) )

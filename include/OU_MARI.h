@@ -62,11 +62,10 @@ struct ShipStop : public TradeStop
 {
 public:
 	int	update_pick_up(char *enableFlag=NULL);
-
-	//----------- multiplayer version --------------//
-	void			mp_pick_up_toggle(int pos);
 };
 #pragma pack()
+
+struct UnitMarineCrc;
 
 //------- Define class UnitMarine -------//
 
@@ -102,7 +101,6 @@ public:
 
 	ShipStop		stop_array[MAX_STOP_FOR_SHIP];	// an array of firm_recno telling train stop stations
 	void			update_stop_list();
-	void			update_stop_and_goods_info();
 	int			get_next_stop_id(int curStopId);
 
 	void			pre_process();
@@ -193,6 +191,7 @@ public:
 
 	virtual	uint8_t crc8();
 	virtual	void	clear_ptr();
+	virtual	void	init_crc(UnitMarineCrc *c);
 
 private:
 	void 	disp_unit_menu(int dispY1, int refreshFlag);

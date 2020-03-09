@@ -100,10 +100,13 @@
     <ClInclude Include="..\include\audio_base.h" />
     <ClInclude Include="..\include\audio_stream.h" />
     <ClInclude Include="..\include\c99_printf.h" />
+    <ClInclude Include="..\include\CmdLine.h" />
     <ClInclude Include="..\include\COLCODE.h" />
     <ClInclude Include="..\include\COLOR.h" />
+    <ClInclude Include="..\include\ConfigAdv.h" />
     <ClInclude Include="..\include\CRC.h" />
     <ClInclude Include="..\include\dbglog.h" />
+    <ClInclude Include="..\include\FilePath.h" />
     <ClInclude Include="..\include\file_input_stream.h" />
     <ClInclude Include="..\include\file_io_visitor.h" />
     <ClInclude Include="..\include\file_output_stream.h" />
@@ -116,8 +119,8 @@
     <ClInclude Include="..\include\IMGFUN.h" />
     <ClInclude Include="..\include\input_stream.h" />
     <ClInclude Include="..\include\KEY.h" />
+    <ClInclude Include="..\include\LocaleRes.h" />
     <ClInclude Include="..\include\mem_input_stream.h" />
-    <ClInclude Include="..\include\mouse_sdl.h" />
     <ClInclude Include="..\include\MPTYPES.h" />
     <ClInclude Include="..\include\multiplayer.h" />
     <ClInclude Include="..\include\OANLINE.h" />
@@ -192,6 +195,7 @@
     <ClInclude Include="..\include\OMOUSE.h" />
     <ClInclude Include="..\include\OMOUSE2.h" />
     <ClInclude Include="..\include\OMOUSECR.h" />
+    <ClInclude Include="..\include\OMP_CRC.h" />
     <ClInclude Include="..\include\OMUSIC.h" />
     <ClInclude Include="..\include\ONATION.h" />
     <ClInclude Include="..\include\ONATIONA.h" />
@@ -212,7 +216,6 @@
     <ClInclude Include="..\include\OREMOTEQ.h" />
     <ClInclude Include="..\include\ORES.h" />
     <ClInclude Include="..\include\ORESDB.h" />
-    <ClInclude Include="..\include\ORESTXT.h" />
     <ClInclude Include="..\include\ORESX.h" />
     <ClInclude Include="..\include\OROCK.h" />
     <ClInclude Include="..\include\OROCKRES.h" />
@@ -273,17 +276,14 @@
     <ClInclude Include="..\include\OWEATHER.h" />
     <ClInclude Include="..\include\OWORLD.h" />
     <ClInclude Include="..\include\OWORLDMT.h" />
-    <ClInclude Include="..\include\platform.h" />
+    <ClInclude Include="..\include\PlayerStats.h" />
     <ClInclude Include="..\include\player_desc.h" />
     <ClInclude Include="..\include\posix_string_compat.h" />
+    <ClInclude Include="..\include\ReplayFile.h" />
     <ClInclude Include="..\include\RESOURCE.h" />
+    <ClInclude Include="..\include\session_desc.h" />
     <ClInclude Include="..\include\storage_constants.h" />
-    <ClInclude Include="..\include\surface.h" />
-    <ClInclude Include="..\include\surface_base.h" />
-    <ClInclude Include="..\include\surface_sdl.h" />
     <ClInclude Include="..\include\version.h" />
-    <ClInclude Include="..\include\vga_base.h" />
-    <ClInclude Include="..\include\vga_sdl.h" />
     <ClInclude Include="..\include\vga_util.h" />
     <ClInclude Include="..\include\WALLTILE.h" />
     <ClInclude Include="..\include\wav_stream.h" />
@@ -291,6 +291,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AM.cpp" />
+    <ClCompile Include="..\src\CmdLine.cpp" />
+    <ClCompile Include="..\src\ConfigAdv.cpp" />
     <ClCompile Include="..\src\dbglog.cpp" />
     <ClCompile Include="..\src\enet\multiplayer.cpp" />
     <ClCompile Include="..\src\file_input_stream.cpp" />
@@ -338,6 +340,7 @@
     <ClCompile Include="..\src\imgfun\generic\I_READ.cpp" />
     <ClCompile Include="..\src\imgfun\generic\I_SNOW.cpp" />
     <ClCompile Include="..\src\input_stream.cpp" />
+    <ClCompile Include="..\src\LocaleRes.cpp" />
     <ClCompile Include="..\src\mem_input_stream.cpp" />
     <ClCompile Include="..\src\misc_uuid.cpp" />
     <ClCompile Include="..\src\OAI_ACT.cpp" />
@@ -559,7 +562,6 @@
     <ClCompile Include="..\src\OUNITAC.cpp" />
     <ClCompile Include="..\src\OUNITAI.cpp" />
     <ClCompile Include="..\src\OUNITAM.cpp" />
-    <ClCompile Include="..\src\OUNITAMT.cpp" />
     <ClCompile Include="..\src\OUNITAT.cpp" />
     <ClCompile Include="..\src\OUNITAT2.cpp" />
     <ClCompile Include="..\src\OUNITAT3.cpp" />
@@ -590,6 +592,7 @@
     <ClCompile Include="..\src\OU_VEHI.cpp" />
     <ClCompile Include="..\src\OVBROWIF.cpp" />
     <ClCompile Include="..\src\OVBROWSE.cpp" />
+    <ClCompile Include="..\src\OVGA.cpp" />
     <ClCompile Include="..\src\OVGABUF.cpp" />
     <ClCompile Include="..\src\OVGABUF2.cpp" />
     <ClCompile Include="..\src\OVGALOCK.cpp" />
@@ -607,12 +610,12 @@
     <ClCompile Include="..\src\OW_ROCK.cpp" />
     <ClCompile Include="..\src\OW_SOUND.cpp" />
     <ClCompile Include="..\src\OW_WALL.cpp" />
-    <ClCompile Include="..\src\platform\windows.cpp" />
+    <ClCompile Include="..\src\PlayerStats.cpp" />
     <ClCompile Include="..\src\player_desc.cpp" />
-    <ClCompile Include="..\src\surface_sdl.cpp" />
+    <ClCompile Include="..\src\ReplayFile.cpp" />
+    <ClCompile Include="..\src\session_desc.cpp" />
     <ClCompile Include="..\src\vgautil.cpp" />
     <ClCompile Include="..\src\vgautil2.cpp" />
-    <ClCompile Include="..\src\vga_sdl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\7k.ico" />

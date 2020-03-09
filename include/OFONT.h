@@ -32,6 +32,10 @@
 #include <OVGABUF.h>
 #endif
 
+#ifdef ENABLE_NLS
+#include <iconv.h>
+#endif
+
 //------- Define constant ------------//
 
 #define DEFAULT_LINE_SPACE  2   // 2 pixels space between lines
@@ -71,6 +75,12 @@ struct FontInfo;
 class Font
 {
 public:
+	enum { LEFT_JUSTIFY=0,
+		CENTER_JUSTIFY,
+		RIGHT_JUSTIFY,
+		AUTO_JUSTIFY
+	};
+
 	char	  init_flag;
 
 	const char*   next_text_ptr;      // these 3 vars are used for storing
@@ -89,6 +99,10 @@ public:
 
 	FontInfo* font_info_array;
 	char* 	 font_bitmap_buf;        // pointer to the buffer of the font
+
+#ifdef ENABLE_NLS
+	iconv_t cd;
+#endif
 
 public:
 	static short      hyper_field_count;
@@ -124,7 +138,7 @@ public:
 	void d3_put(int,int,int,int,const char*);
 	int  center_put(int,int,int,int,const char*,char clearBack=0);
 
-	void put_paragraph(int,int,int,int,const char*,int=DEFAULT_LINE_SPACE,int=1,char=1);
+	void put_paragraph(int,int,int,int,const char*,int=DEFAULT_LINE_SPACE,int=1,char=1,char=AUTO_JUSTIFY);
 
 	void count_line(int x1, int y1, int x2, int y2, const char *text,
 						 int lineSpace, int& totalLines, int& dispLines);
@@ -183,6 +197,9 @@ public:
 	void update_field(int,int,const char*,int);
 	void field(int,int,const char*,int,const char*,int,int,const char* helpCode=NULL);
 	int  disp(int,int,const char*,int);
+
+private:
+	void put_paragraph_line(int x1, int y1, const char *textPtr, const char *textPtrEnd, char *flag_under_line);
 };
 
 extern Font font_san, font_std, font_small, font_mid, font_news;

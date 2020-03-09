@@ -1,12 +1,15 @@
 noinst_HEADERS = \
 	ALL.h \
-	storage_constants.h \
 	COLCODE.h \
 	COLOR.h \
 	CRC.h \
+	ConfigAdv.h \
+	CmdLine.h \
+	FilePath.h \
 	GAMEDEF.h \
 	IMGFUN.h \
 	KEY.h \
+	LocaleRes.h \
 	MPTYPES.h \
 	OANLINE.h \
 	OAUDIO.h \
@@ -80,6 +83,7 @@ noinst_HEADERS = \
 	OMOUSE.h \
 	OMOUSE2.h \
 	OMOUSECR.h \
+	OMP_CRC.h \
 	OMUSIC.h \
 	ONATION.h \
 	ONATIONA.h \
@@ -99,13 +103,9 @@ noinst_HEADERS = \
 	OREMOTEQ.h \
 	ORES.h \
 	ORESDB.h \
-	ORESTXT.h \
 	ORESX.h \
 	OROCK.h \
 	OROCKRES.h \
-	OSaveGameArray.h \
-	OSaveGameInfo.h \
-	OSaveGameProvider.h \
 	OSCROLL.h \
 	OSE.h \
 	OSERES.h \
@@ -125,17 +125,20 @@ noinst_HEADERS = \
 	OSPY.h \
 	OSTR.h \
 	OSYS.h \
+	OSaveGameArray.h \
+	OSaveGameInfo.h \
+	OSaveGameProvider.h \
 	OTALKMSG.h \
 	OTALKRES.h \
 	OTARRAY.h \
 	OTECHRES.h \
 	OTERRAIN.h \
 	OTORNADO.h \
-	OTownNetwork.h \
 	OTOWN.h \
 	OTOWNREC.h \
 	OTOWNRES.h \
 	OTUTOR.h \
+	OTownNetwork.h \
 	OUNIT.h \
 	OUNITALL.h \
 	OUNITRES.h \
@@ -158,7 +161,9 @@ noinst_HEADERS = \
 	OWEATHER.h \
 	OWORLD.h \
 	OWORLDMT.h \
+	PlayerStats.h \
 	RESOURCE.h \
+	ReplayFile.h \
 	WALLTILE.h \
 	WebService.h \
 	asmfun.h \
@@ -172,22 +177,18 @@ noinst_HEADERS = \
 	file_reader.h \
 	file_util.h \
 	file_writer.h \
-	gettext.h \
 	gettext-gnu.h \
+	gettext.h \
 	input_stream.h \
 	mem_input_stream.h \
 	misc_uuid.h \
-	mouse_sdl.h \
 	multiplayer.h \
 	openal_audio.h \
 	output_stream.h \
-	platform.h \
 	player_desc.h \
-	surface.h \
-	surface_base.h \
-	surface_sdl.h \
+	posix_string_compat.h \
+	session_desc.h \
+	storage_constants.h \
 	version.h \
-	vga_base.h \
-	vga_sdl.h \
 	vga_util.h \
 	wav_stream.h

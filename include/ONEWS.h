@@ -118,6 +118,9 @@ public:
 	char* king_name1(int addColor=0);
 	char* king_name2(int addColor=0);
 
+	char* nation_color_str1();
+	char* nation_color_str2();
+
 	short short_para1;
 	short short_para2;
 	short short_para3;
@@ -226,9 +229,9 @@ public:
 	void	nation_surrender(int nationRecno, int toNationRecno);
 	void  king_die(int nationRecno);
 	void  new_king(int nationRecno, int kingUnitRecno);
-	void  firm_destroyed(int firmRecno, Unit* attackUnit);
+	void  firm_destroyed(int firmRecno, Unit* attackUnit, short destroyerNationRecno);
 	void  firm_captured(int firmRecno, int takeoverNationRecno, int spyTakeover);
-	void  town_destroyed(int townNameId, int xLoc, int yLoc, Unit* attackUnit);
+	void  town_destroyed(int townNameId, int xLoc, int yLoc, Unit* attackUnit, short destroyerNationRecno);
 	void  town_abandoned(int townRecno);
 	void	town_surrendered(int townRecno, int toNationRecno);
 	void  monster_king_killed(int monsterId, int xLoc, int yLoc);

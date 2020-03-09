@@ -119,7 +119,7 @@ public:
 	short	max_hit_points();
 	int   loyalty();
 	int	target_loyalty(int firmRecno);
-	int	is_nation(int firmRecno, int nationRecno);
+	int	is_nation(int firmRecno, int nationRecno, int checkSpy=0);
 
 public:
 	void	init_potential();
@@ -130,6 +130,7 @@ public:
 };
 #pragma pack()
 
+struct FirmCrc;
 class FirmBase;
 class FirmMine;
 class FirmFactory;
@@ -297,6 +298,7 @@ public:
 	int		can_assign_capture();
 	int		can_worker_capture(int captureNationRecno);
 	virtual int	 is_worker_full();
+	int		have_own_workers(int checkSpy=0);
 
 	void 		set_worker_home_town(int townRecno, char remoteAction, int workerId=0);
 	int 		can_spy_bribe(int bribeWorkerId, int briberNationRecno);
@@ -321,6 +323,7 @@ public:
 
 	virtual void put_info(int refreshFlag)		{;}
 	virtual void detect_info()						{;}
+			  void sort_worker();
 
 	 		  void process_animation();
 			  void process_construction();
@@ -380,6 +383,7 @@ public:
 	//-------------- multiplayer checking codes ---------------//
 	virtual	uint8_t crc8();
 	virtual	void	clear_ptr();
+	virtual	void	init_crc(FirmCrc *c);
 
    //---------------------------------------//
 
